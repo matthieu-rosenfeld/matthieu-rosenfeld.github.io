@@ -77,7 +77,7 @@ Sous [Firefox](https://addons.mozilla.org/fr/firefox/addon/vue-js-devtools/) et 
 
 Ouvrez dans votre IDE le dossier `todo_list/src`. Commençons par regarder les deux fichiers `main.ts` et `App.vue`. Le fichier `main.ts` est le point d'entrée principal du site et pour l'instant, il se contente d'importer un composant définit dans le fichier `App` et de le déclarer comme composant principal avec la dernière ligne. Ouvrez le fichier `index.html` pour voir à quoi le `#app` fait référence : on pourrait le remplacer par n'importe quel sélecteur valide.
 
-Nous allons pour l'instant surtout nous concentrer sur le fichier `App.vue`. La première chose à constater c'est qu'il contient du JS entre les balises `<script>`, du `HTML` entre les balises `<template>` et enfin du CSS entre les balises `<style>`. Ce découpage contredit le découpage auquel nous sommes habitués. Nous allons tout de même effectuer un découpage, mais il sera composant par composant. C'est la méthode adoptée par de nombreux framework JS. Nous verrons les détails des composants plus tard, mais pour l'instant, vous pouvez constater que le JS importe deux composants qui sont ensuite utilisés dans le HTML (`HelloWorld` et `The_ welcome`).
+Nous allons pour l'instant surtout nous concentrer sur le fichier `App.vue`. La première chose à constater c'est qu'il contient du JS entre les balises `<script>`, du `HTML` entre les balises `<template>` et enfin du CSS entre les balises `<style>`. Ce découpage contredit le découpage auquel nous sommes habitués. Nous allons tout de même effectuer un découpage, mais il sera composant par composant. C'est la méthode adoptée par de nombreux framework JS. Nous verrons les détails des composants plus tard, mais pour l'instant, vous pouvez constater que le JS importe deux composants qui sont ensuite utilisés dans le HTML (`HelloWorld` et `The_welcome`).
 
 Remplacez le contenu de `App.vue` par
  
@@ -116,7 +116,7 @@ La moustache ne fonctionne que pour inclure du texte dans le HTML. Si l'on veut 
 </div>
 
 
-> Vue fourni plusieurs de ces attributs spéciaux en `v-` qui s'appellent des directives. Dans ce TD vous allez découvrir `v-bind`, `v-on`, `v-model` et `v-for`.
+> Vue fournit plusieurs de ces attributs spéciaux en `v-` qui s'appellent des directives. Dans ce TD vous allez découvrir `v-bind`, `v-on`, `v-model` et `v-for`.
 
 On aimerait ensuite rajouter un compteur simple en dessous du texte de notre page. On va ajouter au HTML le bouton suivant : `<button v-on:click="incremente">+</button>`. Cette fois, nous utilisons la directive `v-on:` qui indique que l'on cherche à détecter un événement qui est précisé ensuite (donc `v-on:click` détecte un clic alors que `v-on:keyup` détecte un appui de touche). La valeur donnée est le nom de la fonction JS à appeler (on peut aussi écrire du code directement, mais sauf s'il est particulièrement court, c'est une mauvaise pratique d'écrire le JS au milieu du HTML).
 
@@ -138,9 +138,11 @@ function incremente(){
 
 On peut constater dans la console que la valeur de la variable change, mais l'affichage n'est pas mis à jour. C'est normal, l'interface n'est mis-à-jour que lorsqu'une variable "réactive" change, hors pour l'instant, nous n'avons pas défini de variable réactive. Pour rendre la variable compteur réactive, vous allez devoir faire les trois choses suivantes :
 
-1. Importer la fonction `ref` en ajoutant la ligne suivante en haut du script `import {ref} from 'vue';`. Cette ligne indique simplement que nous importons la fonction `ref` depuis le module `vue`. La notion de module permet de séparer le code JS en "blocs logiques" et donc d'avoir des projets mieux organisés. En particulier, plutôt que de devoir inclure tous nos fichiers JS dans l'entête du HTML, on peut ainsi inclure le module JS principale qui importe les modules JS dont il a besoin qui vont eux même importer les modules JS dont ils ont besoin. On a donc des dépendances beaucoup plus claires pour l'humain, pour l'IDE et pour le navigateur.
+1. Importer la fonction `ref` en ajoutant la ligne suivante en haut du script `import {ref} from 'vue';`. Cette ligne indique simplement que nous importons la fonction `ref` depuis le module `vue`. 
+   
+   La notion de module permet de séparer le code JS en "blocs logiques" et donc d'avoir des projets mieux organisés. En particulier, plutôt que de devoir inclure tous nos fichiers JS dans l'entête du HTML, on peut ainsi inclure le module JS principal qui importe les modules JS dont il a besoin qui vont eux même importer les modules JS dont ils ont besoin. On a donc des dépendances beaucoup plus claires pour l'humain, pour l'IDE et pour le navigateur.
 
-2. Modifier la définition de compteur pour utiliser `ref` `ainsi let compteur = ref(7);`.
+2. Modifier la définition de compteur pour utiliser `ref` ainsi `let compteur = ref(7);`.
 
 3. Remplacer toutes les utilisations de compteur dans le script par `compteur.value` (par contre, gardez compteur dans la partie `HTML`).
 
@@ -160,7 +162,9 @@ La fonction `ref` renvoie un objet réactif qui encapsule l'objet donné en argu
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Maintenant, ajouter un bouton `<input>` et utiliser `v-bind` pour que `value` de cet input soit toujours la variable `compteur`. Vérifiez que si l'on change la valeur en cliquant sur le bouton précédent, l'affichage se met à jour dans notre nouvel input. Ensuite, utilisez `v-on:input` et la fonction suivante pour que la modification du contenu de l'input mette la variable à jour.
+**Exercice :** Maintenant, ajouter un bouton `<input>` et utiliser `v-bind` pour que `value` de cet input soit toujours la variable `compteur`. Vérifiez que si l'on change la valeur en cliquant sur le bouton précédent, l'affichage se met à jour dans notre nouvel input. 
+
+Ensuite, utilisez `v-on:input` et la fonction suivante pour que la modification du contenu de l'input mette la variable à jour.
 
 </div>
 
