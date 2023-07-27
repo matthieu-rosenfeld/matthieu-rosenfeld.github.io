@@ -500,7 +500,7 @@ Nous allons repartir de notre exemple de liste de tâches, pour le faire évolue
 ### Premiers composants et *props*
 
 Vous êtes normalement familier avec la structure arborescente d'une page web. Une balise contient des balises qui contiennent des balises qui contiennent des balises... L'idée derrière les composants est de définir nos propres "balises" avec des comportements bien définis et de pouvoir les utiliser à l'intérieur d'autres composants.
-Cela permet donc de découper le code d'un site web en fonction des blocs de fonctionnalité : on va pouvoir définir dans des fichiers séparés le composant header, le composant footer, le composant menu et dans un autre le composant page principale (probablement lui-même constitué de plusieurs composants) et on écrira un composant qui assemble tous ces composants ensemble. Le second intérêt est que si plusieurs morceaux de notre page utilisent des fonctionnalités similaires, on va pouvoir réutiliser plusieurs fois le même composant. On peut d'ailleurs aussi très facilement utiliser les composants écrits par d'autres utilisateurs.
+Cela permet donc de découper le code d'un site web en fonction des blocs de fonctionnalité : on va pouvoir définir dans des fichiers séparés le composant *header*, le composant *footer*, le composant menu et dans un autre le composant page principale (probablement lui-même constitué de plusieurs composants) et on écrira un composant qui assemble tous ces composants ensemble. Le second intérêt est que si plusieurs morceaux de notre page utilisent des fonctionnalités similaires, on va pouvoir réutiliser plusieurs fois le même composant. On peut d'ailleurs aussi très facilement utiliser les composants écrits par d'autres utilisateurs.
 
 
 
@@ -524,7 +524,16 @@ Cela permet donc de découper le code d'un site web en fonction des blocs de fon
 
 </div>
 
-Normalement, votre site fonctionne toujours, mais nous avons utilisé notre premier composant. Le `@` dans le chemin correspond à la racine du site. Utiliser ce symbole permet d'éviter des problèmes de chemins. (Il se peut que votre IDE signale que le fichier du composant n'existe pas, relancer l'IDE à la racine du projet semble régler le problème. ?? Est-ce que ça arrive vraiment ??) La ligne `import ...` permet de rendre le composant accessible et on peut alors l'utiliser dans `<template>` comme si c'était une balise HTML. Une grosse partie du travail de Vue est de faire fonctionner tout ça. Notez que le nom de l'import à faire `ListeDeTaches` a été déduit automatiquement du nom du fichier qui le contient.
+Normalement, votre site fonctionne toujours, mais nous avons utilisé notre premier composant. Le `@` dans le chemin correspond à la racine du site. Utiliser ce symbole permet d'éviter des problèmes de chemins. 
+
+Il se peut que votre IDE signale que le fichier du composant n'existe pas, relancer l'IDE à la racine du projet semble régler le problème. 
+
+(
+?? Est-ce que ça arrive vraiment ??
+Romain : Oui, ça m'est arrivé sous VSCode.
+)
+
+La ligne `import ...` permet de rendre le composant accessible et on peut alors l'utiliser dans `<template>` comme si c'était une balise HTML. Une grosse partie du travail de *Vue* est de faire fonctionner tout ça. Notez que le nom de l'import à faire `ListeDeTaches` a été déduit automatiquement du nom du fichier qui le contient.
 
 <div class="exercice" markdown="1" >
 
@@ -587,14 +596,14 @@ Nous voulons maintenant ajouter la possibilité d'ajouter des listes de tâches.
 **Exercice :**
 
 1. Faites-le et vérifiez que tout fonctionne. Vous pouvez vous inspirer du fonctionnement de `ListeDeTâche`.
-2. Si vous ne l'avez pas fait depuis un moment, ouvrez l'onglet Vue des outils de développement du navigateur. Constatez qu'on peut voir l'arborescence des composants qui évolue en direct. Prenez le temps d'expérimenter un peu.
+2. Si vous ne l'avez pas fait depuis un moment, ouvrez l'onglet *Vue* des outils de développement du navigateur. Constatez qu'on peut voir l'arborescence des composants qui évolue en direct. Prenez le temps d'expérimenter un peu.
 
 
 </div>
 
 ### Emit and emitted events
 
-Nous aimerions rajouter un bouton dans chaque liste qui permet de supprimer la liste. Une nouvelle difficulté se présente à nous : si le bouton est dans le composant `ListeDeTache` alors c'est ce composant qui peut détecter que le bouton de suppression a été activé. Il faut donc faire remonter l'information à son parent (`App.vue`) pour qu'elle puisse le supprimer. Vue offre une manière très simple de surmonter ce problème : la fonction `$emit`. Quand elle est appelée, la fonction `$émit("nomDevenement")` déclenche un événement qui peut être écouté par le parent du composant.
+Nous aimerions rajouter un bouton dans chaque liste qui permet de supprimer la liste. Une nouvelle difficulté se présente à nous : si le bouton est dans le composant `ListeDeTache` alors c'est ce composant qui peut détecter que le bouton de suppression a été activé. Il faut donc faire remonter l'information à son parent (`App.vue`) pour qu'elle puisse le supprimer. *Vue* offre une manière très simple de surmonter ce problème : la fonction `$emit`. Quand elle est appelée, la fonction `$emit("nomEvenement")` déclenche un événement qui peut être écouté par le parent du composant.
 
 <div class="exercice" markdown="1" >
 
@@ -606,9 +615,7 @@ Nous aimerions rajouter un bouton dans chaque liste qui permet de supprimer la l
 
 </div>
 
-
-
-Cette ligne de code indique que quand on clique sur ce bouton, cela déclenche l'événement supprime. On peut maintenant détecter l'événement en ajoutant la directive  `@supprime="truc à faire"` dans un composant ListeDeTache. Dans notre cas ça donne
+Cette ligne de code indique que quand on clique sur ce bouton, cela déclenche l'événement *supprime*. On peut maintenant détecter l'événement en ajoutant la directive  `@supprime="truc à faire"` dans un composant ListeDeTache. Dans notre cas ça donne
 
 ```vue
 <ListeDeTaches v-for="liste in listes" :key="liste.id"
@@ -635,7 +642,7 @@ Nous avons écrit notre premier composant, nous allons extraire du code de `List
 <button @click="retirerTache(tache)">Retire</button>
 ```
 
-Nous allons donc créer un composant `TacheDeListe.vue` qui contient ce HTML et que nous utiliserons dans `ListeDeTaches.vue`. Vous devez être capable d'imaginer comment le faire en utilisant des `props`, `emmit`, et `emmited event`.
+Nous allons donc créer un composant `TacheDeListe.vue` qui contient ce HTML et que nous utiliserons dans `ListeDeTaches.vue`. Vous devez être capable d'imaginer comment le faire en utilisant des `props`, `emit`, et `emited event`.
 
 <div class="exercice" markdown="1" >
 
@@ -662,9 +669,9 @@ Commençons par définir notre composant `TacheDeListe.vue`:
 
 </div>
 
-Il y a plusieurs problèmes à régler pour rendre de composant fonctionnel. Premièrement, l'objet JavaScript `tache` n'est pas accessible ici. Une mauvaise manière de régler le problème serait de le passer en entier dans les `props`. En faisant cela, on passerait dans les props des valeurs qui n'ont aucun sens pour `TacheDeListe` et il est plus difficile de rendre le composant "générique" pour qu'il soit réutilisable dans un autre contexte. Par ailleurs, un composant n'a pas le droit de modifier ses props (cela pourrait avoir des effets de bords difficilement contrôlables chez le composant parent). Il va dont falloir réfléchir un peu plus pour gérer le booléen `faite`.
+Il y a plusieurs problèmes à régler pour rendre de composant fonctionnel. Premièrement, l'objet JavaScript `tache` n'est pas accessible ici. Une mauvaise manière de régler le problème serait de le passer en entier dans les `props`. En faisant cela, on passerait dans les *props* des valeurs qui n'ont aucun sens pour `TacheDeListe` et il serait plus difficile de rendre le composant "générique" pour qu'il soit réutilisable dans un autre contexte. Par ailleurs, un composant n'a pas le droit de modifier ses *props* (cela pourrait avoir des effets de bords difficilement contrôlables chez le composant parent). Il va donc falloir réfléchir un peu plus pour gérer le booléen `faite`.
 
-Nous allons déclarer deux props: le nom de la tâche et le booléen `cochee`.
+Nous allons déclarer deux *props*: le nom de la tâche et le booléen `cochee`.
 
 ```js
 const props = defineProps<{descriptionTache: string, cochee:boolean}>();
@@ -674,7 +681,7 @@ const props = defineProps<{descriptionTache: string, cochee:boolean}>();
 
 **Exercice :**
 
-1. Ajoutez ces lignes et faites les trois changements correspondants dans le `template`. Attention, nous allons remplacer `v-model="tache.faite"` par `:checked="prop.cochee"`, car mettre `cochee` dans `v-model` signifierait que cocher la case peut modifier `props.cochee`, mais un composant n'a pas le droit de modifier ses props !
+1. Ajoutez ces lignes et faites les trois changements correspondants dans le `template`. Attention, nous allons remplacer `v-model="tache.faite"` par `:checked="props.cochee"`, car mettre `cochee` dans `v-model` signifierait que cocher la case peut modifier `props.cochee`, mais un composant n'a pas le droit de modifier ses props !
 
 2. Ensuite, plutôt que d'appeler une fonction `retirerTache`, on veut que le clic sur le bouton émette un signal `$emit('supprimerTache')` (qu'on pourra ensuite détecter dans le composant `ListeDeTache`.)
 
@@ -693,7 +700,7 @@ Notez l'usage de `@` qui fait référence au dossier racine du site, on va toujo
     :cochee="tache.faite"
 />
 ```
-Notez que `descriptionTache` est devenu `description-tache`. En HTML, les noms d'attributs ne sont généralement pas en CamelCase mais en kebab-case, ce qui n'est normalement pas possible en JS (vous avez normalement déjà vu ce problème notamment pour les styles en CSS: `background-color` devient `backgroundColor`). Ici, on pourrait utiliser `descriptionTache`, mais on peut aussi utiliser `nom-tache`. Le plus important est d'être cohérent tout le long d'un projet.
+Notez que `descriptionTache` est devenu `description-tache`. En HTML, les noms d'attributs ne sont généralement pas en CamelCase mais en kebab-case, ce qui n'est normalement pas possible en JS (vous avez normalement déjà vu ce problème notamment pour les styles en CSS: `background-color` devient `backgroundColor`). Ici, on pourrait utiliser `descriptionTache`, mais on peut aussi utiliser `description-tache`. Le plus important est d'être cohérent tout le long d'un projet.
 
 <div class="exercice" markdown="1" >
 
@@ -718,7 +725,7 @@ Cela devrait suffire à faire fonctionner le bouton "Retirer". Cependant, si vou
 ```js
 const emit = defineEmits<{
   premierEvenementAEnregistrer: [premierArgument: sonType, deuxiemeArgument:sonType]
-  premierEvenementAEnregistrer: [premierArgument: sonType]
+  deuxiemeEvenementAEnregistrer: [premierArgument: sonType]
 }>();
 ```
 
@@ -733,17 +740,17 @@ const emit = defineEmits<{supprimerTache:[]}>();
 
 </div>
 
-Il existe d'autres syntaxes qui ne demandent pas de définir les types, mais puisque nous utilisons TypeScript c'est une bonne habitude d'utiliser les types autant que possible. De même, il n'est pas obligatoire de déclarer les `emit`, mais c'est une bonne pratique qui peut permettre de régler de nombreux bugs. Déclarer les événements qu'un composant peut emmètre et leurs types améliore aussi l'autocomplétion de l'IDE et la vérification des types par TypeScripte.
+Il existe d'autres syntaxes qui ne demandent pas de définir les types, mais puisque nous utilisons TypeScript c'est une bonne habitude d'utiliser les types autant que possible. De même, il n'est pas obligatoire de déclarer les `emit`, mais c'est une bonne pratique qui peut permettre de régler de nombreux bugs. Déclarer les événements qu'un composant peut émettre et leurs types améliore aussi l'autocomplétion de l'IDE et la vérification des types par TypeScript.
 
 <div class="exercice" markdown="1" >
 
 **Exercice :**
-Dans `ListeDeTaches.vue`, déclarez l'événement `suprimme` puisque ce composant peut emmètre cet événement.
+Dans `ListeDeTaches.vue`, déclarez l'événement `supprime` puisque ce composant peut émettre cet événement.
 
 </div>
 
 
-Il reste à réparer le bouton "Cacher les tâches terminées / Montrer tout" et le raturage des tâches terminées. Le problème est que le booléen `tache.faite`, n'est pas mis à jour par un clic sur la case à cocher. Il pourrait être tentant de modifier le prop, mais un composant n'a pas le droit de modifier ses props ! (C'est techniquement possible dans certains cas, mais c'est fortement déconseillé même dans ces cas-là !) La solution est de déclencher un événement dès que ce bouton est cliqué qui indique au parent du composant de changer la valeur du booléen correspondant. Nous allons donc devoir définir un événement qui prend un argument (pour indiquer la valeur actuelle de la case true/false si elle est cochée ou non).
+Il reste à réparer le bouton "Cacher les tâches terminées / Montrer tout" et le raturage des tâches terminées. Le problème est que le booléen `tache.faite`, n'est pas mis à jour par un clic sur la case à cocher. Il pourrait être tentant de modifier le *prop*, mais un composant n'a pas le droit de modifier ses *props* ! (C'est techniquement possible dans certains cas, mais c'est fortement déconseillé même dans ces cas-là !) La solution est de déclencher un événement dès que ce bouton est cliqué qui indique au parent du composant de changer la valeur du booléen correspondant. Nous allons donc devoir définir un événement qui prend un argument (pour indiquer la valeur actuelle de la case `true`/`false` si elle est cochée ou non).
 
 <div class="exercice" markdown="1" >
 
@@ -777,7 +784,7 @@ Il suffit maintenant de détecter l'événement `checkedChange` dans `ListeDeTac
 
 </div>
 
-Plutôt que de définir un `prop` et un événement, nous aurions pu définir un `v-model` pour notre composant. Revenons d'abord sur le fonctionnement de `v-model`. Étant donné une variable de type `string` on peut associer son contenu avec un input avec la ligne suivante
+Plutôt que de définir un `prop` et un événement, nous aurions pu définir un `v-model` pour notre composant. Revenons d'abord sur le fonctionnement de `v-model`. Étant donné une variable de type `string` on peut associer son contenu avec un `<input>` avec la ligne suivante
 
 ```vue
 <input v-model="variableTexte" />
@@ -816,7 +823,7 @@ De la même manière, la ligne `<monComposantPersonalise v-model="maVariable">` 
 />
 ```
 
-Il suffit alors de définir le `prop` et l'évennement correspondant dans le composant `monComposantPersonalise`:
+Il suffit alors de définir le `prop` et l'événement correspondant dans le composant `monComposantPersonalise`:
 
 ```vue
 <script setup>
@@ -827,10 +834,9 @@ Il suffit alors de définir le `prop` et l'évennement correspondant dans le com
 </script>
 
 <template>
-  <input
-	:checked="modelValue"
-	@change="$emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
-  />
+<input type="checkbox" :checked="modelValue"
+  @change="$emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
+/>
 </template>
 ```
 
@@ -838,13 +844,13 @@ Il suffit alors de définir le `prop` et l'évennement correspondant dans le com
 
 **Exercice :**
 
-1. Faites les modifications necessaires en remplaçant `cochee` par `modelValue` et `checkedChange` par `update:modelValue` dans `TacheDeListe.vue`. (Attention dans `defineEmits` à bien mettre `"update:modelValue"` sinon JavaScript est géné par les `:`).
+1. Faites les modifications nécessaires en remplaçant `cochee` par `modelValue` et `checkedChange` par `update:modelValue` dans `TacheDeListe.vue`. (Attention dans `defineEmits` à bien mettre `"update:modelValue"` sinon JavaScript est gêné par les `:`).
 
 2. Modifiez `ListeDeTache` pour utiliser `v-model` ainsi
 
     ```vue
     <TacheDeListe
-      :nom-tache="tache.description"
+      :description-tache="tache.description"
       v-model="tache.faite"
       @supprimer-tache="retirerTache(tache)"
     />
@@ -856,15 +862,16 @@ Il suffit alors de définir le `prop` et l'évennement correspondant dans le com
 
 </div>
 
-Retenez qu'on utilise les props pour faire descendre de l'information d'un composant vers son enfant et les événements pour faire remonter l'information. La directive `v-model` permet de faire descendre et remonter l’information, mais c’est simplement un raccourci qui utilise un prop et un évènement. Nous n'en parlerons pas ici, mais on peut "nommer" les `v-model` ce qui permet d'associer plusieurs `v-model` au même composant.
+Retenez qu'on utilise les *props* pour faire descendre de l'information d'un composant vers son enfant et les événements pour faire remonter l'information. La directive `v-model` permet de faire descendre et remonter l’information, mais c’est simplement un raccourci qui utilise un *prop* et un évènement. Nous n'en parlerons pas ici, mais on peut "nommer" les `v-model` ce qui permet d'associer plusieurs `v-model` au même composant.
 
 ## Utiliser le slot
-Jusqu'à maintenant nous avons utilisé nos composants comme des balises HTML autofermantes `<monComposant />`, mais il est aussi possible de les utiliser avec la syntaxe `<monComposant> </monComposant>`. On peut alors même mettre du HTML entre ces balises que le composant poura utiliser. Supposons que j'utilise mon composant ainsi
+
+Jusqu'à maintenant nous avons utilisé nos composants comme des balises HTML autofermantes `<monComposant />`, mais il est aussi possible de les utiliser avec la syntaxe `<monComposant>...</monComposant>`. Le composant pourra utiliser le code HTML écrit entre les 2 balises. Supposons que j'utilise mon composant ainsi
 
 ```vue
-<monComposant> <span class="toto"> du texte</span></monComposant>
+<monComposant><span class="toto">du texte</span></monComposant>
 ```
-et que dans la définition de mon composant ma template ressemble à ça
+et que dans le `<template>` de mon composant est
 
 ```vue
 <template>
@@ -873,12 +880,15 @@ et que dans la définition de mon composant ma template ressemble à ça
   du html
 </template>
 ```
-alors la balise slot est automatiquement remplacée par le HTML contenu entre les balises `<monComposant>` donc en l'occurrence `<span class="toto"> du texte</span>`. On peut voir cela un peu comme une autre manière d'envoyer de l'information à un composant enfant. La différence majeure avec les props est qu'on passe ici du HTML qui sera bien interpreté comme du HTML au niveau du composant enfant. Ce HTML est généré par le parent, donc s'il contient des variables appartenant au parent tout fonctionnera correctement et il interagit aussi avec le CSS défini par le parent. L'autre différence importante est que le sens sémantique est assez différent : intuitivement, on comprend la différence entre le contenu d'une balise et les attributs d'une balise. Nous n'en parlerons pas, mais il est possible de définir plusieurs `slot` pour la même balise.
+
+alors la balise `<slot>` est automatiquement remplacée par le HTML contenu entre les balises `<monComposant>` : `<span class="toto"> du texte</span>`. On peut voir cela un peu comme une autre manière d'envoyer de l'information à un composant enfant. La différence majeure avec les *props* est qu'on passe ici du HTML qui sera bien interprété comme du HTML au niveau du composant enfant. Ce HTML est généré par le parent, peut contenir des variables du parent et utilisera le CSS défini par le parent. L'autre différence importante est que le sens sémantique est assez différent : intuitivement, on comprend la différence entre le contenu d'une balise et les attributs d'une balise. Nous n'en parlerons pas, mais il est possible de définir plusieurs `slot` pour la même balise.
 
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Retirer le prop `description-tache` de `TacheDeVue` et utiliser `<slot></slot>` à sa place dans le `<template>`. Modifier ensuite son utilisation dans `ListeDeTaches`: au lieu de passer `tache.description` dans un attribut utiliser la syntaxe moustache à l'intérieur de la balise. Vérifiez que tout fonctionne.
+**Exercice :** Retirer le prop `description-tache` de `TacheDeVue` et utiliser `<slot></slot>` à sa place dans le `<template>`. 
+
+Modifier ensuite son utilisation dans `ListeDeTaches`: au lieu de passer `tache.description` dans un attribut, utiliser la syntaxe moustache à l'intérieur de la balise. Vérifiez que tout fonctionne.
 
 </div>
 
@@ -888,41 +898,70 @@ C'était la dernière modification au site de gestionnaire de listes de tâches.
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Avant de passer au déploiement le site, refaites un appel au linter (`npm run lint`). Et explorez un peu l'onglet Vue du navigateur pour voir les informations qu'il peut fournir.
+**Exercice :** Avant de passer au déploiement le site, refaites un appel au linter (`npm run lint`). Et explorez un peu l'onglet *Vue* du navigateur pour voir les informations qu'il peut fournir.
 
 </div>
+
 ## Déployer le site
 
-
 Pour l'instant, nous avons utilisé Vite pour faire tourner notre site sur un serveur de développement. Nous allons discuter les étapes à suivre pour pouvoir déployer notre site sur un serveur en production. Vite permet de facilement "construire" le site qui sera déployé ("build" en anglais, cette étape transforme le code et ressemble un peu à une étape de compilation). Cette étape de "construction" transforme notre code Vue en un code JS optimisé et beaucoup plus court et donc plus léger à envoyer sur le web, mais beaucoup moins lisible pour un humain.
- 
-Nous allons d'abord devoir ouvrir le fichier de configuration `vite.config.ts`. Ce fichier sert à configurer un grand nombre d'options. Nous allons devoir indiquer le chemin de base du site web. En effet, Vite part du principe que le site que nous construisons sera le seul site servi par le serveur web et sera donc à la racine du site. C'est habituellement, ce que l'on fait pour un site professionnel. Cependant, nous avons un seul serveur web pour tous nos TDs à l'IUT et nous ne pouvons pas procéder ainsi. Nous touchons ici au “coût” d’utilisation des frameworks.: Ils offrent des manières plus simples de faire beaucoup de choses standards, mais en contrepartie, il peut devenir un peu plus compliqué de faire des choses plus exotiques. Dans la plupart des projets professionnels, les avantages d’utiliser un framework restent largement rentables.
-
 
 <div class="exercice" markdown="1" >
 
 **Exercice :**
 
-1. Commencez par choisir le dossier où vous allez ranger votre site, par exemple, vous pouvez créer les dossiers `TD_vueJS/todo_list` dans votre `public_html`.
-2. Ensuite, dans le fichier `vite.config.ts` ajoutez à la fin du `export default defineConfig` le champ `base: '/le_chemin_vers_là_où_le_site_sera_déployé'` (la racine correspond à la racine du site /!\ ) qui permet d'indiquer le chemin vers la base du site (là où le `index.html` sera accessible) . Si vous avez suivi le nommage proposé, la ligne devrait ressembler à `base: '******todo*****/TD_vueJS/todo_list` (il est aussi possible d'utiliser `base: 'http://******todo*****/TD_vueJS/todo_list` ou d'utiliser un chemin relatif, mais ça pourrait poser des difficultés plus tard).
+1. Lancez la compilation de votre site : Allez dans votre terminal, tapez `q` pour couper temporairement le serveur, puis entrez
+
+   ```
+   npm run build
+   ```
+
+2. Le résultat de la compilation du site est stocké dans le répertoire
+   `todo_list/dist`. Nous allons maintenant déployer le site sur un serveur Web.
+   Nous donnons les instructions dans l'exemple où vous êtes à l'IUT.
+
+   Nous voudrions faire comme si ce répertoire `dist` était stocké dans `public_html`. Nous allons donc créer un lien symbolique dans `public_html` qui pointe vers `dist`.
+
+   ```bash
+   ln -s todo_list/dist ~/public_html/TD_vueJS/TD1 
+   ``` 
+
+   Vous pouvez donc désormais accéder à votre site à l'URL
+   `https://webinfo.iutmontp.univ-montp2.fr/~votre_login/TD_vueJS/TD1`.
+   Cependant, la page Web est vide et l'onglet *Console* indique des problèmes
+   de chargement des fichiers de votre site. 
+
+</div>
+ 
+En effet, Vite part du principe que le site que nous construisons sera le seul
+site servi par le serveur web et sera donc à la racine du site, c'est-à-dire à
+l'URL `https://webinfo.iutmontp.univ-montp2.fr/` au lieu de
+`https://webinfo.iutmontp.univ-montp2.fr/~votre_login/TD_vueJS/TD1`. C'est
+habituellement, ce que l'on fait pour un site professionnel. Cependant, nous
+avons un seul serveur web pour tous nos TDs à l'IUT et nous ne pouvons pas
+procéder ainsi. Nous touchons ici au “coût” d’utilisation des frameworks : Ils
+offrent des manières plus simples de faire beaucoup de choses standards, mais en
+contrepartie, il peut devenir un peu plus compliqué de faire des choses plus
+exotiques. Dans la plupart des projets professionnels, les avantages d’utiliser
+un framework restent largement rentables.
+
+Nous allons d'abord devoir ouvrir le fichier de configuration `vite.config.ts`
+pour indiquer à Vite le chemin de base du site Web.
+
+<div class="exercice" markdown="1" >
+
+**Exercice :**
+
+1. Dans le fichier `vite.config.ts`, ajoutez à la fin du `export default defineConfig` le champ `base: '/~votre_login/TD_vueJS/TD1'`.
+   
+   Notez que `base` permet aussi d'indiquer l'URL complète (avec le nom de domaine) ou d'utiliser un chemin relatif, mais ça pourrait poser des difficultés plus tard.
+
+2. Relancez la compilation avec `npm run build` et le site doit maintenant 
+   être accessible à l'URL `https://webinfo.iutmontp.univ-montp2.fr/~votre_login/TD_vueJS/TD1`.
 
 </div>
 
 Nous reparlerons de ce fichier plus tard pour pouvoir installer un proxy qui nous permettra d'utiliser notre API.
-
-Pour déployer le site, il ne reste plus qu'à "construire" son code.
-
-<div class="exercice" markdown="1" >
-
-**Exercice :**
-Allez dans votre terminal, tapez "q" pour couper temporairement le serveur, puis entrez
-
-```
-npm run build
-```
-</div>
-
-Voilà, le code de notre site est disponible dans le dossier "todo_list/dist". Il ne reste plus qu'à le copier dans le dossier `public_html/le_chemin_vers_là_où_le_site_sera_déployé` et à vérifier qu'il est effectivement disponible à l'adresse `http://******todo*****/...`.
 
 N'oubliez pas de relancer le serveur de développement avec `npm run dev` si vous devez continuer à coder sur le TD.
 
@@ -933,15 +972,15 @@ N'oubliez pas de relancer le serveur de développement avec `npm run dev` si vou
 Vous avez découvert Vue et TypeScript. Nous avons mentionné la plupart des notions les plus importantes (mais nous avons laissé beaucoup de détails sous le tapis).
 Les trucs à retenir :
 - le rôle de TypeScript (définir les types et les interfaces),
-- notion de reactif et de composant dans Vue,
-- v-bind:attribut (équivalent à :attribut),
-- v-on:event (équivalent à @event),
-- v-model pour synchroniser une variable à une input,
-- v-for permet de lister des éléments,
-- comment définir un composant avec ses props et ses events,
+- notion de réactif et de composant dans Vue,
+- `v-bind:attribut` (équivalent à `:attribut`),
+- `v-on:event` (équivalent à `@event`),
+- `v-model` pour synchroniser une variable à un `<input>`,
+- `v-for` permet de lister des éléments,
+- comment définir un composant avec ses *props* et ses *events*,
 - comment construire et déployer le site.
 
-Pour pouvoir connecter notre façade Vue avec une API PHP, nous verrons dans le prochain TDs comment utiliser le proxy de Vite pour pouvoir connecter le serveur de développement à l'API et comment utiliser le composant KeepAlive (un composant spécial fourni par Vue).
+Pour pouvoir connecter notre façade Vue avec une API PHP, nous verrons dans le prochain TD comment utiliser le proxy de Vite pour pouvoir connecter le serveur de développement à l'API et comment utiliser le composant KeepAlive (un composant spécial fourni par Vue).
 
 <!-- Une liste non exhaustives des notions que nous ne discuterons pas composables, v-if, v-show, lifeCycle, watchers. -->
 
