@@ -10,5 +10,7 @@ Cours à l'IUT de Montpellier -
 
 ## TDs
 
-1. Semaine du 12 septembre 2022 -- [TD1 -- Introduction à Vue](tutorials/TD1.html)
+1. Semaine du x octobre 2023 -- [TD1 -- Introduction à Vue](tutorials/TD1.html)
+1. Semaine du x novembre 2023 -- [TD2 -- Les composants](tutorials/TD2.html)
+1. Semaine du x novembre 2023 -- [TD3 -- Front end pour l'API The Feed](tutorials/TD3.html)
 <!--## Compléments optionnels-->

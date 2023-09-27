@@ -26,16 +26,22 @@ Ce TD est partiellement inspiré du [tutoriel Vue](https://vuejs.org/tutorial/#s
 ## Première page avec `Vue.js` et `npm`
 Jusqu'à maintenant, nous n'avons utilisé que du JavaScript "nature". Nous pouvions donc simplement écrire notre fichier `js`, l'inclure dans le fichier `html` et le navigateur web faisait le reste du travail sans même avoir besoin d'un serveur web. Beaucoup de Frameworks JS coexiste avec tout un paquet d'utilitaires (compilateur, linter, serveur de développement...). Ces utilitaires sont très simples à installer grâce à Node.JS et [npm](https://fr.wikipedia.org/wiki/Npm) (officieusement l'acronyme de "Node Package Manager", officiellement le rétroacronyme de "npm is not an acronym").
 
-Node et npm est déjà disponibles en salle machine, si vous êtes sur votre machine personnelle, vous aurez surement besoin de l'installer (ce qui est normalement assez simple sous un Linux). Pour initier un projet Vue, vous pouvez alors ouvrir votre terminal dans le dossier où vous souhaitez créer votre projet, puis entrez la commande :
+Npm est déjà disponibles en salle machine, si vous êtes sur votre machine personnelle, vous aurez surement besoin de l'installer (ce qui est normalement assez simple sous un Linux). Pour initier un projet Vue, vous pouvez alors ouvrir votre terminal dans le dossier où vous souhaitez créer votre projet, puis entrez la commande :
 
 
 ```sh
 npm init vue@latest
 ```
 
-Faites-le. L'utilitaire vous demande d'abord le nom du projet à créer : vous pouvez choisir `todo_list` (puisque nous allons commencer par réaliser une liste de tâches). Ensuite, il vous propose d'inclure plusieurs fonctionnalités supplémentaires dès la création du projet. Nous allons toutes les refuser sauf TypeScript (nous ignorerons les erreurs de type au début, mais nous y reviendrons ensuite) et ESLint.
+<div class="exercice" markdown="1">
+
+**Exercice :** Faites-le. 
+
+L'utilitaire vous demande d'abord le nom du projet à créer : vous pouvez choisir `todo_list` (puisque nous allons commencer par réaliser une liste de tâches). Ensuite, il vous propose d'inclure plusieurs fonctionnalités supplémentaires dès la création du projet. Nous allons toutes les refuser sauf TypeScript (nous ignorerons les erreurs de type au début, mais nous y reviendrons ensuite) et ESLint.
 
 ![](../assets/output_vite.png)
+</div>
+
 
 Enfin, on nous propose d'entrer les 3 lignes suivantes pour commencer à travailler sur le projet :
 
@@ -45,7 +51,12 @@ npm install
 npm run dev
 ```
 
-Faites-le. La seconde commande permet d'installer les différentes dépendances du projet. Si tout va bien, la dernière commande donne la sortie suivante
+<div class="exercice" markdown="1">
+
+**Exercice :** Faites-le. 
+</div>
+
+La seconde commande permet d'installer les différentes dépendances du projet. Si tout va bien, la dernière commande donne la sortie suivante
 
 ```
 test@0.0.0 dev
@@ -60,24 +71,29 @@ VITE v4.4.2  ready in 420 ms
 ```
 On peut alors ouvrir le lien `http://localhost:5173/` dans le navigateur web de notre choix (Firefox ou Chrome/Chromium). Notre page est disponible sur ce lien et celle-ci se met à jour dès que l'on modifie les fichiers, ce qui est plutôt pratique pour développer. Actuellement, vous devez avoir la page d'accueil d'un projet vue de base. Ne fermez pas votre terminal sinon le serveur de développement cessera de fonctionner.
 
-L'utilitaire que nous avons utilisé pour créer ce projet et faire tourner le serveur de développement s'appelle `Vite`. Pour l'instant, pas besoin d'en savoir plus, mais nous reparlerons des fichiers de configuration `Vite` plus tard.
+L'utilitaire que nous avons utilisé pour créer ce projet et faire tourner le serveur de développement s'appelle `Vite`. Pour l'instant, pas besoin d'en savoir plus, mais nous reparlerons de quelques fichiers de configuration `Vite` plus tard.
 
 
 ### Petit point IDE et navigateur
 
-La documentation Vue semble recommander l'usage de VS code. De même, TypeScript que nous allons utiliser est développé par le même éditeur que VScode (MicroSoft). Tous ces outils sont libres et open source. Pour ces différentes raisons, c'est un bon choix d'utiliser VS code (ou l'alternative VScodium qui est une version de VScode sans la télémétrie de Microsoft) et d'installer les plugins `Vue Language Features (Volar)` et `TypeScript Vue Plugin (Volar)`. Webstorm propose a priori aussi un très bon support pour TypeScript et Vue sans installation préalable de plugin.
+La documentation Vue semble recommander l'usage de VS code. De même, TypeScript que nous allons utiliser est développé par le même éditeur que VScode (MicroSoft). Tous ces outils sont libres et open source. Pour ces différentes raisons, c'est un bon choix d'utiliser VS code (ou l'alternative VScodium qui est une version de VScode sans la télémétrie de Microsoft) et d'installer les plugins `Vue Language Features (Volar)` et `TypeScript Vue Plugin (Volar)`. Cependant, Webstorm propose a priori aussi un très bon support pour TypeScript et Vue sans installation préalable de plugin.
 
 Nous allons aussi installer un plugin au navigateur pour nous aider à déboguer un site codé avec vue:
-sous [Firefox](https://addons.mozilla.org/fr/firefox/addon/vue-js-devtools/) et sous [Chrome](https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd). Ces plugins offrent un nouvel onglet dans les outils de développement qui ressemble à ça :
+sous [Firefox](https://addons.mozilla.org/fr/firefox/addon/vue-js-devtools/) et sous [Chrome](https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd). Ces plugins offrent un nouvel onglet dans les outils de développement qui ressemble à ceci :
 
 ![](../assets/screen_fire_vue.png)
 
 ### La première page
 
 
-Ouvrez dans votre IDE le dossier `todo_list/src`. Commençons par regarder les deux fichiers `main.ts` et `App.vue`. Le fichier `main.ts` est le point d'entrée principal du site et pour l'instant, il se contente d'importer un composant définit dans le fichier `App` et de le déclarer comme composant principal avec la dernière ligne. Ouvrez le fichier `index.html` pour voir à quoi le `#app` fait référence: on pourrait le remplacer par n'importe quel sélecteur valide.
+Ouvrez le projet dans votre IDE et commencez à observer le contenu du dossier `todo_list/src`. Commençons par regarder les deux fichiers `main.ts` et `App.vue`. Le fichier `main.ts` est le point d'entrée principal du site et pour l'instant, il se contente d'importer un composant définit dans le fichier `App` et de le déclarer comme composant principal avec la dernière ligne. Ouvrez le fichier `index.html` pour voir à quoi le `#app` fait référence: on pourrait le remplacer par n'importe quel sélecteur valide.
 
-Nous allons pour l'instant surtout nous concentrer sur le fichier `App.vue`. La première chose à constater c'est qu'il contient du JS entre les balises `<script>`, du `HTML` entre les balises `<template>` et enfin du CSS entre les balises `<style>`. Ce découpage contredit le découpage auquel nous sommes habitués. Nous allons tout de même effectuer un découpage, mais il sera composant par composant. C'est le choix fait par la plupart des frameworks JS les plus populaires, certain proposent même de séparer le code en composant et de séparer le HTML, le CSS et le JS de chaque composant. Nous verrons les détails des composants plus tard, mais pour l'instant, vous pouvez constater que le JS importe deux composants qui sont ensuite utilisés dans le HTML (`HelloWorld` et `The_welcome`).
+Nous allons pour l'instant surtout nous concentrer sur le fichier `App.vue`. La première chose à constater c'est qu'il contient:
+- du JS entre les balises `<script>`, 
+- du HTML entre les balises `<template>` 
+- et enfin du CSS entre les balises `<style>`. 
+
+Ce découpage contredit l'organisation du code à laquelle vous êtes habitués. Nous allons tout de même effectuer un découpage, mais il sera "composant" par "composant". C'est le choix fait par la plupart des frameworks JS les plus populaires Certain proposent de séparer le code en composant et de séparer le HTML, le CSS et le JS de chaque composant. Nous verrons les détails des composants plus tard. Pour l'instant, le JS importe deux composants  (`HelloWorld` et `The_welcome`) qui sont ensuite utilisés dans le HTML.
 
 Remplacez le contenu de `App.vue` par
  
@@ -153,10 +169,12 @@ On peut constater dans la console que la valeur de la variable change, et pourta
 
 </div>
 
-La fonction `ref` renvoie un objet réactif qui encapsule l'objet donné en argument. Il faut donc maintenant utiliser `monobjet.value` pour accéder à sa valeur dans le JS. En contrepartie, dès qu'il change, l'interface se met-à-jour correctement (cette fonction utilise l'objet proxy de JavaScript que nous avons utilisé dans un contexte similaire l'an dernier). Il faudra définir et utiliser tous les objets réactifs de cette manière.
+La fonction `ref` renvoie un objet réactif qui encapsule l'objet donné en argument. Il faut donc maintenant utiliser `monobjet.value` pour accéder à sa valeur dans le JS. En contrepartie, dès qu'il change, l'interface se met-à-jour correctement . Il faudra définir et utiliser tous les objets réactifs de cette manière.
+
+> La fonction `ref` utilise l'objet proxy de JavaScript que nous avons utilisé dans un contexte similaire l'an dernier. En fait, Vue définie une fonction `reactive` dont le fonctionnement est très proche de la fonction `reactive` que nous avons écrit l'an dernier. La fonction `ref` utilise en fait `reactive`, mais `ref` est plus simple d'utilisation et nous utiliserons donc principalement `ref`.
 
 
-> **Attention :** Quand on utilise une variable `ref` dans la partie `script JS` il faut bien utiliser `maVariable.value` pour accéder à sa valeur alors qu'il faut faire `maVariable` dans la partie `template HTML`. Cela risque de cause pas mal d'erreur au début si vous l'oubliez !!
+> **Attention :** Pour utiliser une variable `ref` dans la partie `script JS` il faut écrire `maVariable.value` pour accéder à sa valeur alors qu'il faut faire `maVariable` dans la partie `template HTML`. Cela risque de cause pas mal d'erreur au début si vous l'oubliez !!
 
 
 <div class="exercice" markdown="1" >
@@ -165,18 +183,19 @@ La fonction `ref` renvoie un objet réactif qui encapsule l'objet donné en argu
 
 Ensuite, utilisez `v-on:input` et la fonction suivante pour que la modification du contenu de l'input mette la variable à jour.
 
-</div>
-
 ```js
 function onInput(e) {
   compteur.value = e.target.value
 }
 ```
 
+</div>
+
+
 On a réussi à associer une variable à l'input dans les deux directions. En fait, pour faire cela directement, il existe une troisième directive `v-model`.
 
 <div class="exercice" markdown="1" >
-**Exercice :** Remplacez l'input par `<input type="input" v-model="compteur">` et supprimez la fonction `onInput`. Vérifiez que tout fonctionne.
+**Exercice :** Remplacez l'input par `<input v-model="compteur">` et supprimez la fonction `onInput`. Vérifiez que tout fonctionne.
 </div>
 
 
@@ -226,7 +245,7 @@ Nous allons utiliser une nouvelle directive `v-for` qui permet de faire une bouc
 
 </div>
 
-Dans la partie JS, nous définissions le tableau `taches` qui contient les éléments de la liste de tâches. Chaque élément de la liste de tâches, possède un texte qui décrit la tâche, un booléen qui décrit si la tâche est effectuée ou non et une `id` dont nous allons voir l'utilité. L'autre partie intéressante est la ligne `<li v-for="tache in taches" :key="tache.id">` qui permet de faire une boucle sur tous les éléments de `taches` et de créer un `<li>` pour chacun d'entre eux. La partie `:key="tache.id"` permet d'associer une clef différente à chaque élément. Pour l'instant le code pourrait fonctionner sans, mais le fait d'associer une clef à chaque élément permet à Vue de comprendre quel élément correspond à quel élément quand le tableau change (par exemple, si l'on supprime une case au milieu du tableau). Il faut donc toujours associer une clef unique à chaque élément.
+Dans la partie JS, nous définissions le tableau `taches` qui contient les éléments de la liste de tâches. Chaque élément de la liste de tâches, possède un texte qui décrit la tâche, un booléen qui décrit si la tâche est effectuée ou non et une `id` dont nous allons voir l'utilité. L'autre partie intéressante est la ligne `<li v-for="tache in taches" :key="tache.id">` qui permet de faire une boucle sur tous les éléments de `taches` et de créer un `<li>` pour chacun d'entre eux. La partie `:key="tache.id"` permet d'associer une clef différente à chaque élément. Pour l'instant le code pourrait fonctionner sans, mais le fait d'associer une clef à chaque élément permet à Vue de comprendre quel élément correspond à quel élément quand le tableau change (par exemple, si l'on supprime une case au milieu du tableau). Dans le doute, il faut toujours associer une clef unique à chaque élément.
 
 
 ### Ajouter et retirer un élément à la liste de tâches
@@ -237,9 +256,9 @@ Nous allons maintenant ajouter la possibilité d'ajouter un élément à la list
 
 **Exercice :**
 
-1. Commencez par ajouter un input texte associé à une variable réactive qu'on pourra appeler `nouvelleTache` (il faut donc utiliser `ref` et `v-model`). On ajoutera un `placeholder` pertinent à l'input.
+1. Commencez par ajouter, avant l'affichage de la liste, un input texte associé à une variable réactive qu'on pourra appeler `nouvelleTache` (il faut donc utiliser `ref` et `v-model`). On ajoutera un `placeholder` pertinent à l'input.
 
-2. Écrivez une nouvelle fonction `ajouterTache` qui ajoute un nouvel élément à `taches` (on pourra utiliser [Array.prototype.push](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Array/push)). Ce nouvel élément doit posséder une nouvelle `id` (on peut utiliser `id++`), une description qui correspond au contenu de la variable `nouvelleTache` et le booléen `faite:false`. La fonction `ajouterTache` devra aussi vérifier que `nouvelleTache` est différent de `""` avant de l'ajouter à `taches` puis réinitialiser la valeur de `nouvelleTache` à `""`.
+2. Écrivez une nouvelle fonction `ajouterTache` qui ajoute un nouvel élément à `taches` (on pourra utiliser [Array.prototype.push](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Array/push)). Ce nouvel élément doit posséder une nouvelle `id` (on peut utiliser `id++`), une description qui correspond au contenu de la variable `nouvelleTache` et le booléen `faite:false`. La fonction `ajouterTache` devra aussi vérifier que `nouvelleTache` est différent de `""` avant de l'ajouter à `taches` puis réinitialiser la valeur de `nouvelleTache` à `""`. N'oubliez pas que pour utiliser nos variables `ref` dans le JS, il faut utiliser `.value`. 
 
 3. Ajoutez un bouton qui appelle `ajouterTache` (on utilisera `@click`). Vérifiez que tout fonctionne.
 </div>
@@ -295,31 +314,32 @@ On va maintenant ajouter la possibilité de retirer un élément de la liste de 
 <div class="exercice" markdown="1" >
 
 **Exercice :**  
-1. Devant chaque tâche, ajoutez un input de type `checkbox` reliée à la valeur `tache.faite` correspondante.
-
-
-2. Pour que chaque tâche faite apparaisse raturée, nous allons ajouter les lignes suivantes au CSS
-
-    ```css
-    .fait{
-      text-decoration: line-through;
-    }
-    ```
+Devant chaque tâche, ajoutez un input de type `checkbox` reliée à la valeur `tache.faite` correspondante. Vous pouvez utiliser l'onglet Vue pour vérifier que les booléens `faite` change de valeur quand on clique une checkbox. 
 
 </div>
 
-Il faut ensuite associer la classe `fait` à toutes les tâches qui sont faites. La directive `v-bind:class` fonctionne de manière un peu particulière. L'un des manières de l'utiliser est de lui donner un objet dont les noms des attributs sont les noms classes à ajouter et la valeur de chaque attribut est un booléen qui indique si la classe correspondante doit être ajoutée. Ces classes se cumulent avec celles définies en HTML classique avec `class ="..."`. Par exemple, un `<div>` avec
+Pour que chaque tâche faite apparaisse raturée, nous allons ajouter les lignes suivantes au CSS
+
+```css
+.fait{
+  text-decoration: line-through;
+}
+```
+
+Il faut ensuite associer la classe css `fait` à toutes les tâches qui sont faites. La directive `v-bind:class` fonctionne de manière un peu particulière. L'un des manières de l'utiliser est de lui donner un objet dont les noms des attributs sont les noms classes à ajouter et la valeur de chaque attribut est un booléen qui indique si la classe correspondante doit être ajoutée. Ces classes se cumulent avec celles définies en HTML classique avec `class ="..."`. Par exemple, un `<div>` avec
 
 ```js
 <div class="blip blop" :class="{class1: true, class2:false, toto:true}">
 ```
- aurait donc comme classes `"blip blop class1 toto"`. On peut utiliser la valeur d'une variable pour désigner le booléen (et le nom de la classe).
+ aurait donc comme classes `"blip blop class1 toto"`. On peut utiliser la valeur d'une variable pour désigner le booléen (et le nom de la classe). 
+Observez que les directives et les moustaches [peuvent prendre n'importe quelle expression JS](https://vuejs.org/guide/essentials/template-syntax.html#using-javascript-expressions), c'est-à-dire tout bout de code dont l'évaluation donne une valeur.
  
 <div class="exercice" markdown="1" >
 
-**Exercice :** Ajoutez au `span` associé à chaque `tache` la classe `fait` si son booléen `tache.faite` est `true`. Vérifiez que tout fonctionne.
-
-Observez que les moustaches [peuvent prendre n'importe quelle expression JS](https://vuejs.org/guide/essentials/template-syntax.html#using-javascript-expressions), c'est-à-dire tout bout de code dont l'évaluation donne une valeur.
+**Exercice :** 
+1. Ajoutez les 3 lignes de css.
+2. Ajoutez au `span` associé à chaque `tache` la classe `fait` si son booléen `tache.faite` est `true`. 
+3. Vérifiez que tout fonctionne.
 
 </div>
  
@@ -399,7 +419,7 @@ TypeScript est une légère surcouche à JavaScript qui permet de "typer" son co
 
 Typer les variables permet à l'IDE et à divers outils de développement de détecter automatiquement différents bugs potentiels. Le typage permet aussi d'améliorer considérablement la complétion automatique que fourni l'IDE, notamment pour de gros projets. 
 
-Le fonctionnement de TypeScript est très simple : il fournit quelques manières d'annoter le code avec des types. Pour produire un code JavaScript valide, il suffit d'effacer toutes ces annotations (à part dans quelques cas avancés...). Normalement, il faut donc un outil spécial (qu'on peut facilement installer avec `npm`) pour transformer le code TypeScript en JavaScript que le navigateur pourra exécuter. Dans notre cas Vite gère Vue et TypeScript en même temps (nous avons coché la case "Add TypeScript ?" quand nous avons initié le projet).
+Le fonctionnement de TypeScript est très simple : il fournit quelques manières d'annoter le code avec des types. Pour produire un code JavaScript valide, il suffit d'effacer toutes ces annotations (à part dans quelques cas avancés...). Il faut un outil spécial  pour transformer le code TypeScript en JavaScript que le navigateur pourra exécuter (on peut facilement l'installer avec `npm`). Dans notre cas, Vite gère Vue et TypeScript en même temps (nous avons coché la case "Add TypeScript ?" quand nous avons initié le projet).
 
 La fonctionnalité principale de TypeScript est de pouvoir définir le type d'une variable avec la syntaxe `mavariable:montype`. Ça n'est pas forcément utile quand on déclare une variable puisque TypeScript peut deviner automatiquement le type en se basant sur le type de l'affection associée. Dans l'exemple suivant, TS peut deviner que le type de `helloWorld` est `string`
 
@@ -417,7 +437,7 @@ function maFonction(param1:type1, param2:type2):typeDeRetour{
   ...
 }
 ```
-et TypeScript pourra ainsi vérifier que tout se passe correctement lors de l'appel de cette fonction. L'autre fonctionnalité principale est de définir des types particuliers, comme les interfaces et les unions. Nous allons surtout utiliser les interfaces pour indiquer qu'un objet doit posséder certains attributs avec le bon type. Mais on peut aussi en faire un usage très proche de celui que vous avez vu en Java en précisant les méthodes qu'un objet devrait posséder (TS possède un certain nombre de notions qui permettent de faire de la POO plus proche de celle que vous connaissez en Java).
+et TypeScript pourra ainsi vérifier que tout se passe correctement lors de l'appel de cette fonction. L'autre fonctionnalité principale que nous allons utiliser est la possibilité de définir des types particuliers, comme les interfaces et les unions. Nous allons surtout utiliser les interfaces pour indiquer qu'un objet doit posséder certains attributs avec le bon type. Mais on peut aussi en faire un usage très proche de celui que vous avez vu en Java en précisant les méthodes qu'un objet devrait posséder (TS possède un certain nombre de notions qui permettent de faire de la POO plus proche de celle que vous connaissez en Java).
 
 <div class="exercice" markdown="1" >
 
@@ -473,7 +493,7 @@ En passant notre souris sur la définition de `taches` on voit que le type est p
 À partir de maintenant, nous essayerons de donner des types corrects et précis aux objets, mais vous savez déjà presque tout ce qu'il faut savoir pour utiliser TypeScript.
 
 ### Et le linter
-Un linter est un programme qui parcourt le code pour essayer de trouver d'y trouver des défauts. Beaucoup de linter ne se contentent pas de détecter des erreurs évidentes du langage, mais vérifient aussi qu'une certain nombre de conventions habituelles sont respectées. Le terme linter vient simplement du fait que le premier linter s'appelait `lint` (et était écrit pour le langage C). Utiliser un linter permet d'améliorer la qualité du code produit. Il peut exister plusieurs linters pour le même langage puisqu'on peut vouloir vérifier différentes conventions.
+Un linter est un programme qui parcourt le code pour essayer d'y trouver des défauts. Beaucoup de linter ne se contentent pas de détecter des erreurs évidentes du langage, mais vérifient aussi qu'une certain nombre de conventions habituelles et de bonnes pratiques sont respectées. Le terme linter vient simplement du fait que le premier linter s'appelait `lint` (et était écrit pour le langage C). Utiliser un linter permet d'améliorer la qualité du code produit. Il peut exister plusieurs linters pour un même langage.
 
 En créant votre projet, vous avez coché "yes" pour le linter et Vite s'est donc chargé de configurer tout ce qu'il faut pour utiliser un linter JS/Vue simplement.
 
