@@ -1,12 +1,16 @@
 ---
-title: Cours de programmation Web - HTML, CSS
-layout: main
+# Feel free to add content and custom Front Matter to this file.
+# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
+
+title: Les frameworks web - Vue.JS
 ---
 
-# R5.0? -- Un Titre
-Cours à l'IUT de Montpellier - 
 
-**Mots clés :** JS, Vue
+Parcours RACDV – Cours R5.A.05 – Programmation avancée
+
+Parcours IAMSI – Cours R5.D.04 – Développement pour progiciels
+
+**Mots clés :** framework, JS, Vue
 
 ## TDs
 

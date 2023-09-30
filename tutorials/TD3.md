@@ -1,5 +1,5 @@
 ---
-title: TD3 -- Réalisation du Front pour l'api The Feed
+title: TD3 -- Réalisation du Front The Feed
 subtitle: 
 lang: fr
 ---
@@ -25,6 +25,8 @@ npm run dev
 ```
 
 Ouvrez la page correspondant au projet dans votre navigateur. Nous pouvons commencer à travailler sur notre projet.
+
+Vous pouvez aussi modifier le titre de la page en `The Feed` dans le fichier `index.html`.
 
 ## Nos premières routes
 
@@ -52,23 +54,23 @@ Commençons par créer notre première vue.
     </template>
     ```
 
-4. Remplacez le contenu du fichier `router/index.ts` par le contenu suivant :
+4. Remplacez le contenu du fichier `router/index.ts` par le contenu suivant (en fonction de la version de Vue, il se peut que vous ayez un fichier `router.ts` à la place du fichier `router/index.ts`, le fonctionnement est le même) :
     ```ts
     import { createRouter, createWebHistory } from 'vue-router'
     import Feed from '../views/Feed.vue'
 
     const router = createRouter({
-    history: createWebHistory(''),
-    routes: [
-        {
-            path: '/',
-            component: Feed
-        },
-        {
-            path: '/feed',
-            component: Feed
-        }
-    ]
+        history: createWebHistory(''),
+        routes: [
+            {
+                path: '/',
+                component: Feed
+            },
+            {
+                path: '/feed',
+                component: Feed
+            }
+        ]
     })
 
     export default router
@@ -87,8 +89,8 @@ Commençons par créer notre première vue.
 
 Prenons le temps de comprendre ce qu'il se passe. Pour bien comprendre commençons par regarder le contenu du fichier `main.ts`. On y trouve deux nouvelles lignes: 
 ```ts
-    import router from './router'
-    app.use(router)
+import router from './router'
+app.use(router)
 ```
 
 La première ligne permet d'importer le router en indiquant où il est stocké (ici dans le dossier `router`). La seconde ligne permet de rendre le router disponible à l'ensemble des composants qu'on va charger par la suite dans `app`.
@@ -105,7 +107,7 @@ Pour s'assurer que nous avons compris créons une autre vue qui nous servira plu
 **Exercice :** 
 1. Créez le fichier `AllUsers.vue` sur le même modèle que `Feed.vue`, mais avec le texte `Ceci est la liste des utilisateurs.`
 
-2. Ajoutez une route `/allUsers` dans le fichier `router/index.ts` qui invoque le composant que nous venons de définir. N'oubliez pas de faire l'import du composant avant de définir la route.
+2. Ajoutez une route `/users` dans le fichier `router/index.ts` qui invoque le composant que nous venons de définir. N'oubliez pas de faire l'import du composant avant de définir la route.
 
 3. Vérifiez que cette nouvelle route fonctionne.
 </div>
@@ -122,10 +124,27 @@ Ensuite, l'appelle à la méthode `router.push('maroute')` redirige la page vers
 
 <div class="exercice" markdown="1">
 
-**Exercice :** Modifiez le fichier `App.vue` pour qu'un clic sur `The feed` renvoie sur la route `/feed` et qu'un clic sur `Les membres` renvoie sur la route `/allUsers`. Vérifiez que tout fonctionne.
+**Exercice :** Modifiez le fichier `App.vue` pour qu'un clic sur `The feed` renvoie sur la route `/feed` et qu'un clic sur `Les membres` renvoie sur la route `/users`. Vérifiez que tout fonctionne.
 
 </div>
 
+On peut aussi nommez nos routes en rajoutant un `name` à la route comme ceci
+```ts
+    {
+        path: '/',
+        name:'feed',
+        component: Feed
+    },
+```
+
+On peut ensuite utiliser la route par son nom comme ceci `router.push({name: 'nomDeLaRoute'})`. Cette syntaxe est légèrement plus lourde que la précédente, mais elle possède quelques avantages. Elle diminue les risques d'erreurs, mais surtout elle va nous simplifier la vie plus tard avec les routes paramétrées.
+
+
+<div class="exercice" markdown="1">
+
+**Exercice :** Nommez la route `/users` avec le nom `allUsers` et utiliser ce `name` dans le `push` comme montré au-dessus.
+
+</div>
 
 ## Les routes paramétrées
 
@@ -135,6 +154,7 @@ Pour définir une route paramétrée, il suffit de précédé le paramètre du s
 ```ts
 { 
     path: '/users/:id', 
+    name: 'singleUser',
     component: User 
 },
 ```
@@ -148,12 +168,13 @@ const id = route.params.id
 <div class="exercice" markdown="1">
 
 **Exercice :** 
+1. Créez une vue `views/SingleMessage.vue` qui récupère le paramètre `id` de la route et affiche `J'affiche le message d'id {{id}}`. 
 
-1. Créez une vue `views/SingleMessage.vue` qui récupère le paramètre `id` de la route et affiche `J'affiche le message d'id {{id}}`. Ensuite, ajoutez dans le router une route `/feed/:id` qui conduit vers la vue précédemment définie. Vérifiez que tout fonctionne en testant l'url de la route `/feed/17`.
+2. Ajoutez dans le router une route `/feed/:id` nommée `singleMessage` qui conduit vers la vue précédemment définie. 
 
-2. Modifiez le fichier `App.vue` pour qu'un clic sur `The feed` renvoie sur la route `/feed` et qu'un clic sur `Les membres` renvoie sur la route `/allUsers`. Vérifiez que tout fonctionne.
+3. Vérifiez que tout fonctionne en testant l'url de la route `/feed/17`.
 
-3. Profitez en pour modifier la vue `SingleUser.vue` pour qu'elle fasse un fetch de l'utilisateur désiré et qu'elle l'affiche dans un composant user. Vérifiez que tout fonctionne en testant l'url de la route `/user/17`.
+4. Faites de même pour une route `/user/:id` qui affiche une vue `SingleUser.vue` qui se contente d'afficher un message similaire au précédent pour l'instant.
 
 </div>
 
@@ -165,10 +186,10 @@ Avant de chercher à utiliser l'API, nous allons commencer à voir comment nous 
 
 ```ts
 export interface Utilisateur{
-    id:number;
+    id: number;
     adresseEmail: string;
     login: string;
-    premium:boolean;
+    premium: boolean;
 }
 ```
 
@@ -184,14 +205,14 @@ Si plusieurs types sont définis dans mon fichier, je peux en importer plusieurs
 <div class="exercice" markdown="1">
 
 **Exercice :** 
-1. Créez un fichier `src/types.ts` dans lequel vous ajouterez la définition des interfaces d'un Utilisateur et d'une interface publication avec les mots clefs `export`. Pour l'interface `Publication`, basez vous sur ce que votre API renvoie.
+1. Créez un fichier `src/types.ts` dans lequel vous ajouterez la définition des interfaces d'un Utilisateur et d'une interface publication avec les mots clefs `export`. Pour l'interface `Publication`, basez-vous sur ce que votre API renvoie (il y a 4 champs et on utilisera un string pour la date).
 
 </div>
 
 La prochaine étape est de définir un composant pour afficher les données de l'utilisateur. Pour ce site, nous allons utiliser une boite qui ressemble à ceci pour les différents éléments de contenus (les messages, les utilisateurs...) :
 ![](../assets/boxComponent.png)
 
-En fonction du contexte, nous allons parfois vouloir rendre ces boites cliquables parfois y mettre des liens et il est donc assez compliqué d'écrire un composant adapté (mais c'est tout à fait possible en utilisant quelques outils que nous n'avons pas mentionnés). Par contre, il est très simple d'utiliser un css commun pour plusieurs composants. Nous allons donc utiliser le css suivant (que vous pouvez adapter à vos goûts):
+En fonction du contexte, nous allons parfois vouloir rendre ces boites cliquables parfois y mettre des liens et il est donc assez compliqué d'écrire un composant adapté (mais ce serait tout à fait possible notamment avec quelques outils que nous n'avons pas mentionnés). Par contre, il est très simple d'utiliser un css commun pour plusieurs composants. Nous allons donc utiliser le css suivant (que vous pouvez adapter à vos goûts):
 
 ```css
 div.contentBox{
@@ -235,28 +256,32 @@ div.contentBox{
 
 Le HTML quant à lui ressemblera à ça
 ```html
-    <div class="wrapper">
-        <div class="top">
-            ici le titre du bloc
-        </div>
-        <div class="content" >
-            ici le contenu du bloc
-        </div>
+<div class="wrapper">
+    <div class="top">
+        ici le titre du bloc
     </div>
-</template>
+    <div class="content" >
+        ici le contenu du bloc
+    </div>
+</div>
 ```
 
-Pour pouvoir importer un CSS dans le CSS de notre composant, il suffit d'utiliser les lignes suivantes'
+Pour pouvoir importer un CSS dans le CSS de notre composant, il suffit d'utiliser les lignes suivantes:
 ```css
 <style scoped>
   @import "/chemin/vers/moncss";
 </style>
 ```
 
-Remarquez que ce n'est pas un ajout de vue, mais bien quelque chose qui est toujours possible en CSS (ici vue se chargera d'appliquer aussi le `scoped` au fichier importé). Dans un premier temps on pourra donc définir le composant correspondant à un utilisateur ainsi
+Remarquez que ce n'est pas un ajout de vue, mais bien quelque chose qui est toujours possible en CSS (ici vue se chargera d'appliquer aussi le `scoped` au fichier importé).
+
+> *Petit point CSS:* Le CSS contenu dans `<style scoped>` n'est appliqué qu'au composant dans lequel, il est écrit. Schématiquement Vue ajoute des `data-attribut` aux éléments d'un composant et modifie les sélecteurs de notre CSS pour qu'ils utilisent ces `data-attribut`. Mais Vue rajoute de nombreuses possibilités. Par exemple, la pseudo-class `:deep` permet d'accéder aux enfants d'un composant. Notez qu'on peut aussi charger un CSS global comme c'est actuellement fait dans `main.ts`.
+
+
+ Dans un premier temps on pourra donc définir le composant correspondant à un utilisateur ainsi
 ```vue
 <script setup lang="ts">
-  import type {Utilisateur} from '@/type'; 
+  import type {Utilisateur} from '@/types'; 
     const props = defineProps<{utilisateur: Utilisateur}>();
 </script>
 
@@ -284,39 +309,14 @@ Remarquez que ce n'est pas un ajout de vue, mais bien quelque chose qui est touj
     @import "@/components/ContentBox.css";
 </style>
 ```
-<script setup lang="ts">
-    import {ref, onMounted } from 'vue'
-    import type {Ref} from 'vue';   
-    import type {Utilisateur} from '@/types'
-    import User from '@/components/User.vue'
-    const users:Ref<Utilisateur[]> = ref([{
-        id:4, 
-        adresseEmail:"toto@gouv.fr", 
-        login:"toto", 
-        premium:false
-    }]);
-    // onMounted(() => {
-    // fetch('http://localhost/frameworks/the_feed_api/public/api/utilisateurs')
-    // .then(a=>a.json())
-    // .then(a => {
-    //     users.value = a["hydra:member"];
-    // });
-    // })
-</script>
-
-<template> 
-    <template  v-for="user in users" :key="user.id" >
-        <User :utilisateur="user"/>
-    </template>
-</template>
 
 <div class="exercice" markdown="1">
 
 **Exercice :** 
-1. Créez un fichier `components/ContentBox.css` et le fichier du composant `components/boiteUtilisateur.vue` avec les contenus indiqués au-dessus.
+1. Créez un fichier `components/ContentBox.css` et le fichier du composant `components/BoiteUtilisateur.vue` avec les contenus indiqués au-dessus.
 
 2. Modifiez le contenu de `AllUser.vue` pour :
-    - ajouter dans le script la définission du tableau `users` qui contient un `user` comme suit (plus tard nous remplirons ce tableau en interrogeant l'API)
+    - Ajouter dans le script la définissions du tableau `users` qui contient un `user` comme suit (plus tard nous remplirons ce tableau en interrogeant l'API)
     ```ts 
     const users:Ref<Utilisateur[]> = ref([{
         id:4, 
@@ -325,27 +325,33 @@ Remarquez que ce n'est pas un ajout de vue, mais bien quelque chose qui est touj
         premium:false
     }]);
     ```
-    - dans le template faites un `v-for` pour afficher chaque élément du tableau dans un composant `boiteUtilisateur`
-    - ajouter les `import` nécessaires : on a besoin de `ref` et de `boiteUtilisateur`, ainsi que des types `Ref` et `Utilisateur`
+    - Dans le template, utiliser un `v-for` pour afficher chaque élément du tableau dans un composant `boiteUtilisateur` (vous pouvez utiliser l'`id` pour l'attribut `key`).
+    - Ajouter les `import` nécessaires : on a besoin de `ref` et de `boiteUtilisateur`, ainsi que des types `Ref` et `Utilisateur` (l'IDE doit pouvoir le faire pour vous).
     - Vérifiez que tout fonctionne. Ajoutez un deuxième utilisateur au tableau `users` pour vérifier votre boucle.
 
-3. Modifiez la vue `SingleUser` pour qu'elle crée un faux `Utilisateur` (amis avec la bonne id qu'on peut récupérer en paramètre de la route) et l'affiche en utilisant le composant `boiteUtilisateur`.
+3. Modifiez la vue `SingleUser` pour qu'elle crée un faux `Utilisateur` (mais avec la bonne id qu'on peut récupérer en paramètre de la route) et l'affiche en utilisant le composant `boiteUtilisateur`. Attention, l'id en paramètre (`route.params.id`) est de type `string` alors que l'id d'un `Utilisateur` doit être un `number`. On peut utiliser `Number(monstring)` pour convertir un `string` en `number`.
 
 </div>
 
  On souhaite qu'un clic sur le login d'un utilisateur affiche son profil. 
- On pourrait utiliser `router.push`, mais pour faire un lien, nous pouvons utiliser à la place la balise `router-link`. Cette balise génère une balise `<a>` HTML avec l'url correspondant à la route donnée en paramètre et s'utilise comme suit :
+ On pourrait utiliser `router.push`, mais pour faire un lien, nous pouvons utiliser à la place la balise `router-link`. Cette balise se comporte comme un `<a>` HTML avec l'url correspondant à la route donnée en paramètre et s'utilise comme suit :
  ```html
- <router-link :to="lienDeLaroute" >texte du lien</router-link>
+ <router-link :to="{name:'nomDeLaRoute',params:{param1:valeureParam1, param2:valeureParam2}}">texte du lien</router-link>
 ```
+Dans notre cas cela donne :
+ ```html
+ <router-link :to="{name:'singleUser', params:{id:utilisateur.id}}">texte du lien</router-link>
+```
+Ici, il pourrait être tentant de faire `<router-link :to="'/singleUser/'+utilisateur.id">`, mais il faudrait s'assurer que `utilisateur.id` est correctement encodé dans l'url alors que l'autre syntaxe automatise l'encodage des url.
 
 <div class="exercice" markdown="1">
 
-**Exercice :** Modifiez le composant `boiteUtilisateur` pour que le login de l'utilisateur soit un lien vers la page de cet utilisateur. On pourra ajouter la classe `clicable` à ce lien pour améliorer le CSS. Vérifiez que le lien fonctionne.
+**Exercice :** Modifiez le composant `BoiteUtilisateur.vue` pour que le login de l'utilisateur soit un lien vers la page de cet utilisateur. On pourra ajouter la classe `clicable` à ce lien pour améliorer le CSS. Vérifiez que le lien fonctionne.
 
 </div>
 
 Nous avons une première version de l'affichage des utilisateurs prête pour être connecté avec notre API. Avant cela nous allons faire la même chose pour les publications. Pour le composant `boitePublication` nous utiliserons le code suivant
+
 ```vue
 <script setup lang="ts">
     import {useRouter, RouterLink} from 'vue-router';
@@ -358,12 +364,12 @@ Nous avons une première version de l'affichage des utilisateurs prête pour êt
 <template>
     <div class="contentBox">
         <div class="top">
-            <router-link :to="'/user/'+publication.auteur.id" class="clicable">
+            <router-link :to="{name:'singleUser', params: {id: publication.auteur.id}}" class="clicable">
                 {{publication.auteur.login}}
             </router-link>
             -- {{(new Date(publication.datePublication)).toLocaleString("fr")}}
         </div>
-        <div class="content clicable" @click="router.push('/feed/'+publication.id)">
+        <div class="content clicable" @click="router.push({name:'singleMessage', params: {id: publication.id}})">
             {{publication.message}}
         </div>
     </div>
@@ -382,7 +388,7 @@ Prenez le temps de comprendre ce qu'il s'y passe. La seule nouveauté est le `(n
 **Exercice :** 
 1. Créez `BoitePublication` avec le code donné plus tôt. 
 
-2. Modifiez la vue `Feed.vue` pour qu'elle affiche une liste de publication en utilisant ce composant. On pourra pour l'instant initialiser une fausse liste de publication avec le contenu suivant :
+2. En vous inspirant de `AllUsers.vue`, modifiez la vue `Feed.vue` pour qu'elle affiche une liste de publication en utilisant ce composant. On pourra pour l'instant initialiser une fausse liste de publication avec le contenu suivant :
     ```ts
     const publications:Ref<Publication[]> = ref([{
         id:3,
@@ -391,14 +397,15 @@ Prenez le temps de comprendre ce qu'il s'y passe. La seule nouveauté est le `(n
         auteur:{
             id:4,
             adresseEmail:"toto@gouv.fr",
-            login:"toto"
+            login:"toto",
+            premium:false
         }
     }]);
     ```
 
 3. Vérifiez que cela fonctionne. 
 
-4. Modifiez la vue `SingleMessage` pour qu'elle utilise le composant pour afficher une fausse publication pour l'instant.
+4. Modifiez la vue `SingleMessage` pour qu'elle utilise le composant pour afficher une fausse publication pour l'instant. 
 
 </div>
 
@@ -457,6 +464,8 @@ En procédant, ainsi on indique à Vue de faire le `fetch` une fois que le compo
 
 2. Faites la même chose pour que les trois autres vues fonctionnent. Il faudra regarder le format du JSON que retourne l'API pour adapter le traitement du `fetch`. Pour `AllUsers` et `Feed` vous pouvez initialiser la variable qui contient le résultat du fetch avec un tableau vide, mais pour les deux autres il faudra que la valeur initiale soit déjà valide (puisque le composant serra déjà affiché avant le fetch). C'est en fait l'opportunité de mettre votre "faux utilisateur/publication" initiale avec des champs dont la valeur est `"chargement"` et c'est donc cela qui s'affichera en attendant que les vraies valeurs soient chargées.
 
+3. N'oubliez pas d'utiliser `encodeURI()` sur toute variable qui pourrait se retrouver dans l'url du `fetch`. Il faudra peut-être d'abord les convertir en string avec la fonction `String`.
+
 </div>
 
 
@@ -507,7 +516,7 @@ Commençons par créer un formulaire de connexion:
 
 Prenez le temps de comprendre tout ce qu'il se passe. Nous utilisons un événement spécial du `form` qui est `@submit` qui permet de détecter si le formulaire a été soumis. Le modifier `.prevent` permet d'empêcher les autres événement lié à la soumission d'un formulaire d'avoir lieu. Autrement dit, quand on clique sur le bouton "connexion" seul la fonction `connect` sera appelée.
 
-Il faudra compléter les parties manquantes de la fonction `connect`. Rappellez vous la forme de la requête de connection grâce à API Platform. Il faudra préciser la méthode de la requête (`POST`), le format du corp de la requête et le corp de la requête. Nous allons donc utiliser la syntaxe plus complète de fetch ce qui ressemblera à ceci:
+Il faudra compléter les parties manquantes de la fonction `connect`. Rappelez-vous la forme de la requête de connexion grâce à API Platform. Il faudra préciser la méthode de la requête (`POST`), le format du corps de la requête et le corps de la requête. Nous allons donc utiliser la syntaxe plus complète de `fetch` ce qui ressemblera à ceci :
 ```ts
 fetch(".../api/auth", {
     method: "POST",  
@@ -523,16 +532,19 @@ fetch(".../api/auth", {
 **Exercice :** 
 1. Créez la vue `login.vue` et complétez là. Pour l'instant, nous allons simplement afficher dans le terminal (`console.log`) le retour de la demande de connexion.
 
-2. Configurez la route correspondante dans le fichier `router/index.ts` et ajoutez le lien correspondant dans le menu. 
+2. Configurez la route `login` correspondante dans le fichier `router/index.ts` et ajoutez le lien correspondant dans le menu. 
 
 3. Vérifiez que cela fonctionne. En particulier, si vous essayez de vous connecter avec des identifiants valides, vous devriez recevoir un JWT en réponse à votre requête.
 </div>
 
 
 ### Stocker le JWT dans un store
-Maintenant que nous savons recevoir le JWT, il nous faut voir comment l'utiliser. Avant de l'utiliser, il va falloir l'enregistrer. On veut enregistrer le JWT de manière à pouvoir l'utiliser depuis n'importe quelle autre vue de l'application, on ne peut donc pas se contenter de l'enregistrer dans une variable locale de la vue ou du composant. On le stocker dans le composant principal (`App.vue`), le modifier avec un `emmit`, mais il faudrait alors l'envoyer dans un `prop` à toutes les vues et les composants qui pourraient en avoir besoin. Pour stocker ce genre de variables globales, nous allons plutôt utiliser un store.
+Maintenant que nous savons recevoir le JWT, il nous faut voir comment l'utiliser. Avant de l'utiliser, il va falloir l'enregistrer. On veut enregistrer le JWT de manière à pouvoir l'utiliser depuis n'importe quelle autre vue de l'application, on ne peut donc pas se contenter de l'enregistrer dans une variable locale de la vue ou du composant. On pourrait le stocker dans le composant principal (`App.vue`) et le modifier avec un `emmit`, mais il faudrait alors l'envoyer dans un `prop` à toutes les vues et les composants qui pourraient en avoir besoin. Pour stocker ce genre de variables globales, nous allons plutôt utiliser un store.
 
-Un store est simplement un objet commun qui permet de stocker les variables globales et qu'on peut simplement importer dans un composant dès qu'on en a besoin. Pour définir un store qui stocke le JWT, on pourra simplement écrire:
+Nous pourrions utiliser le store de Vue. C'est le `Pinia` qu'il nous propose d'ajouter quand nous créons notre projet (et il est aussi possible d'utiliser d'autre store en les installant avec `npm`). Cependant, pour l'usage que nous allons en faire il est plus simple d'utiliser notre propre store, mais aussi cela permet de comprendre comment un store fonctionne.
+
+
+Un store est simplement un objet commun qui permet de stocker les variables globales et qu'on peut facilement importer dans les composants qui l'utilise. Pour définir un store qui stocke le JWT, on pourra simplement écrire :
 
 ```ts
 import { reactive } from 'vue'
@@ -542,10 +554,10 @@ export const storeAuthentification = reactive({
 });
 ```
 
-Maintenant, si je veux utiliser le store dans un composant je peux simplement faire
+Maintenant, pour utiliser le store dans un composant on peut faire
 ```vue
 <script setup>
-    import { storeAuthentification } from './storeAuthentification.js'
+    import { storeAuthentification } from '.../storeAuthentification.ts'
     //faire des trucs avec storeAuth.JWT qui contient mon JWT
 </script>
 ```
@@ -558,37 +570,44 @@ import { reactive } from 'vue'
 
 export const storeAuthentification = reactive({
   JWT: "",
-  connexion(login, motDePasse): boolean{
+  connexion(login: string, motDePasse: string, succes:()=>void, echec:()=>void): void{
     //fait le fetch et change le JWT si succès
     //return true/false en fonction du suddès de l'authentification
   }
 });
 ```
-
+On a donc une fonction connexion qui fait la requête HTTP de connexion avec fetch. En cas d'echec, cette fonction appel la fonction callback `echec` donnée en paramètre et en cas de succès, elle enregistre le JWT puis appelle la fonction `succes`. Les deux fonctions de callback permettront de changer la route ou d'afficher un message flash en cas de succès/echec. Remarquez que `()=>void` est le type d'une fonction qui ne prend pas d'argument et qui ne renvoie rien.
 
 <div class="exercice" markdown="1">
 
 **Exercice :** 
-1. Créez le fichier `store\storeAuthentification.ts` qui contient le code du store. Réutilisez la requete fetch de l'exercice précédente pour compléter la fonction connexion.
+1. Créez le fichier `store\storeAuthentification.ts` qui contient le code du store. Basez vous sur la requête fetch de l'exercice précédent pour compléter la fonction connexion. Pour tester si la connexion a échoué on pourra utiliser `reponsehttp.status !== 200` (il vaut 200 si la connexion est réussie).
 
-2. Modifiez la vue login pour qu'elle puisse accéder au `storeAuthentification` et que la fonction `connect` utilise la méthode connexion pour enregistrer le JWT.
+2. Modifiez la vue login pour qu'elle puisse accéder au `storeAuthentification` et que la fonction `connect` utilise la méthode connexion pour enregistrer le JWT. Pour l'instant on pourra utiliser `()=>{}` pour les fonctions `succes` et `echec`.
 
-3. Pour tester, modifier temporairement la vue login, pour afficher le JWT actuellement stocké en haut de la page login.
+3. Pour tester, modifier temporairement la vue login, pour afficher le JWT actuellement stocké en haut de la page login. Annulez ensuite cet affichage.
 
-4. Modifiez le store pour ajouter un booléen "estConnecte" qui indique si l'utilisateur est connécté. Modifiez la fonction connexion pour qu'elle change la valeur du booléen quand c'est necessaire.
+4. Modifiez les deux fonctions de callback pour qu'en cas de connexion réussie l'utilisateur soit redirigé vers la route `/feed` et qu'en cas d'échec la variable `connectingUser` soit réinitialisée. Vérifiez que tout fonctionne.
 
-5. Dans la vue principale `App.vue`, importez le store et utilisez ce booléen pour cacher les boutons `s'incrire` et `se connecter` si l'utilisateur est déjà connecté. On pourra utiliser la directive `v-if` dont le fonctionnement est expliqué [ici](https://fr.vuejs.org/guide/essentials/conditional.html).
+5. Modifiez le store pour ajouter un booléen "estConnecte" qui indique si l'utilisateur est connecté. Modifiez la fonction connexion pour qu'elle change la valeur du booléen quand c'est nécessaire.
+
+6. Dans la vue principale `App.vue`, importez le store et utilisez ce booléen pour cacher les boutons `s'incrire` et `se connecter` si l'utilisateur est déjà connecté. On pourra utiliser la directive `v-if` dont le fonctionnement est expliqué [ici](https://fr.vuejs.org/guide/essentials/conditional.html).
 
 </div>
 
 
-**Remarque :** Le store est une variable JavaScript comme les autres et dès qu'on quitte ou qu'on rafraichit la page cette variable est réinitialisée. Il existe des solutions pour stocker des variables entre plusieurs chargements de la page. Cependant, les deux principales solutions (localStorage et coockie) sont sensibles aux injections JS (XSS) et il faut donc être très prudent pour pouvoir utiliser ces solutions correctement. En fait, même notre store pourrait être vulnérable en cas d'injection XSS. On peut aussi utiliser les `workers` pour stocker le JWT de manière plus sécurisé jusqu'à la prochaine fermeture du navigateur web. Toutes ces solutions sortent du contexte de ce TD et nous n'allons donc pas les explorer.
+**Remarque :** Le store est une variable JavaScript comme les autres et dès qu'on quitte ou qu'on rafraichit la page cette variable est réinitialisée. Il existe des solutions pour stocker des variables entre plusieurs chargements de la page. Cependant, les deux principales solutions (localStorage et cookie) sont sensibles aux injections JS (XSS) et il faut donc être très prudent pour pouvoir utiliser ces solutions correctement. En fait, même notre store pourrait être vulnérable en cas d'injection XSS. On peut aussi utiliser les `workers` pour stocker le JWT de manière plus sécurisé jusqu'à la prochaine fermeture du navigateur web. Toutes ces solutions ne sont pas forcément très compliquées à mettre en place, mais sortent du contexte de ce TD et nous n'allons donc pas les explorer.
+
 
 
 ### Utilisez le JWT
+
 Nous savons récupérer, stocker et accéder au JWT, il ne nous reste plus qu'à l'utiliser.
-Nous allons créer un nouveau composant qui permet poster un message. Nous pourrons utiliser le template suivant et le style habituel:
+Nous allons créer un nouveau composant qui permet poster un message. Nous pourrons utiliser le template suivant et le style habituel :
 ```vue
+<script setup lang="ts">
+//todo
+</script>
 <template>
   <div class="wrapper">
     <div class="top">
@@ -607,10 +626,10 @@ Nous allons créer un nouveau composant qui permet poster un message. Nous pourr
 </template>
 ```
 
-Rappelez-vous que pour faire un `POST` d'une publication, l'utilisateur doit fournir son JWT dans le champ Authorization. La syntaxe qui permet d'ajouter ce champ au `fetch` est la suivante :
+Rappelez-vous que pour faire un `POST` d'une publication, l'utilisateur doit fournir son JWT dans le champ `Authorization`. La syntaxe qui permet d'ajouter ce champ au `fetch` est la suivante :
 
 ```ts
-fetch("/monapi/publication", {
+fetch("/monapi/publications", {
             method: "POST",  
             headers: {
                 'Content-Type': 'application/json',
@@ -624,24 +643,42 @@ Il faut bien évidemment remplacer `monJWT` par le JWT enregistré.
 <div class="exercice" markdown="1">
 
 **Exercice :** 
-1. Créez le composant `views/formulairePost.vue` en utilisant le HTML précédent et en complétant le JS.
+1. Créez le composant `views/FormulairePost.vue` en utilisant l'exemple plus haut. Complétez le composant en définissant la fonction `envoyer` et la variable message comme il faut. Pour l'instant, on peut ne pas mettre de `then` et se contenter d'ignorer la réponse de notre requête.
 
 2. Si l'utilisateur est connecté, affichez ce composant en haut de la vue feed.
 
-3. Vérifiez que tout fonctionne.
+3. Vérifiez que tout fonctionne. Attention pour l'instant la page feed n'est pas rechargé automatiquement avec le nouveau message.
+</div>
+
+Il faudrait que l'ajout d'un message déclenche le rechargement de la page `feed`. On pourrait ajouter nous même le nouveau message au tableau (la réponse à notre requête contient toutes les infos sur le nouveau message). Mais nous allons plutôt recharger toute la page. L'avantage de procéder ainsi est que si d'autre changement ont eu lieu entre temps on va aussi les recharger et donc l'état de notre page correspond effectivement à l'état de l'API à un certain moment. L'autre solution aurait l'avantage d'être légèrement plus efficace puisqu'elle nous évite de faire une requête. 
+
+Pour faire cela, notre composant `FormulairePoste` emmétra un événement pour signaler à son parent qu'il faut qu'il recharge la page. 
+
+
+<div class="exercice" markdown="1">
+
+**Exercice :** 
+1. Dans le composant `FormulairePoste`, définissez un nouvel évènement avec `const emit = defineEmits<{ updated: []}>();`. Modifiez le traitement du `fetch` pour émettre cet évènement en cas de succès de la requête.
+
+2. Modifiez maintenant le composant `Feed` pour appeler la fonction `chargerFeed` quand le composant `FormulairePoste` émet l'évènement `update` (il suffit de faire `@updated="chargerFeed"` au bon endroit).
+
+3. Définissez la fonction `chargerFeed` qui réutilise le code du `fetch` qui était dans `onMounted`. Modifiez `onMounted` pour appeler aussi la fonction `chargerFeed`.
+
+4. Vérifiez que tout fonctionne.
+
 </div>
 
 ## Importer un composant pour les messages flash
 
-Il est possible d'utiliser de nombreux composants crées par d'autres développeurs au sein de notre application. Pour notre site, nous allons utiliser le composant `FlashMessage` disponible [ici](https://www.npmjs.com/package/@smartweb/vue-flash-message/v/next) pour afficher des messages flash quand certains événements ont lieu.
+Il est possible d'utiliser de nombreux composants créés par d'autres développeurs au sein de notre application. Pour notre site, nous allons utiliser le composant `FlashMessage` disponible [ici](https://www.npmjs.com/package/@smartweb/vue-flash-message/v/next) pour afficher des messages flash quand certains événements ont lieu.
 
-Pour commencer, il faut installer la dépendance nécessaire à notre projet. Dans le terminal, entrez la commande:
+Pour commencer, il faut installer la dépendance nécessaire à notre projet. Dans le terminal, entrez la commande :
 ```sh
 npm install @smartweb/vue-flash-message@next
 ```
 Ça y est le paquet est disponible dans notre application. C'est l'intérêt d'un gestionnaire de paquet.
 
-Ensuite pour l'utiliser, nous allons commencer par l'enregistrer dans notre App comment nous vaions fait pour le router. Pour cela, nous devons ajouter au bon endroit les deux lignes suivantes au fichier `main.ts`:
+Ensuite pour l'utiliser, nous allons commencer par l'enregistrer dans `main.ts` comme nous avions fait pour le router. Pour cela, nous devons ajouter au bon endroit les deux lignes suivantes au fichier `main.ts`:
 ```ts
 import FlashMessage from '@smartweb/vue-flash-message';
 ...
@@ -650,20 +687,20 @@ app.use(FlashMessage);
 
 ```
 
-Notez que nous pourrions aussi importer les messages flash dans chaque composant où nous allons l'utiliser. D'ailleurs, nous pourrions aussi enregistrer certain de nos propres composant ici, pour ne pas avoir besoin de les importer dans le reste du code.
+Notez que nous pourrions aussi importer les messages flash dans chaque composant où nous allons l'utiliser. D'ailleurs, nous pourrions aussi enregistrer certain de nos propres composants ici, pour ne pas avoir besoin de les importer dans le reste du code.
 
-Enfin, pour utiliser les messages flash il faut:
+Enfin, pour utiliser les messages flash :
 - placer la balise `<FlashMessage />` pour indiquer l'endroit où l'on souhaite qu'ils s'affichent.
-- quand je veux afficher un message flash, je peux ensuite appeler la fonction `flashMessage` dont voici un exemple d'utilisation
+- pour afficher un message flash, je peux ensuite appeler la fonction `flashMessage` dont voici un exemple d'utilisation
     ```ts
     flashMessage.show({
         type: 'error',
         title: 'Error Message Title'
     });
     ```
-**Attention :** pour utiliser `flashMessage` dans le template, il faut en fait utiliser `$flashMessage`. Par contre, pour l'utiliser dans le `script setup` il faudra penser à ajouter la ligne 
+**Attention :** Pour utiliser l'objet `flashMessage` dans le template, il faut en fait utiliser `$flashMessage`. Par contre, pour l'utiliser dans le `script setup`, il faudra d'abord l'importer 
 `import { flashMessage } from '@smartweb/vue-flash-message';` 
-car les composants enregistrés ne sont pas disponible dans le `script setup`.
+car les composants enregistrés dans `main.ts` ne sont pas disponible dans le `script setup`.
 
 <div class="exercice" markdown="1">
 
