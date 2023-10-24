@@ -18,13 +18,13 @@ Jusqu'à maintenant, nous n'avons utilisé que du JavaScript "nature".
 Ce langage offre beaucoup de possibilités, mais de nombreux frameworks permettent d'aller beaucoup plus loin.
 Ces frameworks offrent souvent des outils permettant de faire un certain nombre de tâches récurrentes plus facilement. Ils imposent (ou suggèrent) la plupart du temps une manière d'organiser le code d'un projet ainsi qu'un certain nombre de bonnes pratiques associées. Notez que puisque JavaScript peut aussi s'utiliser côté serveur, il existe des frameworks *frontend* et des frameworks *backend*.
 
-Dans ce TD, nous allons étudier les bases de Vue qui est l'un des frameworks frontend les plus populaires. Ce que nous allons voir est donc spécifique à ce framework. Cependant, la plupart des idées importantes (en particulier, la *réactivité* et la notion de *composants*) se retrouvent chez la plupart des frameworks même si les détails d'implémentation peuvent varier considérablement. Nous allons aussi profiter de ce TD pour découvrir TypeScript. C'est une surcouche du langage JavaScript qui permet d'utiliser les types et donc d'augmenter la qualité, la ré-utilisabilité et la testabilité du code produit.
+Dans ce TD, nous allons étudier les bases de Vue qui est l'un des frameworks *frontend* les plus populaires. Ce que nous allons voir est donc spécifique à ce framework. Cependant, la plupart des idées importantes (en particulier, la *réactivité* et la notion de *composants*) se retrouvent chez la plupart des frameworks même si les détails d'implémentation peuvent varier considérablement. Nous allons aussi profiter de ce TD pour découvrir TypeScript. C'est une surcouche du langage JavaScript qui permet d'utiliser les types et donc d'augmenter la qualité, la ré-utilisabilité et la testabilité du code produit.
 
 
 Ce TD est partiellement inspiré du [tutoriel Vue](https://vuejs.org/tutorial/#step-1). La [documentation de Vue](https://vuejs.org/guide/introduction.html) fournit beaucoup d'information de manière assez lisible sur l'ensemble des fonctionnalités de Vue.
 
 ## Première page avec `Vue.js` et `npm`
-Jusqu'à maintenant, nous n'avons utilisé que du JavaScript "nature". Nous pouvions donc simplement écrire notre fichier `js`, l'inclure dans le fichier `html` et le navigateur web faisait le reste du travail sans même avoir besoin d'un serveur web. Beaucoup de Frameworks JS coexiste avec tout un paquet d'utilitaires (compilateur, linter, serveur de développement...). Ces utilitaires sont très simples à installer grâce à Node.JS et [npm](https://fr.wikipedia.org/wiki/Npm) (officieusement l'acronyme de "Node Package Manager", officiellement le rétroacronyme de "npm is not an acronym").
+Jusqu'à maintenant, nous n'avons utilisé que du JavaScript "nature". Nous pouvions donc simplement écrire notre fichier `js`, l'inclure dans le fichier `html` et le navigateur web faisait le reste du travail sans même avoir besoin d'un serveur web. Beaucoup de frameworks JS coexistent avec tout un paquet d'utilitaires (compilateur, linter, serveur de développement...). Ces utilitaires sont très simples à installer grâce à Node.JS et [npm](https://fr.wikipedia.org/wiki/Npm) (officieusement l'acronyme de "Node Package Manager", officiellement le rétroacronyme de "npm is not an acronym").
 
 Npm est déjà disponibles en salle machine, si vous êtes sur votre machine personnelle, vous aurez surement besoin de l'installer (ce qui est normalement assez simple sous un Linux). Pour initier un projet Vue, vous pouvez alors ouvrir votre terminal dans le dossier où vous souhaitez créer votre projet, puis entrez la commande :
 
@@ -35,7 +35,7 @@ npm init vue@latest
 
 <div class="exercice" markdown="1">
 
-**Exercice :** Faites-le. 
+Faites-le. 
 
 L'utilitaire vous demande d'abord le nom du projet à créer : vous pouvez choisir `todo_list` (puisque nous allons commencer par réaliser une liste de tâches). Ensuite, il vous propose d'inclure plusieurs fonctionnalités supplémentaires dès la création du projet. Nous allons toutes les refuser sauf TypeScript (nous ignorerons les erreurs de type au début, mais nous y reviendrons ensuite) et ESLint.
 
@@ -53,7 +53,7 @@ npm run dev
 
 <div class="exercice" markdown="1">
 
-**Exercice :** Faites-le. 
+Faites-le. 
 </div>
 
 La seconde commande permet d'installer les différentes dépendances du projet. Si tout va bien, la dernière commande donne la sortie suivante
@@ -124,7 +124,7 @@ La moustache ne fonctionne que pour inclure du texte dans le HTML. Si l'on veut 
 
 <div class="exercice" markdown="1">
 
-**Exercice :** Essayez de définir un lien de cette manière.
+Essayez de définir un lien de cette manière.
 
 </div>
 
@@ -145,7 +145,7 @@ function incremente(){
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Vérifiez que cela fonctionne (ouvrez la console pour vérifier l'affichage de la valeur). Vous pouvez maintenant utiliser la syntaxe moustache pour afficher la variable compteur dans votre page. Que se passe-t-il ?
+Vérifiez que cela fonctionne (ouvrez la console pour vérifier l'affichage de la valeur). Vous pouvez maintenant utiliser la syntaxe moustache pour afficher la variable compteur dans votre page. Que se passe-t-il ?
 
 </div>
 
@@ -165,7 +165,7 @@ On peut constater dans la console que la valeur de la variable change, et pourta
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Faites-le et vérifiez que tout fonctionne.
+Faites-le et vérifiez que tout fonctionne.
 
 </div>
 
@@ -179,7 +179,7 @@ La fonction `ref` renvoie un objet réactif qui encapsule l'objet donné en argu
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Maintenant, ajouter un bouton `<input>` et utiliser `v-bind` pour que `value` de cet input soit toujours la variable `compteur`. Vérifiez que si l'on change la valeur en cliquant sur le bouton précédent, l'affichage se met à jour dans notre nouvel input. 
+Maintenant, ajouter un bouton `<input>` et utiliser `v-bind` pour que `value` de cet input soit toujours la variable `compteur`. Vérifiez que si l'on change la valeur en cliquant sur le bouton précédent, l'affichage se met à jour dans notre nouvel input. 
 
 Ensuite, utilisez `v-on:input` et la fonction suivante pour que la modification du contenu de l'input mette la variable à jour.
 
@@ -195,7 +195,7 @@ function onInput(e) {
 On a réussi à associer une variable à l'input dans les deux directions. En fait, pour faire cela directement, il existe une troisième directive `v-model`.
 
 <div class="exercice" markdown="1" >
-**Exercice :** Remplacez l'input par `<input v-model="compteur">` et supprimez la fonction `onInput`. Vérifiez que tout fonctionne.
+Remplacez l'input par `<input v-model="compteur">` et supprimez la fonction `onInput`. Vérifiez que tout fonctionne.
 </div>
 
 
@@ -217,7 +217,7 @@ Nous allons utiliser une nouvelle directive `v-for` qui permet de faire une bouc
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Remplacez le contenu de `App.vue` par le code suivant :
+Remplacez le contenu de `App.vue` par le code suivant :
 
 
 ```vue
@@ -254,7 +254,7 @@ Nous allons maintenant ajouter la possibilité d'ajouter un élément à la list
 
 <div class="exercice" markdown="1" >
 
-**Exercice :**
+
 
 1. Commencez par ajouter, avant l'affichage de la liste, un input texte associé à une variable réactive qu'on pourra appeler `nouvelleTache` (il faut donc utiliser `ref` et `v-model`). On ajoutera un `placeholder` pertinent à l'input.
 
@@ -268,7 +268,7 @@ On aimerait bien que l'ajout d'une tâche ignore les espaces inutiles en début 
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Faites-le et vérifiez que tout fonctionne.
+Faites-le et vérifiez que tout fonctionne.
 
 </div>
 
@@ -277,7 +277,7 @@ De manière générale, la syntaxe complète des directives est la suivante `nam
 On va maintenant ajouter la possibilité de retirer un élément de la liste de tâche. 
 <div class="exercice" markdown="1" >
 
-**Exercice :**
+
 1. Ajoutez un bouton `<button @click="retirerTache(tache)">Retirer tâche</button>` à chaque élément. Un clic sur ce bouton va donc appeler la fonction retirerTache avec comme argument `tache` qui correspond à l'élément du tableau taches. Codez la fonction `retirerTache`. 
    
    On pourra utiliser la méthode [`filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) en ne gardant que les éléments qui sont différents de `tache`.
@@ -313,7 +313,7 @@ On va maintenant ajouter la possibilité de retirer un élément de la liste de 
 
 <div class="exercice" markdown="1" >
 
-**Exercice :**  
+ 
 Devant chaque tâche, ajoutez un input de type `checkbox` reliée à la valeur `tache.faite` correspondante. Vous pouvez utiliser l'onglet Vue pour vérifier que les booléens `faite` change de valeur quand on clique une checkbox. 
 
 </div>
@@ -336,7 +336,7 @@ Observez que les directives et les moustaches [peuvent prendre n'importe quelle 
  
 <div class="exercice" markdown="1" >
 
-**Exercice :** 
+
 1. Ajoutez les 3 lignes de css.
 2. Ajoutez au `span` associé à chaque `tache` la classe `fait` si son booléen `tache.faite` est `true`. 
 3. Vérifiez que tout fonctionne.
@@ -362,7 +362,7 @@ dans le HTML
 ```
 <div class="exercice" markdown="1" >
 
-**Exercice :** Prenez le temps de comprendre le fonctionnement du bouton et ajoutez-le.
+Prenez le temps de comprendre le fonctionnement du bouton et ajoutez-le.
 
 </div>
 
@@ -374,7 +374,7 @@ Pour sélectionner les tâches qu'on affiche nous allons modifier la ligne qui b
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Faites-le, puis écrivez la fonction `tachesFiltrees` qui utiliser [`filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) pour renvoyer un tableau qui contient les tâches à afficher (ça dépend donc de `cacheFaits` et de `tache.faite`). Vérifiez que tout fonctionne.
+Faites-le, puis écrivez la fonction `tachesFiltrees` qui utiliser [`filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) pour renvoyer un tableau qui contient les tâches à afficher (ça dépend donc de `cacheFaits` et de `tache.faite`). Vérifiez que tout fonctionne.
 
 </div>
 
@@ -390,7 +390,7 @@ Ensuite, au lieu de `function tachesFiltrees(){ ... return ...}` on écrira
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Faites-le et vérifiez que tout fonctionne.
+Faites-le et vérifiez que tout fonctionne.
 
 </div>
 
@@ -408,7 +408,7 @@ a=a+1;
 ```
 <div class="exercice" markdown="1" >
 
-**Exercice :** Quel est le contenu de `a` à la fin ?
+Quel est le contenu de `a` à la fin ?
 Vérifiez dans la console du navigateur.
 
 </div>
@@ -441,7 +441,7 @@ et TypeScript pourra ainsi vérifier que tout se passe correctement lors de l'ap
 
 <div class="exercice" markdown="1" >
 
-**Exercice :**
+
 Remplacez temporairement votre fonction `ajouterTache` par celle-ci :
 
   ```js
@@ -478,7 +478,7 @@ interface Tache {
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Ajoutez la définition de l'interface dans votre JS. Remplacez `tache:any` par `tache:Tache`, normalement votre IDE arrive à vérifier que tout va bien. Essayez `tache:string` ou `tache:number` pour voir ce que votre IDE vous indique.
+Ajoutez la définition de l'interface dans votre JS. Remplacez `tache:any` par `tache:Tache`, normalement votre IDE arrive à vérifier que tout va bien. Essayez `tache:string` ou `tache:number` pour voir ce que votre IDE vous indique.
 
 </div>
 
@@ -486,7 +486,7 @@ En passant notre souris sur la définition de `taches` on voit que le type est p
  
 <div class="exercice" markdown="1" >
 
-**Exercice :** Faites-le et vérifiez que tout va bien.
+Faites-le et vérifiez que tout va bien.
 
 </div>
 
@@ -499,7 +499,6 @@ En créant votre projet, vous avez coché "yes" pour le linter et Vite s'est don
 
 <div class="exercice" markdown="1" >
 
-**Exercice :**
 1. Ouvrez le terminal dans lequel vous avez entré la commande `npm run dev`. Fermez le serveur de développement en pressant la touche `q`. Tapez la commande `npm run lint` pour lancer le linter.
 
 2. Le linter produit peut être quelques warnings. Si c'est le cas, corrigez les et relancer le linter pour vérifier qu'ils ont disparu. Votre IDE propose probablement lui-même du lintage ce qui rend ces commandes un peu superflues en pratique.

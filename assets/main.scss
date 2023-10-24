@@ -3,9 +3,28 @@
 
 @import "{{ site.theme }}";
 
+// Constants
+$exercice: "Exercice";
+
 .exercice{
   border-radius: 10px;
   background-color: PaleTurquoise;
   padding: 10px 10px 1px 10px;
-  margin: 5px 5px 10px 5px;
+  margin: 5px 5px 26px 5px;
+  box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 hsla(0, 0%, 0%, 0.19);
 } 
+
+body {
+  counter-reset: exercice;
+}
+
+.exercice:before {
+    counter-increment: exercice;
+    content: $exercice " " counter(exercice);
+    font-weight: bold;
+    font-size: 110%;
+}
+
+.exercice p:first-of-type {
+    margin-top: 0.5em
+}
