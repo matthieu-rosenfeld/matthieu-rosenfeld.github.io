@@ -18,9 +18,9 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Frameworks web --  Vue.js
+title: Frameworks web —  Vue.js
 description: >- # this means to ignore newlines until "baseurl:"
- TD de vue.js -- Malo Gasquet, Romain Lebreton, Cyrille Nadal, Matthieu Rosenfeld --  2023, licensed under CC-BY-SA 4.0.
+ TD de vue.js — Malo Gasquet, Romain Lebreton, Cyrille Nadal, Matthieu Rosenfeld --  2023, licensed under CC-BY-SA 4.0.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 

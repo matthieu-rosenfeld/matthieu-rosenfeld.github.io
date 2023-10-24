@@ -1,5 +1,5 @@
 ---
-title: TD2 -- Les composants en Vue.js
+title: TD2 — Les composants en Vue.js
 lang: fr
 ---
 

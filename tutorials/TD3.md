@@ -1,5 +1,5 @@
 ---
-title: TD3 -- Réalisation du Front The Feed
+title: TD3 — Réalisation du Front The Feed
 subtitle: 
 lang: fr
 ---
