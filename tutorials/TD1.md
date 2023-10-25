@@ -179,7 +179,7 @@ La fonction `ref` renvoie un objet réactif qui encapsule l'objet donné en argu
 
 <div class="exercice" markdown="1" >
 
-Maintenant, ajouter un bouton `<input>` et utiliser `v-bind` pour que `value` de cet input soit toujours la variable `compteur`. Vérifiez que si l'on change la valeur en cliquant sur le bouton précédent, l'affichage se met à jour dans notre nouvel input. 
+Maintenant, ajouter un champ texte `<input>` et utiliser `v-bind` pour que `value` de cet input soit toujours la variable `compteur`. Vérifiez que si l'on change la valeur en cliquant sur le bouton précédent, l'affichage se met à jour dans notre nouvel input. 
 
 Ensuite, utilisez `v-on:input` et la fonction suivante pour que la modification du contenu de l'input mette la variable à jour.
 
@@ -517,5 +517,12 @@ Les commandes `npm run` (`dev`, `lint` et `type-check`) sont définies dans le f
 ## Conclusion
 
 Vous avez découvert un certain nombre de fonctionnalités de Vue pour la réalisation de notre liste de tâches. Dans le prochain TD nous découvrirons la notion de composant pour réaliser un tableau de bord de liste de tâches.
+
+## Liens avec les TDs de *R4.A.10 -- Complément web*
+
+Nous avons l'an dernier écrit notre petite bibliothèque de programmation réactive. Son fonctionnement était d'ailleurs basé sur celui de Vue (notamment sur l'explication qu'on peut trouver [ici](https://vuejs.org/guide/extras/reactivity-in-depth.html#how-reactivity-works-in-vue). La fonction `Ref` utilise `Reactive` de Vue qui est très proche dans l'esprit de celle que nous avions codée l'an dernier (elle utilise l'objet proxy pour détécter les getteurs et setteurs). Cependant, la fonction `Reactive` de Vue gère de nombreux cas particuliers et la réactivité en profondeur. La fonction `Ref` est un peu plus simple à utiliser que la fonction `Reactive` en gérant d'autres cas particuliers.
+
+Les moustaches font la même chose que "data-textvar" que nous avions défini. C'est-à-dire qu'elles enregistrent l'effet `balise.textContent = variableReactive` pour qu'il s'exécute à chaque modification de `variableReactive` (Vue gère beaucoup d'autres problèmes à cet endroit).  La directive `v-bind:attribut="valeur"` enregistre (en gros) `balise.attribut = variableReactive` (nous ne l'avons pas fait l'an dernier, mais nous aurions facilement pu le faire).  
+
 
 {% endraw %}
