@@ -18,9 +18,15 @@ Nous allons repartir de notre exemple de liste de tâches du TD précédent, pou
 
 ### Premier composant et *props*
 
-Vous êtes normalement familier avec la structure arborescente d'une page web. Une balise contient des balises qui contiennent des balises qui contiennent des balises... L'idée derrière les composants est de définir nos propres "balises" avec des comportements bien définis et de pouvoir les utiliser à l'intérieur d'autres composants.
-Cela permet donc de découper le code d'un site web en fonction des blocs de fonctionnalité : on va pouvoir définir dans des fichiers séparés le composant *header*, le composant *footer*, le composant menu et dans un autre le composant *page principale* (probablement lui-même constitué de plusieurs composants) et on écrira un composant qui assemble tous ces composants ensemble. Vous connaissez la notion de composition en programmation objet et ici l'idée est exactement la même. 
-Si plusieurs morceaux de notre page utilisent des fonctionnalités similaires, on va pouvoir réutiliser plusieurs fois le même composant. Nous verrons au prochain TD que grâce à `npm`, on peut aussi très facilement utiliser les composants écrits par d'autres utilisateurs.
+Vous êtes normalement familiers avec la structure arborescente d'une page web. Une balise contient des balises qui contiennent des balises... L'idée derrière les composants est de définir nos propres "balises" avec des comportements bien définis et de pouvoir les utiliser à l'intérieur d'autres composants.
+
+Cela permet donc de découper le code d'un site web en fonction des blocs de fonctionnalité : on va pouvoir définir dans des fichiers séparés le composant *header*, le composant *footer*, le composant menu et le composant *page principale* (probablement lui-même constitué de plusieurs composants). Et on écrira un composant qui assemble tous ces composants ensemble. 
+
+Vous connaissez la notion de composition en programmation objet. L'idée ici est
+exactement la même. Si plusieurs morceaux de notre page utilisent des
+fonctionnalités similaires, on va pouvoir réutiliser plusieurs fois le même
+composant. Nous verrons au prochain TD que grâce à `npm`, on peut aussi très
+facilement utiliser les composants écrits par d'autres utilisateurs.
 
 
 
@@ -28,7 +34,7 @@ Si plusieurs morceaux de notre page utilisent des fonctionnalités similaires, o
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Pour définir notre premier composant, ajouter dans le dossier src un dossier `composants` et à l'intérieur de ce dossier créer un fichier `ListeDeTaches.vue`. Copiez le code de `App.vue` dans `ListeDeTaches.vue`. Et voilà nous avons créé un composant (en fait, `App.vue` définissait déjà un composant). Pour utiliser ce composant dans `App.vue`, remplacez le code de `App.vue` par le suivant :
+ Pour définir notre premier composant, ajouter dans le dossier `src` un dossier `composants`. À l'intérieur de ce dossier créer un fichier `ListeDeTaches.vue`. Copiez le code de `App.vue` dans `ListeDeTaches.vue`. Et voilà nous avons créé un composant (en fait, `App.vue` définissait déjà un composant). Pour utiliser ce composant dans `App.vue`, remplacez le code de `App.vue` par le suivant :
 
 
  ```vue
@@ -48,7 +54,7 @@ Si plusieurs morceaux de notre page utilisent des fonctionnalités similaires, o
 
 Normalement, votre site fonctionne toujours, mais nous utilisons explicitement un composant. 
 
-Il se peut que votre IDE signale que le fichier du composant n'existe pas, relancer l'IDE à la racine du projet semble régler le problème. 
+Il se peut que votre IDE signale que le fichier du composant n'existe pas ; relancer l'IDE à la racine du projet semble régler le problème. 
 
 La ligne `import ...` permet de rendre le composant accessible et on peut alors l'utiliser dans `<template>` comme si c'était une balise HTML. Une grosse partie du travail de *Vue* est de faire fonctionner tout ça. Le `@` dans le chemin correspond à la racine du site. Utiliser ce symbole permet d'éviter des problèmes de chemins. 
 
@@ -57,15 +63,17 @@ Notez que l'import est légèrement différent de ceux qu'on a fait jusqu'à mai
 ```js
 import {ref} from 'vue';
 ```
-En fait, un module JS peut exporter un certain nombre de fonctions, variables et autres par leur nom. La syntaxe `import {nom1, nom2} from 'module'` permet de lister précisément les imports qu'on fait. Cependant, les modules JS peuvent aussi définir un export principal et quand on utilise la commande sans accolades `import nomLocal from 'module'` on demande à importer l'export principal (et il sera accessible sous le `nomLocal` que j'ai choisi). À partir du code de `ListeDeTache.vue` vue définit en fait un composant dont l'export principal correspond au composant.
+En fait, un module JS peut exporter un certain nombre de fonctions, variables et autres par leur nom. La syntaxe `import {nom1, nom2} from 'module'` permet de lister précisément les imports qu'on fait. Cependant, les modules JS peuvent aussi définir un export principal et quand on utilise la commande sans accolades `import nomLocal from 'module'` on demande à importer l'export principal (et il sera accessible sous le `nomLocal` que j'ai choisi). À partir du code de `ListeDeTache.vue`, Vue définit en fait un composant dont l'export principal correspond au composant.
 
 
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Trouvez comment afficher trois listes de tâches dans la page (indice : c'est très simple). Vérifiez que ces listes sont bien trois listes différentes et que modifier l'une d'entre elle n'impacte pas les autres.
+ Trouvez comment afficher trois listes de tâches dans la page (indice : c'est très simple). Vérifiez que ces listes sont bien trois listes différentes et que modifier l'une d'entre elle n'impacte pas les autres.
 
 </div>
+
+#### Props
 
 On aimerait bien donner des noms à nos différentes listes de tâches. Pour que ce soit utilisable, il faut que le nom de la liste se comporte comme un attribut ou un paramètre de la liste de tâche. C'est ce qu'on appelle les "props" du composant (les "accessoires" en français). Pour définir, les props d'un composant, on va utiliser la fonction `defineProps` comme ceci :
 
@@ -93,14 +101,14 @@ Pour l'associer à une variable, on peut utiliser `v-bind` comme pour n'importe 
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** 
+ 
 1. Modifiez le composant `ListeDeTaches` pour qu'il accepte un prop nommé `titre` de type `string`.
 2. Modifiez le composant `ListeDeTaches` pour qu'il affiche son titre dans une balise `<h2>` en haut de la liste.
 3. Modifiez `App.vue` pour donner un titre aux trois listes de tâches. Vérifiez que tout fonctionne.
 
 </div>
 
-Vous devriez obtenir quelque chose qui ressemble à ça:
+Vous devriez obtenir quelque chose qui ressemble à ça :
 
 ![](../assets/listes_etape2.png)
 
@@ -118,9 +126,9 @@ Nous voulons maintenant ajouter la possibilité d'ajouter des listes de tâches.
 
 <div class="exercice" markdown="1" >
 
-**Exercice :**
 
-1. Faites-le. Initialisez le tableau des listes de tâches avec au moins deux listes et vérifiez que tout fonctionne. Vous pouvez vous inspirer du fonctionnement de `ListeDeTâche`.
+
+1. Faites-le. Initialisez le tableau des listes de tâches avec au moins deux listes et vérifiez que tout fonctionne. Vous pouvez vous inspirer du fonctionnement de `ListeDeTaches`.
 2. Si vous ne l'avez pas fait depuis un moment, ouvrez l'onglet *Vue* des outils de développement du navigateur. Constatez qu'on peut voir l'arborescence des composants qui évolue en direct. Prenez le temps d'expérimenter un peu.
 
 
@@ -132,7 +140,7 @@ Nous aimerions rajouter un bouton dans chaque liste qui permet de supprimer la l
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Ajoutons le bouton suivant dans `ListeDeTache` (vous pouvez changer le texte et/ou styliser un peu votre CSS pour qu'il soit mieux positionné et moins laid) :
+ Ajoutons le bouton suivant dans `ListeDeTache` (vous pouvez changer le texte et/ou styliser un peu votre CSS pour qu'il soit mieux positionné et moins laid) :
 
 ```vue
 <button @click="$emit('supprimerListe')">x</button>
@@ -150,7 +158,7 @@ Il ne reste plus qu'à coder la fonction `retirerListe` (qui fonctionne comme la
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Faites le et vérifier que tout fonctionne. N'oubliez pas de donner le type de l'argument de la fonction `retirerListe`. Son type est `{id:number,titre:string}`, mais nous pouvons définir une interface pour le type `ListeInfo`. On peut ensuite préciser manuellement le type de notre tableau de listes comme nous avions fait dans `ListeDeTaches.vue`.
+ Faites-le et vérifier que tout fonctionne. N'oubliez pas de donner le type de l'argument de la fonction `retirerListe`. Son type est `{id:number,titre:string}`, mais nous pouvons définir une interface pour le type `ListeInfo`. On peut ensuite préciser manuellement le type de notre tableau de listes comme nous avions fait dans `ListeDeTaches.vue`.
 
 </div>
 
@@ -159,7 +167,7 @@ Il ne reste plus qu'à coder la fonction `retirerListe` (qui fonctionne comme la
 Nous avons écrit notre premier composant, nous allons extraire du code de `ListeDeTaches` et définir un composant pour améliorer le découpage du code. Plus précisément, nous allons essayer d'extraire la partie qui correspond au HTML suivant :
 
 ```vue
-  <input type ="checkbox" v-model="tache.faite" />
+  <input type="checkbox" v-model="tache.faite" />
   <span :class="{fait: tache.faite}">{{tache.description}}</span>
   <button @click="retirerTache(tache)">Retire</button>
 ```
@@ -168,12 +176,12 @@ Nous allons donc créer un composant `TacheDeListe.vue` qui contient ce HTML et 
 
 <div class="exercice" markdown="1" >
 
-**Exercice :**
+
 Commençons par définir notre composant `TacheDeListe.vue`:
 
 ```vue
 <script setup lang="ts">
-  import {ref } from 'vue';
+  import {ref} from 'vue';
 </script>
 
 <template>
@@ -192,7 +200,7 @@ Commençons par définir notre composant `TacheDeListe.vue`:
 </div>
 
 Il y a plusieurs problèmes à régler pour rendre de composant fonctionnel. 
-Premièrement, l'objet JavaScript `tache` n'est pas accessible ici. Une mauvaise manière de régler le problème serait de le passer en entier dans les `props`. En faisant cela, on passerait dans les *props* des valeurs qui n'ont aucun sens pour `TacheDeListe` et il serait plus difficile de rendre le composant "générique" pour qu'il soit réutilisable dans un autre contexte. Par ailleurs, une des bonnes pratiques fondamentales de vue est d'interdire aux composants de modifier leurs *props* (cela pourrait avoir des effets de bords difficilement contrôlables chez le composant parent). Il va donc falloir réfléchir un peu plus pour gérer le booléen `faite`.
+Premièrement, l'objet JavaScript `tache` n'est pas accessible ici. Une mauvaise manière de régler le problème serait de le passer en entier dans les `props`. En faisant cela, on passerait dans les *props* des valeurs qui n'ont aucun sens pour `TacheDeListe` et il serait plus difficile de rendre le composant "générique" pour qu'il soit réutilisable dans un autre contexte. Par ailleurs, une des bonnes pratiques fondamentales de Vue est d'interdire aux composants de modifier leurs *props* (cela pourrait avoir des effets de bords difficilement contrôlables chez le composant parent). Il va donc falloir réfléchir un peu plus pour gérer le booléen `faite`.
 
 
 ### Déclarer les props
@@ -205,9 +213,10 @@ const props = defineProps<{descriptionTache: string, cochee:boolean}>();
 
 <div class="exercice" markdown="1" >
 
-**Exercice :**
 
-1. Ajoutez ces lignes et faites les trois changements pour utiliser ces props dans le `template`. Attention, nous allons remplacer `v-model="tache.faite"` par `:checked="props.cochee"`, car mettre `cochee` dans `v-model` signifierait que cocher la case peut modifier `props.cochee`, mais un composant n'a pas le droit de modifier ses props !
+
+1. Ajoutez ces lignes et faites les trois changements pour utiliser ces props dans le `template`. Attention, nous allons remplacer `v-model="tache.faite"` par `:checked="props.cochee"`.  
+   En effet, `v-model="props.cochee"` signifierait que cocher la case peut modifier `props.cochee`, mais un composant n'a pas le droit de modifier ses props !
 
 2. Ensuite, plutôt que d'appeler une fonction `retirerTache`, on veut que le clic sur le bouton émette un signal `$emit('supprimerTache')` (qu'on pourra ensuite détecter dans le composant `ListeDeTache`.)
 
@@ -225,11 +234,11 @@ Pour utiliser le composant, remplacez les trois lignes à l'intérieur du `<li>`
 ```vue
 <TacheDeListe :description-tache="tache.description" :cochee="tache.faite" />
 ```
-Notez que `descriptionTache` est devenu `description-tache`. En HTML, les noms d'attributs ne sont généralement pas en CamelCase mais en kebab-case, ce qui n'est normalement pas possible en JS (vous avez normalement déjà vu ce problème notamment pour les styles en CSS: `background-color` devient `backgroundColor`). Ici, on pourrait utiliser `descriptionTache`, mais on peut aussi utiliser `description-tache`. Le plus important est d'être cohérent tout le long d'un projet.
+Notez que `descriptionTache` est devenu `description-tache`. En HTML, les noms d'attributs ne sont généralement pas en CamelCase mais en kebab-case, ce qui n'est normalement pas possible en JS (vous avez normalement déjà vu ce problème notamment pour les styles en CSS : `background-color` devient `backgroundColor`). Ici, on pourrait utiliser `descriptionTache`, mais on peut aussi utiliser `description-tache`. Le plus important est d'être cohérent tout le long d'un projet.
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Faites l'import et utilisez le composant `TacheDeListe` dans `ListeDeTaches`.
+ Faites l'import et utilisez le composant `TacheDeListe` dans `ListeDeTaches`.
 Vérifiez que le site s'affiche correctement.
 
 </div>
@@ -242,11 +251,11 @@ Pour le bouton retirer, il suffit d'appeler la fonction `retirerTache` quand on 
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Faites-le et vérifiez que ça fonctionne.
+ Faites-le et vérifiez que ça fonctionne.
 
 </div>
 
-Cela devrait suffire à faire fonctionner le bouton "Retirer". Cependant, si vous ouvrez le terminal de votre navigateur, vous devriez apercevoir des warnings qui concernent l'événement `supprimerTache`. Le contenu de ce warning est assez compliqué, heureusement il nous indique une manière de le régler qui est de déclarer explicitement l'événement. Pour ce faire, on utilise la fonction `defineEmits` dans le fichier du composant. Il y a plusieurs syntaxes, nous allons utiliser la syntaxe suivante (qui n'est valide qu'en TypeScript) :
+Cela devrait suffire à faire fonctionner le bouton "Retirer". Cependant, si vous ouvrez la console de votre navigateur, vous devriez apercevoir des warnings qui concernent l'événement `supprimerTache`. Le contenu de ce warning est assez compliqué, heureusement il nous indique une manière de le régler qui est de déclarer explicitement l'événement. Pour ce faire, on utilise la fonction `defineEmits` dans le fichier du composant. Il y a plusieurs syntaxes, nous allons utiliser la syntaxe suivante (qui n'est valide qu'en TypeScript) :
  
 ```js
 const emit = defineEmits<{
@@ -257,7 +266,7 @@ const emit = defineEmits<{
 
 <div class="exercice" markdown="1" >
 
-**Exercice :**
+
 Dans notre cas, nous déclarons pour l'instant un seul événement et celui-ci n'attend pas d'argument donc on écrira en haut de `TacheDeListe.vue` :
 
 ```js
@@ -270,7 +279,7 @@ Il existe d'autres syntaxes qui ne demandent pas de définir les types, mais pui
 
 <div class="exercice" markdown="1" >
 
-**Exercice :**
+
 Dans `ListeDeTaches.vue`, déclarez l'événement `supprimerListe` puisque ce composant peut émettre cet événement.
 
 </div>
@@ -281,7 +290,7 @@ Il reste à réparer le bouton "Cacher les tâches terminées / Montrer tout" et
 
 <div class="exercice" markdown="1" >
 
-**Exercice :**
+
 Commencez par définir un nouvel événement en modifiant la définition de `emit`
 
 ```ts
@@ -290,7 +299,7 @@ const emit = defineEmits<{
   checkedChange:[boolean]}
 >();
 ```
-La nouvelle ligne définie un nouvel événement qui produit une valeur booléenne. Maintenant, nous pouvons ajouter l'attribut suivant au bouton de `TacheDeListe`:
+La nouvelle ligne définie un nouvel événement qui produit une valeur booléenne. Maintenant, nous pouvons ajouter l'attribut suivant au bouton de `TacheDeListe` :
 
 ```vue
 @change="$emit('checkedChange', ($event.target as HTMLInputElement).checked)"
@@ -298,7 +307,7 @@ La nouvelle ligne définie un nouvel événement qui produit une valeur booléen
 
 </div>
 
-L'expression `($event.target as HTMLInputElement).checked` est équivalente à `$event.target.checked` (qui vaut `true` si la case est cochée). Le `as HTMLInputElement` indique à TypeScript que ici `$event.target` est forcément un `HTMLInputElement` ce qu'il ne sait pas déduire tout seul . Sans cela, il détecte une erreur qui n'en est pas une (il existe d'autres manières de contourner ce problème). Vous pouvez essayer de retirer temporairement le `as HTMLInputElement` pour voir l'erreur produite.
+L'expression `($event.target as HTMLInputElement).checked` est équivalente à `$event.target.checked` (qui vaut `true` si la case est cochée). Le `as HTMLInputElement` indique à TypeScript que ici `$event.target` est forcément un `HTMLInputElement` ce qu'il ne sait pas déduire tout seul. Sans cela, il détecte une erreur qui n'en est pas une (il existe d'autres manières de contourner ce problème). Vous pouvez essayer de retirer temporairement le `as HTMLInputElement` pour voir l'erreur produite.
 
 Il suffit maintenant de détecter l'événement `checkedChange` dans `ListeDeTaches` et de mettre à jour le booléen quand il change avec sa nouvelle valeur. Ce qu'on peut faire en ajoutant le code suivant au bon endroit :
 
@@ -308,7 +317,7 @@ Il suffit maintenant de détecter l'événement `checkedChange` dans `ListeDeTac
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** Faites-le, vérifiez que tout fonctionne à nouveau et prenez le temps de comprendre tout ce que nous venons de faire.
+ Faites-le, vérifiez que tout fonctionne à nouveau et prenez le temps de comprendre tout ce que nous venons de faire.
 
 </div>
 
@@ -318,7 +327,7 @@ Plutôt que de définir un `prop` et un événement, nous aurions pu définir un
 <input v-model="variableTexte" />
 ```
 
-En fait, on peut obtenir le même comportement que `v-model` en utilisant `v-bind` et `v-on`:
+En fait, on peut obtenir le même comportement que `v-model` en utilisant `v-bind` et `v-on` (*cf.* [documentation de Vue](https://fr.vuejs.org/guide/essentials/forms.html#form-input-bindings)) :
 
 ```vue
 <input
@@ -327,7 +336,7 @@ En fait, on peut obtenir le même comportement que `v-model` en utilisant `v-bin
 />
 ```
 
-Pour une input checkbox ce serait plutôt
+Pour une `<input type="checkbox">`, ce serait plutôt
 
 ```vue
 <input type="checkbox" v-model="variableBool" />
@@ -342,7 +351,12 @@ est équivalent à :
 />
 ```
 
-De la même manière, la ligne `<monComposantPersonalise v-model="maVariable">` est automatiquement transformé en :
+De la même manière, `v-model` peut être utilisé dans un composant et sert de
+raccourci (*cf.* [documentation de Vue](https://fr.vuejs.org/guide/components/v-model.html#component-v-model)). Ainsi, la ligne 
+```vue
+<monComposantPersonalise v-model="maVariable">
+``` 
+est automatiquement transformé en :
 
 ```vue
 <monComposantPersonalise
@@ -351,7 +365,7 @@ De la même manière, la ligne `<monComposantPersonalise v-model="maVariable">` 
 />
 ```
 
-Il suffit alors de définir le `prop` et l'événement correspondant dans le composant `monComposantPersonalise`:
+Il suffit alors de définir le `prop` et l'événement correspondant dans le composant `monComposantPersonalise` :
 
 ```vue
 <script setup>
@@ -370,9 +384,9 @@ Il suffit alors de définir le `prop` et l'événement correspondant dans le com
 
 <div class="exercice" markdown="1" >
 
-**Exercice :**
 
-1. Faites les modifications nécessaires en remplaçant `cochee` par `modelValue` et `checkedChange` par `update:modelValue` dans `TacheDeListe.vue`. (Attention dans `defineEmits` à bien mettre `"update:modelValue"` sinon JavaScript est gêné par les `:`).
+
+1. Faites les modifications nécessaires en remplaçant `cochee` par `modelValue` et `checkedChange` par `update:modelValue` dans `TacheDeListe.vue`. (Attention dans `defineEmits` à bien mettre les guillemets doubles `"update:modelValue"` sinon JavaScript est gêné par les `:`).
 
 2. Modifiez `ListeDeTache` pour utiliser `v-model` ainsi
 
@@ -390,7 +404,7 @@ Il suffit alors de définir le `prop` et l'événement correspondant dans le com
 
 </div>
 
-Retenez qu'on utilise les *props* pour faire descendre de l'information d'un composant vers son enfant et les événements pour faire remonter l'information. La directive `v-model` permet de faire descendre et remonter l’information, mais c’est simplement un raccourci qui utilise un *prop* et un évènement. Remarquez qu'il n'était pas beaucoup plus compliqué de faire fonctionner le `v-model` du côté du composant enfant, mais qu'il est plus simple à utiliser du côté du composant parent. C'est donc une bonne pratique de définir un `v-model` quand c'est pertinent. Nous n'en parlerons pas ici, mais on peut "nommer" les `v-model` ce qui permet d'associer plusieurs `v-model` au même composant.
+Retenez qu'on utilise les *props* pour faire descendre de l'information d'un composant vers son enfant et les événements pour faire remonter l'information. La directive `v-model` permet de faire descendre et remonter l’information d'un composant, mais c’est simplement un raccourci qui utilise un *prop* et un évènement. Remarquez qu'il n'était pas beaucoup plus compliqué de faire fonctionner le `v-model` du côté du composant enfant, mais qu'il est plus simple à utiliser du côté du composant parent. C'est donc une bonne pratique de définir un `v-model` quand c'est pertinent. Nous n'en parlerons pas ici, mais on peut "nommer" les `v-model` ce qui permet d'associer plusieurs `v-model` au même composant.
 
 ## Échappement des variables
 
@@ -399,15 +413,18 @@ Avant de définir les slots faisons une petite parenthèse pour discuter de l'é
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** 
+ 
 1. Dans le fichier `App.vue`, ajoutez temporairement une variable `const monHTML= "<h2>un titre</h2>"` et dans le template affichez le contenu de la variable en écrivant `{{monHTML}}`. Que constatez-vous ? 
 
 2. Annulez ce changement.
+   
 </div>
-Le HTML est échappé automatiquement. C'est un comportement tout a fait volontaire, cela permet d'éviter qu'un utilisateur malicieux puisse "injecter" du HTML (ou pire du JS) dans notre site. Nous n'avons donc pas besoin de nous soucier d'échapper le html. Pour simuler la navigation sur notre site, nous utiliserons les routes au prochain TD et nous n'aurons pas besoin de nous soucier d'échapper les variables utilises dans les url de notre site. Par contre, il faut malgrès tout garder cette problèmatique en tête par exemple si nous devons faire des requêtes AJAX qui contiennent une variable.
+
+Le HTML est échappé automatiquement. C'est un comportement tout à fait volontaire, cela permet d'éviter qu'un utilisateur malicieux puisse "injecter" du HTML (ou pire du JS) dans notre site. Nous n'avons donc pas besoin de nous soucier d'échapper le html. Pour simuler la navigation sur notre site, nous utiliserons les routes au prochain TD et nous n'aurons pas besoin de nous soucier d'échapper les variables utilises dans les url de notre site. Par contre, il faut malgré tout garder cette problématique en tête par exemple si nous devons faire des requêtes AJAX qui contiennent une variable.
 
 
 ## Utiliser le slot
+
 Jusqu'à maintenant nous avons utilisé nos composants comme des balises HTML autofermantes `<monComposant />`, mais il est aussi possible de les utiliser avec la syntaxe `<monComposant>...</monComposant>`. Le composant pourra utiliser le code HTML écrit entre les 2 balises. Supposons que j'utilise mon composant ainsi
 
 ```vue
@@ -428,9 +445,9 @@ alors la balise `<slot>` est automatiquement remplacée par le HTML contenu entr
 
 <div class="exercice" markdown="1" >
 
-**Exercice :**  Retirer le prop `description-tache` de `TacheDeVue` et utiliser `<slot></slot>` à sa place dans le `<template>`. 
+  Retirer le prop `description-tache` de `TacheDeVue` et utiliser `<slot></slot>` à sa place dans le `<template>`. 
 
-Modifier ensuite son utilisation dans `ListeDeTaches`: au lieu de passer `tache.description` dans un attribut, utiliser la syntaxe moustache à l'intérieur de la balise. Vérifiez que tout fonctionne.
+Modifier ensuite son utilisation dans `ListeDeTaches` : au lieu de passer `tache.description` dans un attribut, utiliser la syntaxe moustache à l'intérieur de la balise. Vérifiez que tout fonctionne.
 
 </div>
 
@@ -440,8 +457,8 @@ C'était la dernière modification au site de gestionnaire de listes de tâches.
 
 <div class="exercice" markdown="1" >
 
-**Exercice :** 
-1. Refaites un appel au linter (`npm run lint`). Corrigez les erreurs et warnings. En particulier, vous risquer d'avoir des variables inutilisés. Quand nous faisons `cont emit =defineEmits<...>();`, la variable emit peut être utile, mais si nous ne l'utilisons pas nous pouvons simplement appeler la fonction sans stocker son résultat dans une variable `defineEmits<...>();`.
+ 
+1. Refaites un appel au linter (`npm run lint`). Corrigez les erreurs et warnings. En particulier, vous risquer d'avoir des variables inutilisés. Quand nous faisons `const emit =defineEmits<...>();`, la variable emit peut être utile, mais si nous ne l'utilisons pas nous pouvons simplement appeler la fonction sans stocker son résultat dans une variable `defineEmits<...>();`.
 
 2. Refaites un `npm run type-check`. Il ne devrait pas y avoir de problème.
 
@@ -455,7 +472,7 @@ Pour l'instant, nous avons utilisé Vite pour faire tourner notre site sur un se
 
 <div class="exercice" markdown="1" >
 
-**Exercice :**
+
 
 1. Lancez la compilation de votre site : Allez dans votre terminal, tapez `q` pour couper temporairement le serveur, puis entrez
 
@@ -499,7 +516,7 @@ pour indiquer à Vite le chemin de base du site Web.
 
 <div class="exercice" markdown="1" >
 
-**Exercice :**
+
 
 1. Dans le fichier `vite.config.ts`, ajoutez à la fin du `export default defineConfig` le champ `base: '/~votre_login/TD_vueJS/todo_list'`.
    
@@ -545,7 +562,7 @@ Les trucs à retenir :
 - comment construire et déployer le site.
 
 
-Dans le prochain TD, nous utiliserons Vue pour produire une façace à notre API theFeed. Pour cela, nous aurons besoin de quelques notions supplémentaires dont les routes pour simuler la navigation sur un site et les stores pour stocker le JWT.
+Dans le prochain TD, nous utiliserons Vue pour produire une façade à notre API theFeed. Pour cela, nous aurons besoin de quelques notions supplémentaires dont les routes pour simuler la navigation sur un site et les stores pour stocker le JWT.
 
 {% endraw %}
 
