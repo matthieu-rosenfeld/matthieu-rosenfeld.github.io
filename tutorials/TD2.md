@@ -22,8 +22,7 @@ Vous êtes normalement familiers avec la structure arborescente d'une page web. 
 
 Cela permet donc de découper le code d'un site web en fonction des blocs de fonctionnalité : on va pouvoir définir dans des fichiers séparés le composant *header*, le composant *footer*, le composant menu et le composant *page principale* (probablement lui-même constitué de plusieurs composants). Et on écrira un composant qui assemble tous ces composants ensemble. 
 
-Vous connaissez la notion de composition en programmation objet. L'idée ici est
-exactement la même. Si plusieurs morceaux de notre page utilisent des
+Vous connaissez la notion de composition en programmation objet : un objet peut être composé de plusieurs autres objets (ses attributs). L'idée ici est exactement la même. Si plusieurs morceaux de notre page utilisent des
 fonctionnalités similaires, on va pouvoir réutiliser plusieurs fois le même
 composant. Nous verrons au prochain TD que grâce à `npm`, on peut aussi très
 facilement utiliser les composants écrits par d'autres utilisateurs.
@@ -118,7 +117,7 @@ Vous pouvez prendre le temps de personnaliser un peu votre CSS.
 
 Nous voulons maintenant ajouter la possibilité d'ajouter des listes de tâches. Pour cela, nous allons modifier le fichier `App.vue` ainsi :
 
-1. Créer un tableau `todoListes` qui contient les `ids` et les titres des listes
+1. Créer un tableau réactif `todoListes` qui contient les `ids` et les titres des listes
 
 2. Utiliser la directive `v-for` pour créer une liste de tâches pour chaque élément du tableau `todoListes`. On peut faire le `v-for` directement sur le composant `ListeDeTaches` Pour donner les titres en props, nous avons vu en début de TD comment passer la valeur d'une variable dans un attribut.
 
@@ -134,7 +133,7 @@ Nous voulons maintenant ajouter la possibilité d'ajouter des listes de tâches.
 
 </div>
 
-### Emit and emitted events
+### Évènements de composant
 
 Nous aimerions rajouter un bouton dans chaque liste qui permet de supprimer la liste. Une nouvelle difficulté se présente à nous : si le bouton est dans le composant `ListeDeTache` alors c'est ce composant qui peut détecter que le bouton de suppression a été activé. Il faut donc faire remonter l'information à son parent (`App.vue`) pour qu'elle puisse le supprimer. *Vue* offre une manière très simple de surmonter ce problème : la fonction `$emit`. Quand elle est appelée, la fonction `$emit("nomEvenement")` déclenche un événement qui peut être écouté par le parent du composant.
 
@@ -172,12 +171,12 @@ Nous avons écrit notre premier composant, nous allons extraire du code de `List
   <button @click="retirerTache(tache)">Retire</button>
 ```
 
-Nous allons donc créer un composant `TacheDeListe.vue` qui contient ce HTML et que nous utiliserons dans `ListeDeTaches.vue`. Vous devez être capable d'imaginer comment le faire en utilisant des `props`, `emit`, et `emited event`.
+Nous allons donc créer un composant `Tache.vue` qui contient ce HTML et que nous utiliserons dans `ListeDeTaches.vue`. Vous devez être capable d'imaginer comment le faire en utilisant des `props`, `emit`, et `emited event`.
 
 <div class="exercice" markdown="1" >
 
 
-Commençons par définir notre composant `TacheDeListe.vue`:
+Commençons par définir notre composant `TacheElement.vue`:
 
 ```vue
 <script setup lang="ts">
@@ -200,7 +199,7 @@ Commençons par définir notre composant `TacheDeListe.vue`:
 </div>
 
 Il y a plusieurs problèmes à régler pour rendre de composant fonctionnel. 
-Premièrement, l'objet JavaScript `tache` n'est pas accessible ici. Une mauvaise manière de régler le problème serait de le passer en entier dans les `props`. En faisant cela, on passerait dans les *props* des valeurs qui n'ont aucun sens pour `TacheDeListe` et il serait plus difficile de rendre le composant "générique" pour qu'il soit réutilisable dans un autre contexte. Par ailleurs, une des bonnes pratiques fondamentales de Vue est d'interdire aux composants de modifier leurs *props* (cela pourrait avoir des effets de bords difficilement contrôlables chez le composant parent). Il va donc falloir réfléchir un peu plus pour gérer le booléen `faite`.
+Premièrement, l'objet JavaScript `tache` n'est pas accessible ici. Une mauvaise manière de régler le problème serait de le passer en entier dans les `props`. En faisant cela, on passerait dans les *props* des valeurs qui n'ont aucun sens pour `TacheElement` (l'`id`, par exemple) et il serait plus difficile de rendre le composant "générique" pour qu'il soit réutilisable dans un autre contexte. Par ailleurs, une des bonnes pratiques fondamentales de Vue est d'interdire aux composants de modifier leurs *props* (cela pourrait avoir des effets de bords difficilement contrôlables chez le composant parent). Il va donc falloir réfléchir un peu plus pour gérer le booléen `faite`.
 
 
 ### Déclarer les props
@@ -234,18 +233,18 @@ const props = defineProps<{descriptionTache: string, cochee:boolean}>();
 Le composant n'est pas encore parfaitement fonctionnel, mais il ne cause plus d'erreur. Nous pouvons donc l'inclure dans notre page pour le tester au fur et à mesure. Nous allons l'importer dans `ListeDeTaches.vue` avec la ligne :
 
 ```js
-import TacheDeListe from '@/composants/TacheDeListe.vue';
+import TacheElement from '@/composants/TacheElement.vue';
 ```
 Pour utiliser le composant, remplacez les trois lignes à l'intérieur du `<li>` par :
 
 ```vue
-<TacheDeListe :description-tache="tache.description" :cochee="tache.faite" />
+<TacheElement :description-tache="tache.description" :cochee="tache.faite" />
 ```
 Notez que `descriptionTache` est devenu `description-tache`. En HTML, les noms d'attributs ne sont généralement pas en CamelCase mais en kebab-case, ce qui n'est normalement pas possible en JS (vous avez normalement déjà vu ce problème notamment pour les styles en CSS : `background-color` devient `backgroundColor`). Ici, on pourrait utiliser `descriptionTache`, mais on peut aussi utiliser `description-tache`. Le plus important est d'être cohérent tout le long d'un projet.
 
 <div class="exercice" markdown="1" >
 
- Faites l'import et utilisez le composant `TacheDeListe` dans `ListeDeTaches`.
+ Faites l'import et utilisez le composant `TacheElement` dans `ListeDeTaches`.
 Vérifiez que le site s'affiche correctement.
 
 </div>
@@ -274,7 +273,7 @@ const emit = defineEmits<{
 <div class="exercice" markdown="1" >
 
 
-Dans notre cas, nous déclarons pour l'instant un seul événement et celui-ci n'attend pas d'argument donc on écrira en haut de `TacheDeListe.vue` :
+Dans notre cas, nous déclarons pour l'instant un seul événement et celui-ci n'attend pas d'argument donc on écrira en haut de `TacheElement.vue` :
 
 ```js
 const emit = defineEmits<{supprimerTache:[]}>();
@@ -306,7 +305,7 @@ const emit = defineEmits<{
   checkedChange:[boolean]}
 >();
 ```
-La nouvelle ligne définie un nouvel événement qui produit une valeur booléenne. Maintenant, nous pouvons ajouter l'attribut suivant au bouton de `TacheDeListe` :
+La nouvelle ligne définie un nouvel événement qui produit une valeur booléenne. Maintenant, nous pouvons ajouter l'attribut suivant au bouton de `TacheElement` :
 
 ```vue
 @change="$emit('checkedChange', ($event.target as HTMLInputElement).checked)"
@@ -393,12 +392,12 @@ Il suffit alors de définir le `prop` et l'événement correspondant dans le com
 
 
 
-1. Faites les modifications nécessaires en remplaçant `cochee` par `modelValue` et `checkedChange` par `update:modelValue` dans `TacheDeListe.vue`. (Attention dans `defineEmits` à bien mettre les guillemets doubles `"update:modelValue"` sinon JavaScript est gêné par les `:`).
+1. Faites les modifications nécessaires en remplaçant `cochee` par `modelValue` et `checkedChange` par `update:modelValue` dans `TacheElement.vue`. (Attention dans `defineEmits` à bien mettre les guillemets doubles `"update:modelValue"` sinon JavaScript est gêné par les `:`).
 
 2. Modifiez `ListeDeTache` pour utiliser `v-model` ainsi
 
     ```vue
-    <TacheDeListe
+    <TacheElement
       :description-tache="tache.description"
       v-model="tache.faite"
       @supprimer-tache="retirerTache(tache)"
@@ -452,7 +451,7 @@ alors la balise `<slot>` est automatiquement remplacée par le HTML contenu entr
 
 <div class="exercice" markdown="1" >
 
-  Retirer le prop `description-tache` de `TacheDeVue` et utiliser `<slot></slot>` à sa place dans le `<template>`. 
+  Retirer le prop `description-tache` de `TacheElement.Vue` et utiliser `<slot></slot>` à sa place dans le `<template>`. 
 
 Modifier ensuite son utilisation dans `ListeDeTaches` : au lieu de passer `tache.description` dans un attribut, utiliser la syntaxe moustache à l'intérieur de la balise. Vérifiez que tout fonctionne.
 
