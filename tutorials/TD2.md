@@ -75,7 +75,7 @@ En fait, un module JS peut exporter un certain nombre de fonctions, variables et
 
 #### Props
 
-On aimerait bien donner des noms à nos différentes listes de tâches. Pour que ce soit utilisable, il faut que le nom de la liste se comporte comme un attribut ou un paramètre de la liste de tâche. C'est ce qu'on appelle les "props" du composant (les "accessoires" en français). Pour définir, les props d'un composant, on va utiliser la fonction `defineProps` comme ceci :
+On aimerait bien donner des noms à nos différentes listes de tâches. Pour que ce soit utilisable, il faut que le nom de la liste se comporte comme un attribut ou un paramètre de la liste de tâches. C'est ce qu'on appelle les "props" du composant (les "accessoires" en français). Pour définir, les props d'un composant, on va utiliser la fonction `defineProps` comme ceci :
 
 ```ts
   const props = defineProps<{prop1: type1, prop2: type2, prop3: type3}>();
@@ -120,7 +120,7 @@ Nous voulons maintenant ajouter la possibilité d'ajouter des listes de tâches.
 
 1. Créer un tableau `todoListes` qui contient les `ids` et les titres des listes
 
-2. Utiliser la directive `v-for` pour créer une liste de tâche pour chaque élément du tableau `todoListes`. On peut faire le `v-for` directement sur le composant `ListeDeTaches` Pour donner les titres en props, nous avons vu en début de TD comment passer la valeur d'une variable dans un attribut.
+2. Utiliser la directive `v-for` pour créer une liste de tâches pour chaque élément du tableau `todoListes`. On peut faire le `v-for` directement sur le composant `ListeDeTaches` Pour donner les titres en props, nous avons vu en début de TD comment passer la valeur d'une variable dans un attribut.
 
 3. Ajouter un input textuel et un bouton qui permettent d'ajouter un élément au tableau `todoListes` quand on clique sur le bouton.
 
@@ -215,14 +215,21 @@ const props = defineProps<{descriptionTache: string, cochee:boolean}>();
 
 
 
-1. Ajoutez ces lignes et faites les trois changements pour utiliser ces props dans le `template`. Attention, nous allons remplacer `v-model="tache.faite"` par `:checked="props.cochee"`.  
+1. Ajoutez ces lignes et faites les trois changements pour utiliser ces props dans le `template`. Attention, nous allons remplacer 
+   ```
+   v-model="tache.faite"
+   ``` 
+   par 
+   ```
+   :checked="props.cochee"
+   ```  
    En effet, `v-model="props.cochee"` signifierait que cocher la case peut modifier `props.cochee`, mais un composant n'a pas le droit de modifier ses props !
 
 2. Ensuite, plutôt que d'appeler une fonction `retirerTache`, on veut que le clic sur le bouton émette un signal `$emit('supprimerTache')` (qu'on pourra ensuite détecter dans le composant `ListeDeTache`.)
 
 </div>
 
-### Utiliser le composant dans la liste de tâche
+### Utiliser le composant dans la liste de tâches
 
 Le composant n'est pas encore parfaitement fonctionnel, mais il ne cause plus d'erreur. Nous pouvons donc l'inclure dans notre page pour le tester au fur et à mesure. Nous allons l'importer dans `ListeDeTaches.vue` avec la ligne :
 

@@ -30,7 +30,7 @@ Vous pouvez aussi modifier le titre de la page en `The Feed` dans le fichier `in
 
 ## Nos premières routes
 
-Dans ce TD nous allons réaliser une "Application à Page Unique" (Single page application ou SPA). L'idée étant que lors de la navigation sur le site on ne chargera jamais une nouvelle page `html`, mais le JavaScript serra responsable de faire changer la page. Cela permet une navigation plus efficace et moins couteuse en bande passante. Cependant, pour rendre la navigation agréable pour l'utilisateur, il faut qu'elle se comporte comme si l'on avait plusieurs pages, il faudrait notamment :
+Dans ce TD nous allons réaliser une "Application à Page Unique" (Single page application ou SPA). L'idée étant que lors de la navigation sur le site on ne chargera jamais une nouvelle page `html`, mais le JavaScript sera responsable de faire changer la page. Cela permet une navigation plus efficace et moins couteuse en bande passante. Cependant, pour rendre la navigation agréable pour l'utilisateur, il faut qu'elle se comporte comme si l'on avait plusieurs pages, il faudrait notamment :
 - sauvegarder les "pages visitées" dans l'historique, 
 - autoriser un clic sur le bouton "page précédente"
 - permettre l'utilisation d'une url qui change en fonction des "pages" (pour pouvoir l'enregistrer dans mes favoris ou la partager avec un autre utilisateur).
@@ -41,7 +41,7 @@ Commençons par créer notre première vue.
 
 <div class="exercice" markdown="1">
 
-**Exercice :** 
+ 
 1. Commencez déjà par vider le contenu des dossiers `components` et `views`.
 
 2. Remplacez le fichier `App.vue` par [celui ci](../assets/App.vue).
@@ -75,7 +75,7 @@ Commençons par créer notre première vue.
 
     export default router
     ```
-5. Dans le dossier `assets/` remplacez le contenu du fichier main.css par 
+5. Dans le dossier `assets/` remplacez le contenu du fichier `main.css` par 
     ```css
     body{
         margin:0;
@@ -84,10 +84,10 @@ Commençons par créer notre première vue.
     ```
     et supprimez les deux autres fichiers.
 
-6. Vérifiez que votre page s'affiche correctement sans erreurs. Il faut qu'en dessous du menu vous ayez l'affichage du texte ` Ceci est la vue du Feed.`.
+6. Vérifiez que votre page s'affiche correctement sans erreurs. Il faut qu'en dessous du menu vous ayez l'affichage du texte `Ceci est la vue du Feed.`.
 </div>
 
-Prenons le temps de comprendre ce qu'il se passe. Pour bien comprendre commençons par regarder le contenu du fichier `main.ts`. On y trouve deux nouvelles lignes: 
+Prenons le temps de comprendre ce qu'il se passe. Commençons par regarder le contenu du fichier `main.ts`. On y trouve deux nouvelles lignes: 
 ```ts
 import router from './router'
 app.use(router)
@@ -95,7 +95,7 @@ app.use(router)
 
 La première ligne permet d'importer le router en indiquant où il est stocké (ici dans le dossier `router`). La seconde ligne permet de rendre le router disponible à l'ensemble des composants qu'on va charger par la suite dans `app`.
 
-Ensuite dans le fichier `router/index.ts` la partie qui nous intéresse est celle qui définie deux routes différentes `/` et `/feed` qu'on associe toutes les deux au composant `Feed`. Notez qu'en haut du fichier le deuxième importe définie le composant `Feed` comme étant celui contenu dans le fichier `/views/Feed.vue`.
+Ensuite dans le fichier `router/index.ts` la partie qui nous intéresse est celle qui définie deux routes différentes `/` et `/feed` qu'on associe toutes les deux au composant `Feed`. Notez qu'en haut du fichier le deuxième import défini le composant `Feed` comme étant celui contenu dans le fichier `/views/Feed.vue`.
 
 Finalement, dans le fichier `App.vue`, la ligne intéressante est celle qui contient  
 `<router-view />`. Cette ligne indique que cette partie du template doit être remplacée par le composant correspondant à la route actuelle. En l'occurrence, nous avons indiqué que la route `/`, correspondait au composant `views/Feed.vue` et c'est donc celui qui devrait s'afficher. Ouvrez la console du navigateur et regardez ce qu'il se passe si on ajoute `blabla` au bout de l'url et qu'on recharge la page. Essayez ensuite avec `/feed` qui devrait fonctionner.
@@ -104,7 +104,7 @@ Pour s'assurer que nous avons compris créons une autre vue qui nous servira plu
 
 <div class="exercice" markdown="1">
 
-**Exercice :** 
+ 
 1. Créez le fichier `AllUsers.vue` sur le même modèle que `Feed.vue`, mais avec le texte `Ceci est la liste des utilisateurs.`
 
 2. Ajoutez une route `/users` dans le fichier `router/index.ts` qui invoque le composant que nous venons de définir. N'oubliez pas de faire l'import du composant avant de définir la route.
@@ -124,7 +124,7 @@ Ensuite, l'appelle à la méthode `router.push('maroute')` redirige la page vers
 
 <div class="exercice" markdown="1">
 
-**Exercice :** Modifiez le fichier `App.vue` pour qu'un clic sur `The feed` renvoie sur la route `/feed` et qu'un clic sur `Les membres` renvoie sur la route `/users`. Vérifiez que tout fonctionne.
+ Modifiez le fichier `App.vue` pour qu'un clic sur `The feed` renvoie sur la route `/feed` et qu'un clic sur `Les membres` renvoie sur la route `/users`. Vérifiez que tout fonctionne.
 
 </div>
 
@@ -142,7 +142,7 @@ On peut ensuite utiliser la route par son nom comme ceci `router.push({name: 'no
 
 <div class="exercice" markdown="1">
 
-**Exercice :** Nommez la route `/users` avec le nom `allUsers` et utiliser ce `name` dans le `push` comme montré au-dessus.
+ Nommez la route `/users` avec le nom `allUsers` et utiliser ce `name` dans le `push` comme montré au-dessus.
 
 </div>
 
@@ -167,7 +167,7 @@ const id = route.params.id
 
 <div class="exercice" markdown="1">
 
-**Exercice :** 
+ 
 1. Créez une vue `views/SingleMessage.vue` qui récupère le paramètre `id` de la route et affiche `J'affiche le message d'id {{id}}`. 
 
 2. Ajoutez dans le router une route `/feed/:id` nommée `singleMessage` qui conduit vers la vue précédemment définie. 
@@ -204,7 +204,7 @@ Si plusieurs types sont définis dans mon fichier, je peux en importer plusieurs
 
 <div class="exercice" markdown="1">
 
-**Exercice :** 
+ 
 1. Créez un fichier `src/types.ts` dans lequel vous ajouterez la définition des interfaces d'un Utilisateur et d'une interface publication avec les mots clefs `export`. Pour l'interface `Publication`, basez-vous sur ce que votre API renvoie (il y a 4 champs et on utilisera un string pour la date).
 
 </div>
@@ -312,7 +312,7 @@ Remarquez que ce n'est pas un ajout de vue, mais bien quelque chose qui est touj
 
 <div class="exercice" markdown="1">
 
-**Exercice :** 
+ 
 1. Créez un fichier `components/ContentBox.css` et le fichier du composant `components/BoiteUtilisateur.vue` avec les contenus indiqués au-dessus.
 
 2. Modifiez le contenu de `AllUser.vue` pour :
@@ -346,7 +346,7 @@ Ici, il pourrait être tentant de faire `<router-link :to="'/singleUser/'+utilis
 
 <div class="exercice" markdown="1">
 
-**Exercice :** Modifiez le composant `BoiteUtilisateur.vue` pour que le login de l'utilisateur soit un lien vers la page de cet utilisateur. On pourra ajouter la classe `clicable` à ce lien pour améliorer le CSS. Vérifiez que le lien fonctionne.
+ Modifiez le composant `BoiteUtilisateur.vue` pour que le login de l'utilisateur soit un lien vers la page de cet utilisateur. On pourra ajouter la classe `clicable` à ce lien pour améliorer le CSS. Vérifiez que le lien fonctionne.
 
 </div>
 
@@ -385,7 +385,7 @@ Prenez le temps de comprendre ce qu'il s'y passe. La seule nouveauté est le `(n
 
 <div class="exercice" markdown="1">
 
-**Exercice :** 
+ 
 1. Créez `BoitePublication` avec le code donné plus tôt. 
 
 2. En vous inspirant de `AllUsers.vue`, modifiez la vue `Feed.vue` pour qu'elle affiche une liste de publication en utilisant ce composant. On pourra pour l'instant initialiser une fausse liste de publication avec le contenu suivant :
@@ -459,7 +459,7 @@ En procédant, ainsi on indique à Vue de faire le `fetch` une fois que le compo
 
 <div class="exercice" markdown="1">
 
-**Exercice :** 
+ 
 1. Modifiez le code de `AllUsers` pour qu'il affiche tous les utilisateurs. Vérifiez que tout fonctionne. Si vous êtes en local, il se peut que vous rencontriez des problèmes (mais pas nécessairement en fonction des détails de cotre configuration). Dans ce cas, vous pouvez dans un premier temps utiliser l'API d'un de vos camarades hébergé sur le serveur de l'IUT. 
 
 2. Faites la même chose pour que les trois autres vues fonctionnent. Il faudra regarder le format du JSON que retourne l'API pour adapter le traitement du `fetch`. Pour `AllUsers` et `Feed` vous pouvez initialiser la variable qui contient le résultat du fetch avec un tableau vide, mais pour les deux autres il faudra que la valeur initiale soit déjà valide (puisque le composant serra déjà affiché avant le fetch). C'est en fait l'opportunité de mettre votre "faux utilisateur/publication" initiale avec des champs dont la valeur est `"chargement"` et c'est donc cela qui s'affichera en attendant que les vraies valeurs soient chargées.
@@ -529,7 +529,7 @@ fetch(".../api/auth", {
 
 <div class="exercice" markdown="1">
 
-**Exercice :** 
+ 
 1. Créez la vue `login.vue` et complétez là. Pour l'instant, nous allons simplement afficher dans le terminal (`console.log`) le retour de la demande de connexion.
 
 2. Configurez la route `login` correspondante dans le fichier `router/index.ts` et ajoutez le lien correspondant dans le menu. 
@@ -580,7 +580,7 @@ On a donc une fonction connexion qui fait la requête HTTP de connexion avec fet
 
 <div class="exercice" markdown="1">
 
-**Exercice :** 
+ 
 1. Créez le fichier `store\storeAuthentification.ts` qui contient le code du store. Basez vous sur la requête fetch de l'exercice précédent pour compléter la fonction connexion. Pour tester si la connexion a échoué on pourra utiliser `reponsehttp.status !== 200` (il vaut 200 si la connexion est réussie).
 
 2. Modifiez la vue login pour qu'elle puisse accéder au `storeAuthentification` et que la fonction `connect` utilise la méthode connexion pour enregistrer le JWT. Pour l'instant on pourra utiliser `()=>{}` pour les fonctions `succes` et `echec`.
@@ -642,7 +642,7 @@ Il faut bien évidemment remplacer `monJWT` par le JWT enregistré.
 
 <div class="exercice" markdown="1">
 
-**Exercice :** 
+ 
 1. Créez le composant `views/FormulairePost.vue` en utilisant l'exemple plus haut. Complétez le composant en définissant la fonction `envoyer` et la variable message comme il faut. Pour l'instant, on peut ne pas mettre de `then` et se contenter d'ignorer la réponse de notre requête.
 
 2. Si l'utilisateur est connecté, affichez ce composant en haut de la vue feed.
@@ -657,7 +657,7 @@ Pour faire cela, notre composant `FormulairePoste` emmétra un événement pour 
 
 <div class="exercice" markdown="1">
 
-**Exercice :** 
+ 
 1. Dans le composant `FormulairePoste`, définissez un nouvel évènement avec `const emit = defineEmits<{ updated: []}>();`. Modifiez le traitement du `fetch` pour émettre cet évènement en cas de succès de la requête.
 
 2. Modifiez maintenant le composant `Feed` pour appeler la fonction `chargerFeed` quand le composant `FormulairePoste` émet l'évènement `update` (il suffit de faire `@updated="chargerFeed"` au bon endroit).
@@ -704,7 +704,7 @@ car les composants enregistrés dans `main.ts` ne sont pas disponible dans le `s
 
 <div class="exercice" markdown="1">
 
-**Exercice :** 
+ 
 1. Utilisez la commande `npm` et modifiez le fichier `main.ts` de manière à pouvoir utiliser les messages flash.
 
 2. Ajoutez la balise `<FlashMessage />` dans le main de `App.vue`.
@@ -719,7 +719,7 @@ Voici une liste de ce qu'il reste à faire:
 
 <div class="exercice" markdown="1">
 
-**Exercice :** 
+ 
 1. Faites fonctionner le bouton d'inscription.
 2. Ajoutez un bouton de déconnexion qui n'est visible que quand on est déconnecté. Il faudrait rajouter une fonction au store.
 3. Modifiez la page d'information d'un utilisateur (`SingleUser.vue`) pour qu'elle affiche toutes les publications de cet utilisateur. Profitez en aussi pour que les champs login et adresse e-mail dans l'interface ne soient modifiable que si l'utilisateur est sur sa propre page.

@@ -448,13 +448,12 @@ et TypeScript pourra ainsi vérifier que tout se passe correctement lors de l'ap
 
 <div class="exercice" markdown="1" >
 
-
 Remplacez temporairement votre fonction `ajouterTache` par celle-ci :
 
   ```js
   function ajouterTache(){
     if(nouvelleTache.value === "") return;
-    taches.value.push({id: id++, description: nouvelleTache.value, faite: "false"});
+    taches.value.push({id: id++, description: nouvelleTache.value, faite: false});
     nouvelleTache.value = "";
   }
   ```
