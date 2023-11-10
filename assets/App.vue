@@ -4,7 +4,6 @@
       <h1 >The feed</h1>
       <nav>
         <div >Les membres</div>
-        <div >Poster</div>
         <div >S'inscrire</div>
         <div >Se connecter</div>
       </nav>
