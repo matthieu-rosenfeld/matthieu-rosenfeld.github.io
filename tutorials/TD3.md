@@ -31,12 +31,12 @@ Vous pouvez aussi modifier le titre de la page en `The Feed` dans le fichier `in
 
 ## Nos premières routes
 
-Dans ce TD nous allons réaliser une "Application à Page Unique" (Single page application ou SPA). L'idée étant que lors de la navigation sur le site on ne chargera jamais une nouvelle page `html`, mais le JavaScript sera responsable de faire changer la page. Cela permet une navigation plus efficace et moins couteuse en bande passante. Cependant, pour rendre la navigation agréable pour l'utilisateur, il faut qu'elle se comporte comme si l'on avait plusieurs pages, il faudrait notamment :
+Dans ce TD nous allons réaliser une "Application à Page Unique" (Single page application ou SPA). L'idée étant que lors de la navigation sur le site on ne chargera jamais une nouvelle page `html`, mais le JavaScript sera responsable de faire changer la page. Cela permet une navigation plus efficace et moins couteuse en bande passante (au lieu de recharger l'ensemble du code html de la page on ne charge que les nouvelles données). Cependant, pour rendre la navigation agréable pour l'utilisateur, il faut qu'elle se comporte comme si l'on avait plusieurs pages, il faudrait notamment :
 - sauvegarder les "pages visitées" dans l'historique, 
 - autoriser un clic sur le bouton "page précédente"
 - permettre l'utilisation d'une URL qui change en fonction des "pages" (pour pouvoir l'enregistrer dans mes favoris ou la partager avec un autre utilisateur).
 
-On pourrait gérer tout cela nous-même, mais le `router` de Vue est une solution très simple à tous ces problèmes. On va définir des vues (qui se déclarent et s'utilisent comme les composants), on va ensuite configurer les routes pour expliquer quelle route correspond à quelle vue. On pourra ensuite utiliser la balise `<router-view />` dans notre composant principal qui se chargera de détecter la vue à charger en fonction de l'URL. On pourra aussi utiliser le routeur pour générer automatiquement l'URL d'une vue pour définir (un lien par exemple). Bien que le contexte et le fonctionnement soient assez différent, l'utilisation des routes devrait vous rappelez les routes de Symfony.
+On pourrait gérer tout cela nous-même, mais le `router` de Vue est une solution très simple à tous ces problèmes. On va définir des vues (qui sont en fait simplement des composants), on va ensuite configurer les routes pour expliquer quelle route correspond à quelle vue. On pourra ensuite utiliser la balise `<router-view />` dans notre composant principal qui se chargera de détecter la vue à charger en fonction de l'URL. On pourra aussi utiliser le routeur pour générer automatiquement l'URL d'une vue pour définir (un lien par exemple). Bien que le contexte et le fonctionnement soient assez différent, l'utilisation des routes devrait vous rappelez les routes de Symfony.
 
 Commençons par créer notre première vue.
 
@@ -58,7 +58,7 @@ Commençons par créer notre première vue.
 4. Remplacez le contenu du fichier `router/index.ts` par le contenu suivant (en fonction de la version de Vue, il se peut que vous ayez un fichier `router.ts` à la place du fichier `router/index.ts`, le fonctionnement est le même) :
     ```ts
     import { createRouter, createWebHistory } from 'vue-router'
-    import Feed from '../views/Feed.vue'
+    import Feed from '@/views/Feed.vue'
 
     const router = createRouter({
         history: createWebHistory(''),
@@ -530,7 +530,7 @@ fetch(".../api/auth", {
 <div class="exercice" markdown="1">
 
  
-1. Créez la vue `login.vue` et complétez là. Pour l'instant, nous allons simplement afficher dans le terminal (`console.log`) le retour de la demande de connexion.
+1. Créez la vue `Login.vue` et complétez là. Pour l'instant, nous allons simplement afficher dans le terminal (`console.log`) le retour de la demande de connexion.
 
 2. Configurez la route `login` correspondante dans le fichier `router/index.ts` et ajoutez le lien correspondant dans le menu. 
 
@@ -572,7 +572,7 @@ export const storeAuthentification = reactive({
   JWT: "",
   connexion(login: string, motDePasse: string, succes:()=>void, echec:()=>void): void{
     //fait le fetch et change le JWT si succès
-    //return true/false en fonction du suddès de l'authentification
+    //execute succes ou echec en fonction du succès de l'authentification
   }
 });
 ```
@@ -643,7 +643,7 @@ Il faut bien évidemment remplacer `monJWT` par le JWT enregistré.
 <div class="exercice" markdown="1">
 
  
-1. Créez le composant `views/FormulairePost.vue` en utilisant l'exemple plus haut. Complétez le composant en définissant la fonction `envoyer` et la variable message comme il faut. Pour l'instant, on peut ne pas mettre de `then` et se contenter d'ignorer la réponse de notre requête.
+1. Créez le composant `views/FormulairePublication.vue` en utilisant l'exemple plus haut. Complétez le composant en définissant la fonction `envoyer` et la variable message comme il faut. Pour l'instant, on peut ne pas mettre de `then` et se contenter d'ignorer la réponse de notre requête.
 
 2. Si l'utilisateur est connecté, affichez ce composant en haut de la vue feed.
 
@@ -652,15 +652,15 @@ Il faut bien évidemment remplacer `monJWT` par le JWT enregistré.
 
 Il faudrait que l'ajout d'un message déclenche le rechargement de la page `feed`. On pourrait ajouter nous-même le nouveau message au tableau (la réponse à notre requête contient toutes les infos sur le nouveau message). Mais nous allons plutôt recharger toute la page. L'avantage de procéder ainsi est que si d'autres changements ont eu lieu entre temps on va aussi les recharger et donc l'état de notre page correspond effectivement à l'état de l'API à un moment donné. L'autre solution aurait l'avantage d'être légèrement plus efficace puisqu'elle nous évite de faire une requête. 
 
-Pour faire cela, notre composant `FormulairePoste` émettra un événement pour signaler à son parent qu'il faut qu'il recharge la page. 
+Pour faire cela, notre composant `FormulairePublication` émettra un événement pour signaler à son parent qu'il faut qu'il recharge la page. 
 
 
 <div class="exercice" markdown="1">
 
  
-1. Dans le composant `FormulairePoste`, définissez un nouvel évènement avec `const emit = defineEmits<{ updated: []}>();`. Modifiez le traitement du `fetch` pour émettre cet évènement en cas de succès de la requête.
+1. Dans le composant `FormulairePublication`, définissez un nouvel évènement avec `const emit = defineEmits<{ updated: []}>();`. On ne peut pas utiliser `$emit` dans le `script setup`, mais la variable `emit` (résultat de l'appel à `defineEmits`) contient une fonction qui est équivalente à `$emit` et qu'on peut utiliser dans le `script setup`. Modifiez le traitement du `fetch` pour émettre cet évènement en cas de succès de la requête.
 
-2. Modifiez maintenant le composant `Feed` pour appeler la fonction `chargerFeed` quand le composant `FormulairePoste` émet l'évènement `update` (il suffit de faire `@updated="chargerFeed"` au bon endroit).
+2. Modifiez maintenant le composant `Feed` pour appeler la fonction `chargerFeed` quand le composant `FormulairePublication` émet l'évènement `update` (il suffit de faire `@updated="chargerFeed"` au bon endroit).
 
 3. Définissez la fonction `chargerFeed` qui réutilise le code du `fetch` qui était dans `onMounted`. Modifiez `onMounted` pour appeler aussi la fonction `chargerFeed`.
 
@@ -722,8 +722,8 @@ Voici une liste de ce qu'il reste à faire :
 
  
 1. Faites fonctionner le bouton d'inscription.
-2. Ajoutez un bouton de déconnexion qui n'est visible que quand on est déconnecté. Il faudrait rajouter une fonction au store.
-3. Modifiez la page d'information d'un utilisateur (`SingleUser.vue`) pour qu'elle affiche toutes les publications de cet utilisateur. Profitez en aussi pour que les champs login et adresse e-mail dans l'interface ne soient modifiables que si l'utilisateur est sur sa propre page.
+2. Ajoutez un bouton de déconnexion qui n'est visible que quand on est connecté. Il faudrait rajouter une fonction au store.
+3. Modifiez la page d'information d'un utilisateur (`SingleUser.vue`) pour qu'elle affiche toutes les publications de cet utilisateur. Profitez en aussi pour que les champs login et adresse e-mail dans l'interface ne soient modifiables que si l'utilisateur est sur sa propre page (il faudra trouver un moyen de stocker l'utilisateur connecté).
 
 
 Et si le temps le permet :
