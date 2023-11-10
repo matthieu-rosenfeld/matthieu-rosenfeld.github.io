@@ -453,7 +453,7 @@ Remplacez temporairement votre fonction `ajouterTache` par celle-ci :
   ```js
   function ajouterTache(){
     if(nouvelleTache.value === "") return;
-    taches.value.push({id: id++, description: nouvelleTache.value, faite: false});
+    taches.value.push({id: id++, description: nouvelleTache.value, faite: "false"});
     nouvelleTache.value = "";
   }
   ```
