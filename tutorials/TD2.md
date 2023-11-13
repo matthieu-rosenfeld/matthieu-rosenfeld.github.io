@@ -494,7 +494,7 @@ Pour l'instant, nous avons utilisé Vite pour faire tourner notre site sur un se
 
    ```bash
    mkdir ~/public_html/TD_vueJS
-   ln -s ~/todo_list/dist ~/public_html/TD_vueJS/todo_list
+   ln -s .../todo_list/dist ~/public_html/TD_vueJS/todo_list
    ``` 
 
    Vous pouvez donc désormais accéder à votre site à l'URL
