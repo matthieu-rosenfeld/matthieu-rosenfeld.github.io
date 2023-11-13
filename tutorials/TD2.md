@@ -375,7 +375,7 @@ Il suffit alors de définir le `prop` et l'événement correspondant dans le com
 
 ```vue
 <script setup>
-  defineProps({modelValue:monType});
+  const props = defineProps<{modelValue:monType}>();
   defineEmits<{
   "update:modelValue": [premierArgument: sonType, deuxiemeArgument:sonType]
   }>();
