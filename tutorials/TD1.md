@@ -26,7 +26,7 @@ Ce TD est partiellement inspiré du [tutoriel Vue](https://vuejs.org/tutorial/#s
 ## Première page avec `Vue.js` et `npm`
 Jusqu'à maintenant, nous n'avons utilisé que du JavaScript "nature". Nous pouvions donc simplement écrire notre fichier `js`, l'inclure dans le fichier `html` et le navigateur web faisait le reste du travail sans même avoir besoin d'un serveur web. Beaucoup de frameworks JS coexistent avec tout un paquet d'utilitaires (compilateur, *linter*, serveur de développement...). Ces utilitaires sont très simples à installer grâce à Node.JS et [npm](https://fr.wikipedia.org/wiki/Npm) (officieusement l'acronyme de "Node Package Manager", officiellement le rétroacronyme de "npm is not an acronym").
 
-Npm est déjà disponibles en salle machine, si vous êtes sur votre machine personnelle, vous aurez surement besoin de l'installer (ce qui est normalement assez simple sous un Linux). Pour initier un projet Vue, vous pouvez alors ouvrir votre terminal dans le dossier où vous souhaitez créer votre projet, puis entrez la commande :
+Npm est déjà disponibles sur l'image docker que nous avons configuré l'installer (ce qui est normalement assez simple sous un Linux). Pour initier un projet Vue, vous pouvez alors ouvrir votre terminal dans le dossier où vous souhaitez créer votre projet, puis entrez la commande :
 
 
 ```sh
@@ -35,7 +35,7 @@ npm init vue@latest
 
 <div class="exercice" markdown="1">
 
-Faites-le. 
+Faites-le **dans le terminal de votre docker**.
 
 L'utilitaire vous demande d'abord le nom du projet à créer : vous pouvez choisir `todo_list` (puisque nous allons commencer par réaliser une liste de tâches). Ensuite, il vous propose d'inclure plusieurs fonctionnalités supplémentaires dès la création du projet. Nous allons toutes les refuser sauf TypeScript (nous ignorerons les erreurs de type au début, mais nous y reviendrons ensuite) et ESLint.
 
@@ -50,13 +50,40 @@ cd todo_list
 npm install
 npm run dev
 ```
+La seconde commande permet d'installer les différentes dépendances du projet (comme `composer install`, sauf qu'ici il faut le faire dès la première fois). La troisième commande lance normalement le serveur de développement de vite qui permet de travailler dans de bonnes conditions. Cependant, comme nous l'utilisons depuis docker, il va falloir rajouter quelques lignes au fichier de config `vite.config.ts` pour que cela fonctionne.
+
+```ts
+import { fileURLToPath, URL } from 'node:url'
+
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [
+    vue(),
+  ],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    },
+  },
+  server: {
+      host: true,
+      port: 5173
+  }
+})
+```
+
 
 <div class="exercice" markdown="1">
 
-Faites-le. 
+1. Entrez les deux premières commandes **dans le terminal de votre docker**. 
+
+2. Faite la modification du fichier `vite.config.ts` en modifiant les quelques lignes nécessaires, puis faites le `npm run dev`.
 </div>
 
-La seconde commande permet d'installer les différentes dépendances du projet. Si tout va bien, la dernière commande donne la sortie suivante
+Si tout va bien, la dernière commande donne la sortie suivante :
 
 ```
 test@0.0.0 dev
@@ -76,7 +103,7 @@ L'utilitaire que nous avons utilisé pour créer ce projet et faire tourner le s
 
 ### Petit point IDE et navigateur
 
-La documentation Vue semble recommander l'usage de VS code. De même, TypeScript que nous allons utiliser est développé par le même éditeur que VScode (MicroSoft). Tous ces outils sont libres et open source. Pour ces différentes raisons, c'est un bon choix d'utiliser VS code (ou l'alternative VScodium qui est une version de VScode sans la télémétrie de Microsoft) et d'installer les plugins `Vue Language Features (Volar)` et `TypeScript Vue Plugin (Volar)`. Cependant, Webstorm propose a priori aussi un très bon support pour TypeScript et Vue sans installation préalable de plugin.
+La documentation Vue semble encourager l'usage de VS code. De même, TypeScript que nous allons utiliser est développé par le même éditeur que VScode (MicroSoft). Tous ces outils sont libres et open source. Pour ces différentes raisons, c'est un bon choix d'utiliser VS code (ou l'alternative VScodium qui est une version de VScode sans la télémétrie de Microsoft) et d'installer le plugins `Vue - Official` (on pourrait aussi installer un paquet d'autres plugins utiles tels que `ESLint` par exemple). Cependant, Webstorm propose a priori aussi un très bon support pour TypeScript et Vue sans installation préalable de plugin.
 
 Nous allons aussi installer un plugin au navigateur pour nous aider à déboguer un site codé avec Vue:
 sous [Firefox](https://addons.mozilla.org/fr/firefox/addon/vue-js-devtools/) et sous [Chrome](https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd). Ces plugins offrent un nouvel onglet dans les outils de développement qui ressemble à ceci :
@@ -118,13 +145,13 @@ Vérifiez dans le navigateur que l'affichage a bien été mis-à-jour. Vous pouv
 
 ## Base du réactive, moustache, v-bind, v-on et v-model
 
-Prenez le temps d'observer la page minimale que nous avons créée et de comprendre comment elle est décrite par notre fichier `App.vue`. Vous avez certainement remarqué dans l'exemple précédent que dans la page HTML le texte `{{texte}}` a été remplacé par le contenu de la variable. C'est la syntaxe "moustache" (doubles accolades) qui permet l'interpolation de texte. On peut utiliser des expressions plus compliquées. Par exemple, on pourrait écrire `{{texte1+" "+texte2}}` pour afficher la concaténation des deux variables séparés par une espace.
+Prenez le temps d'observer la page minimale que nous avons créée et de comprendre comment elle est décrite par notre fichier `App.vue`. Vous avez certainement remarqué dans l'exemple précédent que dans la page HTML le texte `{{texte}}` a été remplacé par le contenu de la variable. C'est la syntaxe "moustache" (doubles accolades) qui permet l'interpolation de texte (ça devrait vous rappeler Twig). On peut utiliser des expressions plus compliquées. Par exemple, on pourrait écrire `{{texte1+" "+texte2}}` pour afficher la concaténation des deux variables séparés par une espace.
 
 La moustache ne fonctionne que pour inclure du texte dans le HTML. Si l'on veut utiliser une variable dans l'attribut d'une balise, il va falloir utiliser `v-bind:monAttribut="maVariable"`. Par exemple, on pourrait ajouter au JS la définition `let url = "https://vuejs.org/";` et au HTML la ligne `<a v-bind:href="url"> Site de Vue</a>`.
 
 <div class="exercice" markdown="1">
 
-Essayez de définir un lien de cette manière.
+Essayez de définir un lien de cette manière et vérifiez que ça fonctionne.
 
 </div>
 
@@ -145,7 +172,9 @@ function incremente(){
 
 <div class="exercice" markdown="1" >
 
-Vérifiez que cela fonctionne (ouvrez la console pour vérifier l'affichage de la valeur). Vous pouvez maintenant utiliser la syntaxe moustache pour afficher la variable compteur dans votre page. Que se passe-t-il ?
+1. Faites-le puis vérifiez que cela fonctionne :  ouvrez la console pour vérifier l'affichage de la valeur. 
+
+2. Vous pouvez maintenant utiliser la syntaxe moustache pour afficher la variable compteur dans votre page. Que se passe-t-il ?
 
 </div>
 
@@ -161,7 +190,7 @@ On peut constater dans la console que la valeur de la variable change, et pourta
 
 2. Modifier la définition de compteur pour utiliser `ref` ainsi `let compteur = ref(7);`.
 
-3. Remplacer toutes les utilisations de compteur dans le script par `compteur.value` (par contre, gardez compteur dans la partie `HTML`).
+3. Remplacer toutes les utilisations de compteur dans le script par `compteur.value` (par contre, gardez `compteur` dans la partie `HTML`).
 
 <div class="exercice" markdown="1" >
 
@@ -174,14 +203,15 @@ La fonction `ref` renvoie un objet réactif qui encapsule l'objet donné en argu
 > La fonction `ref` utilise l'objet proxy de JavaScript que nous avons utilisé dans un contexte similaire l'an dernier. En fait, Vue définie une fonction `reactive` dont le fonctionnement est très proche de la fonction `reactive` que nous avons écrit l'an dernier. La fonction `ref` utilise en fait `reactive`, mais `ref` est plus simple d'utilisation et nous utiliserons donc principalement `ref`.
 
 
-> **Attention :** Pour utiliser une variable `ref` dans la partie `script JS` il faut écrire `maVariable.value` pour accéder à sa valeur alors qu'il faut faire `maVariable` dans la partie `template HTML`. Cela risque de cause pas mal d'erreur au début si vous l'oubliez !!
+> **Attention :** Pour utiliser une variable `ref` dans la partie `script JS` il faut écrire `maVariable.value` pour accéder à sa valeur alors qu'il faut faire `maVariable` dans la partie `template HTML`. Cela risque de vous causer pas mal d'erreur au début si vous l'oubliez !!
 
+Nous allons maintenant voir comment associer une variable au contenu d'un champ de formulaire.
 
 <div class="exercice" markdown="1" >
 
-Maintenant, ajouter un champ texte `<input>` et utiliser `v-bind` pour que `value` de cet input soit toujours la variable `compteur`. Vérifiez que si l'on change la valeur en cliquant sur le bouton précédent, l'affichage se met à jour dans notre nouvel input. 
+1. Ajoutez un champ texte `<input>` et utiliser `v-bind` pour que `value` de cet input soit toujours la variable `compteur`. Vérifiez que si l'on change la valeur en cliquant sur le bouton de l'exercice précédent, l'affichage se met à jour dans notre nouvel input. 
 
-Ensuite, utilisez `v-on:input` et la fonction suivante pour que la modification du contenu de l'input mette la variable à jour.
+2. Utilisez `v-on:input` et la fonction suivante pour que la modification du contenu de l'input mette la variable à jour.
 
 ```js
 function onInput(e) {
@@ -189,10 +219,11 @@ function onInput(e) {
 }
 ```
 
+3. Vérifiez qu'en changeant au clavier la valeur du champ la valeur affichée précédemment est bien modifiée.
 </div>
 
 
-On a réussi à associer une variable à l'input dans les deux directions. En fait, pour faire cela directement, il existe une troisième directive `v-model`.
+On a réussi à associer une variable à notre `input` dans les deux directions. En fait, on aurait pu faire cela directement grâce à la directive `v-model`.
 
 <div class="exercice" markdown="1" >
 Remplacez l'input par `<input v-model="compteur">` et supprimez la fonction `onInput`. Vérifiez que tout fonctionne.
@@ -201,7 +232,7 @@ Remplacez l'input par `<input v-model="compteur">` et supprimez la fonction `onI
 
 De manière générale, `v-model` permet de relier une variable à un input de manière cohérente (par exemple, si `type="checkbox"` alors la variable sera un booléen).
 
-Les directives ont un rôle assez important et nous en verrons d'autres. En particulier, `v-bind:monattribut="mavariable"` et `v-on:event="mavariable"` sont très utilisées et il existe une syntaxe plus courte : `:monattribut="mavariable"` et `@event="mavariable"` que nous allons privilégier à partir de maintenant.
+Les directives ont un rôle assez important et nous en verrons d'autres. En particulier, `v-bind:monattribut="mavariable"` et `v-on:event="mafonction"` sont très utilisées et il existe une syntaxe plus courte : `:monattribut="mavariable"` et `@event="mafonction"` que nous allons privilégier à partir de maintenant.
 
 
 
@@ -212,7 +243,8 @@ la liste de tâche (*TODO list*). Nous avons fait un morpion en "*R4.A.10 --
 Complément web*" l'an dernier donc pour découvrir Vue, nous allons réaliser une
 liste de tâches. Il sera possible d'ajouter des tâches, de retirer des tâches et
 de cocher certaines tâches pour indiquer qu'elles ont été effectuées. Elle
-ressemblera à ça: ![](../assets/fin_TD1.png)
+ressemblera à ça: 
+![](../assets/fin_TD1.png)
 
 
 ### Afficher la liste de tâches 
@@ -249,7 +281,7 @@ Remplacez le contenu de `App.vue` par le code suivant :
 
 </div>
 
-Dans la partie JS, nous définissions le tableau `taches` qui contient les éléments de la liste de tâches. Chaque élément de la liste de tâches, possède un texte qui décrit la tâche, un booléen qui décrit si la tâche est effectuée ou non et une `id` dont nous allons voir l'utilité. L'autre partie intéressante est la ligne `<li v-for="tache in taches" :key="tache.id">` qui permet de faire une boucle sur tous les éléments de `taches` et de créer un `<li>` pour chacun d'entre eux. La partie `:key="tache.id"` permet d'associer une clef différente à chaque élément. Pour l'instant le code pourrait fonctionner sans, mais le fait d'associer une clef à chaque élément permet à Vue de comprendre quel élément correspond à quel élément quand le tableau change (par exemple, si l'on supprime une case au milieu du tableau). Dans le doute, il faut toujours associer une clef unique à chaque élément.
+Dans la partie JS, nous définissions le tableau réactif `taches` qui contient les éléments de la liste de tâches. Chaque élément de la liste de tâches, possède un texte qui décrit la tâche, un booléen qui décrit si la tâche est effectuée ou non et une `id` dont nous allons voir l'utilité. L'autre partie intéressante est la ligne `<li v-for="tache in taches" :key="tache.id">` qui permet de faire une boucle sur tous les éléments de `taches` et de créer un `<li>` pour chacun d'entre eux. La partie `:key="tache.id"` permet d'associer une clef différente à chaque élément. Pour l'instant le code pourrait fonctionner sans, mais le fait d'associer une clef unique à chaque élément permet à Vue de comprendre quel élément correspond à quel élément quand le tableau change (par exemple, si l'on supprime une case au milieu du tableau et que le contenu de certaines cases est modifié). Dans le doute, il faut toujours associer une clef unique à chaque élément dans un `v-for`.
 
 
 ### Ajouter et retirer un élément à la liste de tâches
@@ -279,16 +311,17 @@ Faites-le et vérifiez que tout fonctionne.
 De manière générale, la syntaxe complète des directives est la suivante `name:argument.modifiers="value"`. Par exemple, `v-on:click.prevent="gestionDuClic"` appelle la fonction `gestionDuClic` dès que l'élément est cliqué tout en empêchant la propagation de l'événement (en l'occurrence, on préfère utiliser la version courte et on écrirait `@click.prevent="gestionDuClic"`).
 
 On va maintenant ajouter la possibilité de retirer un élément de la liste de tâche. 
+
 <div class="exercice" markdown="1" >
 
 
-1. Ajoutez un bouton `<button @click="retirerTache(tache)">Retirer</button>` à chaque élément. Un clic sur ce bouton va donc appeler la fonction retirerTache avec comme argument `tache` qui correspond à l'élément du tableau `taches`. Codez la fonction `retirerTache`. 
-   
-   *Aide :* On pourra utiliser la méthode [`filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) en ne gardant que les éléments qui sont différents de `tache`.
+1. Ajoutez le bouton `<button @click="retirerTache(tache)">Retirer</button>` à chaque élément. Un clic sur ce bouton va donc appeler la fonction retirerTache avec comme argument `tache` qui correspond à l'élément du tableau `taches`. 
+
+2. Codez la fonction `retirerTache`. On pourra utiliser la méthode [`filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) en ne gardant que les éléments qui sont différents de `tache`.
 
    **Attention :** Votre IDE devrait normalement vous dire qu'il y a une erreur (`Parameter 'tache' implicitly has an 'any' type.`). On peut ignorer cette erreur pour l'instant, nous verrons plus tard ce qu'elle veut dire.
 
-2. On peut ajouter un CSS minimal dans `<style scoped>` pour un résultat un peu
+3. On peut ajouter un CSS minimal dans `<style scoped>` pour un résultat un peu
    plus joli. Par exemple :
 
     ```css
@@ -309,21 +342,14 @@ On va maintenant ajouter la possibilité de retirer un élément de la liste de 
     ![](../assets/todo_liste_mitd.png)
 
 
-3. Il est temps d'aller explorer l'onglet Vue dans les outils de développement du navigateur. Vous pouvez par exemple l'utiliser pour changer la valeur de certaines variables à la volée ou simplement observer leurs valeurs. Commencez par vérifier qu'on peut voir les variables évoluer quand on ajoute une tâche. Ensuite vous pouvez essayer de modifier le nom d'une tâche depuis cet onglet.
+4. Il est temps d'aller explorer l'onglet Vue dans les outils de développement du navigateur. Vous pouvez par exemple l'utiliser pour changer la valeur de certaines variables à la volée ou simplement observer leurs valeurs. Commencez par vérifier qu'on peut voir les variables évoluer quand on ajoute une tâche. Ensuite vous pouvez essayer de modifier le nom d'une tâche depuis cet onglet.
 </div>
 
 
 
 ### Sélectionner les tâches faites
 
-<div class="exercice" markdown="1" >
-
- 
-Devant chaque tâche, ajoutez un `<input type="checkbox">` reliée à la valeur `tache.faite` correspondante. Vous pouvez utiliser l'onglet Vue pour vérifier que les booléens `faite` change de valeur quand on clique une checkbox. 
-
-</div>
-
-Pour que chaque tâche faite apparaisse raturée, nous allons ajouter les lignes suivantes au CSS
+Nous voulons maintenant permettre à l'utilisateur de noter si une tâche est faite ou non. Et on voudrait  que chaque tâche faite apparaisse raturée. Pour cela nous allons ajouter les lignes suivantes au CSS
 
 ```css
 .fait{
@@ -331,20 +357,24 @@ Pour que chaque tâche faite apparaisse raturée, nous allons ajouter les lignes
 }
 ```
 
-Il faut ensuite associer la classe CSS `fait` à toutes les tâches qui sont faites. La directive `v-bind:class` fonctionne de manière un peu particulière. L'un des manières de l'utiliser est de lui donner un objet dont les noms des attributs sont les noms classes à ajouter et la valeur de chaque attribut est un booléen qui indique si la classe correspondante doit être ajoutée. Ces classes se cumulent avec celles définies en HTML classique avec `class ="..."`. Par exemple, un `<div>` avec
+Il faudrait ensuite associer la classe CSS `fait` à toutes les tâches qui sont faites. La directive `v-bind:class` fonctionne de manière un peu particulière. L'un des manières de l'utiliser est de lui donner un objet dont les noms des attributs sont les noms des classes à ajouter et la valeur de chaque attribut est un booléen qui indique si la classe correspondante doit être ajoutée. Ces classes se cumulent avec celles définies dans l'attribut HTML `class="..."` (par convention les classes définies ainsi ne doivent pas être retirées par la suite, d'ailleurs la syntaxe de `:class` ne permet pas de les retirer). Par exemple, un `<div>` avec
 
 ```js
-<div class="blip blop" :class="{class1: true, class2:false, toto:true}">
+<div class="blip blop" :class="{class1: true, class2: false, toto: true}">
 ```
- aurait donc comme classes `"blip blop class1 toto"`. On peut utiliser la valeur d'une variable pour désigner le booléen (et le nom de la classe). 
-Observez que les valeurs des directives et les moustaches [peuvent prendre n'importe quelle expression JS](https://vuejs.org/guide/essentials/template-syntax.html#using-javascript-expressions), c'est-à-dire tout bout de code dont l'évaluation donne une valeur.
+
+aurait donc comme classes `"blip blop class1 toto"`. On peut utiliser la valeur d'une variable pour désigner le booléen (et le nom de la classe). 
+Observez que les valeurs des directives et les moustaches [peuvent prendre n'importe quelle expression JS](https://vuejs.org/guide/essentials/template-syntax.html#using-javascript-expressions), c'est-à-dire, tout morceau de code dont l'évaluation donne une valeur.
  
 <div class="exercice" markdown="1" >
 
+1. Devant chaque tâche, ajoutez un `<input type="checkbox">` reliée à la valeur `tache.faite` correspondante. Vous pouvez utiliser l'onglet Vue pour vérifier que les booléens `faite` change de valeur quand on clique une checkbox. 
 
-1. Ajoutez les 3 lignes de CSS.
-2. Ajoutez au `span` associé à chaque `tache` la classe `fait` si son booléen `tache.faite` est `true`. 
-3. Vérifiez que tout fonctionne.
+3. Ajoutez les 3 lignes de CSS.
+
+3. Ajoutez au `span` associé à chaque `tache` la classe `fait` quand son booléen `tache.faite` est à `true`. 
+
+4. Vérifiez que tout fonctionne.
 
 </div>
  
@@ -365,21 +395,31 @@ dans le HTML
   {{ cacheFaits ? 'Tout montrer' : 'Cacher les tâches terminées' }}
 </button>
 ```
+
+
 <div class="exercice" markdown="1" >
 
-Prenez le temps de comprendre le fonctionnement du bouton et ajoutez-le.
+Prenez le temps de comprendre le fonctionnement du code de ce bouton, vous devriez pouvoir expliquer tout ce qu'il fait. Ajoutez-le après la todo liste.
 
 </div>
 
-Pour sélectionner les tâches que l'on affiche, nous allons modifier la ligne qui boucle sur `taches` ainsi
+Nous souhaitons maintenant que quand le booléen `cacheFaits` est à faux, la boucle `v-for` n'affiche que les tâches dont le booléen `faite` est à `false`.
+Pour cela, notons que le tableau utilisé dans une boucle `v-for` peut être donné par une fonction avec la syntaxe suivante
 
 ```html
 <li v-for="tache in tachesFiltrees()" :key="tache.id">
 ```
 
+Si la fonction `tachesFiltrees` utilise des variables réactives (définies avec `ref(...)`), vue se charge de le détecter et de mettre l'affichage à jour à chaque changement de ces variables réactives.
+
 <div class="exercice" markdown="1" >
 
-Faites-le, puis écrivez la fonction `tachesFiltrees` qui utiliser [`filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) pour renvoyer un tableau qui contient les tâches à afficher (ça dépend donc de `cacheFaits` et de `tache.faite`). Vérifiez que tout fonctionne.
+1. Modifiez le HTML pour que le `v-for` dépende du résultat d'une fonction
+`tachesFiltrees`.
+
+2. Écrivez la fonction `tachesFiltrees` qui utilise [`filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) pour renvoyer un tableau qui contient les tâches à afficher (cette fonction dépend donc des deux variables réactives `cacheFaits` et de `tache.faite`). Attention, cette fonction ne doit pas modifier le tableau `taches`, mais bien retourner un autre tableau.
+
+3. Vérifiez que tout fonctionne.
 
 </div>
 
@@ -401,7 +441,7 @@ Faites-le et vérifiez que tout fonctionne.
 
 </div>
 
-La variable `tachesFiltrees` qu'on a définie est une "propriété calculée". Le résultat est calculé et mis à jour automatiquement dès que l'une des variables réactives utilisée est modifiée. Si `tachesFiltrees` est utilisée plusieurs fois entre chaque mise-à-jour, cela évite de la recalculer à chaque fois et on peut donc gagner en performance. Il faut faire attention d'éviter le problème inverse qui serait de définir une propriété calculée qu'on doit tout le temps calculer alors qu'on l'utilise rarement. Il faut toujours réfléchir au choix le plus pertinent entre fonction et propriété calculée. Comme toujours, il se peut aussi qu'un choix soit plus clair et lisible et donc préférable dans certains contextes.
+La variable `tachesFiltrees` qu'on a définie est une "propriété calculée". Le résultat est calculé et mis à jour automatiquement dès que l'une des variables réactives utilisée est modifiée. Si `tachesFiltrees` est utilisée plusieurs fois entre chaque mise-à-jour, cela évite de la recalculer à chaque fois et on peut donc gagner en performance. Il faut faire attention d'éviter le problème inverse qui serait de définir une propriété calculée qu'on doit tout le temps calculer alors qu'on l'utilise rarement. Il faut toujours réfléchir au choix le plus pertinent entre fonction et propriété calculée. Surtout, il se peut qu'un choix soit plus clair et lisible et donc préférable dans certains contextes (ici, a priori, on comprend un peu plus facilement le HTML qui contient la propriété calculée).
 
 
 Notre liste de tâche est terminée. Vous pouvez améliorer le CSS avant de passer à la suite.
@@ -420,7 +460,7 @@ Vérifiez dans la console du navigateur.
 
 </div>
 
-Une connaissance élémentaire du langage permet de répondre correctement ici, mais dans un projet de plusieurs milliers de lignes de code on peut rencontrer des cas beaucoup plus compliqués. Le typage permet entre autre d'éviter d'avoir besoin de se poser ce genre de question.
+Une connaissance élémentaire du langage permet de répondre correctement ici, mais dans un projet de plusieurs milliers de lignes de code on peut rencontrer des cas beaucoup plus compliqués. Le typage permet entre autre d'éviter d'avoir besoin de se poser ce genre de questions.
 
 TypeScript (TS) est une légère surcouche à JavaScript qui permet de "typer" son code. Il va donc permettre de déclarer des types dans les déclarations des variables et des fonctions. Comme en PHP et contrairement à Java, le typage n'est pas "obligatoire" et il existe un type `any` qui correspond à "n'importe quel type". Par contre, contrairement à PHP, les types TS ne sont pas vérifiés pendant l'exécution, mais avant l'exécution pendant la phase de transpilation qui transforme le TS en JS.
 
@@ -438,13 +478,14 @@ mais on pourrait écrire
 ```js
 let helloWorld:string = "Hello World"
 ```
-On peut aussi l'utiliser dans les définitions de fonctions
+On peut aussi l'utiliser dans les définitions de fonctions comme ceci :
 ```ts
 function maFonction(param1:type1, param2:type2):typeDeRetour{
   ...
 }
 ```
-et TypeScript pourra ainsi vérifier que tout se passe correctement lors de l'appel de cette fonction. L'autre fonctionnalité principale que nous allons utiliser est la possibilité de définir des types particuliers, comme les interfaces et les unions. Nous allons surtout utiliser les interfaces pour indiquer qu'un objet doit posséder certains attributs avec le bon type. Mais on peut aussi en faire un usage très proche de celui que vous avez vu en Java en précisant les méthodes qu'un objet devrait posséder (TS possède un certain nombre de notions qui permettent de faire de la POO plus proche de celle que vous connaissez en Java).
+
+TypeScript pourra ainsi vérifier qu'à chaque appel de cette fonction des arguments avec des types compatibles sont fournis (ceci n'a pas lieu à l'exécution, mais à la vérification du code). L'autre fonctionnalité principale que nous allons utiliser est la possibilité de définir des types particuliers, comme les interfaces et les unions. Nous allons surtout utiliser les interfaces pour indiquer qu'un objet doit posséder certains attributs avec le bon type. Mais on peut aussi en faire un usage très proche de celui que vous avez vu en Java en précisant les méthodes qu'un objet devrait posséder (TS possède un certain nombre de notions qui permettent de faire de la POO plus proche de celle que vous connaissez en Java).
 
 <div class="exercice" markdown="1" >
 
@@ -463,7 +504,7 @@ Annulez ce changement.
 
 </div>
  
-Normalement, votre IDE soulève déjà une première erreur TypeScript que nous avons ignorée jusqu'à présent
+Normalement, votre IDE soulève déjà une première erreur TypeScript que nous avons ignorée jusqu'à présent dans la définition de la fonction retirerTache :
 
 ```
 Parameter 'tache' implicitly has an 'any' type.
@@ -472,28 +513,47 @@ Parameter 'tache' implicitly has an 'any' type.
 Le type `any` est un type spécial qui correspond à "n'importe quel type". Ici l'IDE nous dit qu'il a été obligé de deviner que c'était le type attendu pour cette fonction. On peut dans un premier temps corriger l'erreur en corrigeant la déclaration de `function retirerTache(tache:any)`. Ce n'est évidemment pas très utile de mettre `any` partout puisqu'il y a alors trop peu d'information pour que les types permettent de détecter une erreur. Nous allons donc définir une interface comme ceci :
 
 ```ts
-interface Tache {
-  id: number;
-  description:string;
-  faite:boolean;
+interface NomDeMonInterface {
+  nomDeLaPropriete1: TypeDeLapropriete1
+  nomDeLaPropriete2: TypeDeLapropriete2
+  ...
 }
 ```
 
+Rappelez-vous que ce que vous appelleriez un attribut en Java s'appelle une propriété en JS/TS (tant mieux, le JS set à manipuler du HTML et les balises HTML ont déjà des "attributs"). Bien sûr, les fonctions aussi sont des propriétés et donc on peut dans la définition d'une interface définir une fonction avec les types de ses arguments et son type de retour.
+
+Les types qu'on va utiliser sont donc :
+* les trois types primitifs (`string`, `boolean`, `number`),
+* les interfaces,
+* les fonctions ,
+* des collections d'un type primitif donné (par exemple, un tableau de string),
+* le type `any` (aussi rarement que possible).
+
+Il y a de nombreuses autres possibilités que nous allons ignorer : union, enums, Types littéraux, `null`, `undefined`, types génériques (l'équivalent des types paramétrés)...
+
 <div class="exercice" markdown="1" >
 
-Ajoutez la définition de l'interface dans votre JS. Remplacez `tache:any` par `tache:Tache`, normalement votre IDE arrive à vérifier que tout va bien. Essayez `tache:string` ou `tache:number` pour voir ce que votre IDE vous indique.
+1. Vérifiez que votre IDE est satisfait en déclarant le type `any` pour tache.
+
+2. Déclarer une interface pour le type `Tache` qui contient trois propriétés `id `, `description` et `faite` avec les types adéquats.
+
+3. Remplacez `tache:any` par `tache:Tache`, normalement votre IDE arrive à vérifier que tout va bien. 4
+
+4. Essayez temporairement `tache:string` ou `tache:number` pour voir ce que votre IDE vous indique.
 
 </div>
 
-En passant notre souris sur la définition de `taches`, on voit que le type est plutôt compliqué. On peut le forcer à identifier qu'il contient un tableau de `Tache`. Pour cela, il faut importer le type `Ref` avec la ligne `import type { Ref } from 'vue';` et on peut ensuite lui assigner le type `const taches:Ref<Tache[]>` (`Tache[]` est le type d'un tableau de `Tache`, et ici on a une `Ref` vers un tableau de `Tache` à cause de la fonction `ref()`).
+En passant notre souris sur la définition de `taches`, on voit que le type est plutôt compliqué. On peut le forcer à identifier qu'il contient un tableau réactif de `Tache`. Pour cela, il faut importer le type `Ref` avec la ligne `import type { Ref } from 'vue';` et on peut ensuite lui assigner le type `const taches:Ref<Tache[]>` (`Tache[]` est le type d'un tableau de `Tache`, et ici on a une `Ref` vers un tableau de `Tache` à cause de la fonction `ref()`).
  
 <div class="exercice" markdown="1" >
 
 Faites-le et vérifiez que tout va bien.
 
-</div>
+</div> 
 
-À partir de maintenant, nous essayerons de donner des types corrects et précis aux objets, mais vous savez déjà presque tout ce qu'il faut savoir pour utiliser TypeScript.
+Notez qu'on peut donc définir un type dans un autre fichier et l'importer, et que probablement ce qu'il aurait fallu faire pour le type `Tache`. Nous le ferrons par la suite.
+
+À partir de maintenant, nous essayerons de donner des types corrects et précis aux objets, mais vous savez déjà presque tout ce qu'il faut savoir pour l'utilisation de TypeScript  dans le cadre de ce cours.
 
 ### Et le *linter*
 Un *linter* est un programme qui parcourt le code pour essayer d'y trouver des défauts. Beaucoup de *linter* ne se contentent pas de détecter des erreurs évidentes du langage, mais vérifient aussi qu'un certain nombre de conventions habituelles et de bonnes pratiques sont respectées. Le terme *linter* vient simplement du fait que le premier *linter* s'appelait `lint` (et était écrit pour le langage C). Utiliser un *linter* permet d'améliorer la qualité du code produit. Il peut exister plusieurs *linter* pour un même langage.
@@ -502,13 +562,14 @@ En créant votre projet, vous avez coché "yes" pour le *linter* et Vite s'est d
 
 <div class="exercice" markdown="1" >
 
-1. Ouvrez le terminal dans lequel vous avez entré la commande `npm run dev`. Fermez le serveur de développement en pressant la touche `q`. Tapez la commande `npm run lint` pour lancer le *linter*.
+1. Ouvrez le terminal dans lequel vous avez entré la commande `npm run dev` (donc dans le docker !! ). Fermez le serveur de développement en pressant la touche `q`. Tapez la commande `npm run lint` pour lancer le *linter*.
 
 2. Le *linter* produit peut être quelques warnings. Si c'est le cas, corrigez les et relancer le *linter* pour vérifier qu'ils ont disparu. Votre IDE propose probablement lui-même du lintage ce qui rend ces commandes un peu superflues en pratique.
 
 3. Avant de relancer le serveur de développement, essayer la commande `npm run type-check`. Comme son nom l'indique, cette commande vérifie le typage et nous avons réglé les problèmes de type précédemment, vous ne devriez donc pas avoir de warning.
 
 4. Relancez le serveur de dev avec `npm run dev` pour pouvoir reprendre le TD. Par la suite, on pourra régulièrement relancer le *linter*.
+
 </div>
 
 Les commandes `npm run` (`dev`, `lint` et `type-check`) sont définies dans le fichier `package.json`. Ouvrez-le pour jeter un coup d'œil. Vous pouvez ici définir de nouvelles commandes ou modifier les commandes existantes (on pourrait par exemple définir une nouvelle commande qui lance `lint` et `type-check`).

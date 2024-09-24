@@ -12,22 +12,44 @@ Remarquez qu'API Platform fournit [un outil](https://api-platform.com/docs/creat
 
 ## Initialisation du projet
 
-Nous allons créer un nouveau projet Vue en utilisant la commande ```npm init vue@latest```. Cette fois, nous allons activer une option supplémentaire en acceptant le `Vue Router` :
+Nous allons créer un nouveau projet Vue en utilisant la commande 
+
+```bash
+cd /root/workspace/
+npm init vue@latest theFeedFront
+```
+
+Cette fois, nous allons activer une option supplémentaire en acceptant le `Vue Router` :
 
 ![](../assets/console_creation_thefeedapi.png)
 
 
-Ensuite entrez les 3 lignes suggérées dans le terminal :
+<div class="exercice" markdown="1">
 
-```sh
-cd theFeedFront
-npm install
-npm run dev
-```
+1. Faites-le (n'oubliez pas tout se fait dans le terminal du docker). Comme dans le projet précédent il faut rajouter les 4 lignes suivantes dans le fichier `vite.config.ts`
+    
+   ```ts
+    export default defineConfig({
+        ...,
+        server: {
+            host: true,
+            port: 5173
+        }    
+   ```
 
-Ouvrez la page correspondant au projet dans votre navigateur. Nous pouvons commencer à travailler sur notre projet.
+2. Ensuite entrez les 3 lignes suggérées dans le terminal :
 
-Vous pouvez aussi modifier le titre de la page en `The Feed` dans le fichier `index.html`.
+    ```bash
+    cd theFeedFront
+    npm install
+    npm run dev
+    ```
+
+3. Ouvrez la page correspondant au projet dans votre navigateur. Nous pouvons commencer à travailler sur notre projet.
+
+4. Modifiez le titre de la page en `The Feed` dans le fichier `index.html`.
+
+</div>
 
 ## Nos premières routes
 
@@ -36,7 +58,8 @@ Dans ce TD nous allons réaliser une "Application à Page Unique" (Single page a
 - autoriser un clic sur le bouton "page précédente"
 - permettre l'utilisation d'une URL qui change en fonction des "pages" (pour pouvoir l'enregistrer dans mes favoris ou la partager avec un autre utilisateur).
 
-On pourrait gérer tout cela nous-même, mais le `router` de Vue est une solution très simple à tous ces problèmes. On va définir des vues (qui sont en fait simplement des composants), on va ensuite configurer les routes pour expliquer quelle route correspond à quelle vue. On pourra ensuite utiliser la balise `<router-view />` dans notre composant principal qui se chargera de détecter la vue à charger en fonction de l'URL. On pourra aussi utiliser le routeur pour générer automatiquement l'URL d'une vue pour définir (un lien par exemple). Bien que le contexte et le fonctionnement soient assez différent, l'utilisation des routes devrait vous rappelez les routes de Symfony.
+On pourrait gérer tout cela nous-même, mais le `router` de Vue est une solution très simple à utiliser qui règle tous ces problèmes. On va définir des "view" (des "vues" en français, mais on écrira view pour éviter de confondre avec le nom du framework) Cex view sont en fait simplement des composants et on va simplement configurer les routes pour expliquer lesquelles pointent vers quel view/composant. On pourra ensuite utiliser la balise `<router-view />` dans notre composant principal qui se chargera de détecter le composant/view à charger en fonction de l'URL. On pourra aussi utiliser le routeur pour générer automatiquement l'URL d'une vue pour définir (un lien par exemple). 
+Bien que le contexte et le fonctionnement soient assez différent, l'utilisation et la syntaxe des routes devrait vous rappelez les routes de Symfony.
 
 Commençons par créer notre première vue.
 
@@ -48,7 +71,7 @@ Commençons par créer notre première vue.
 2. Remplacez le fichier `App.vue` par [celui ci](../assets/App.vue).
 
 
-3. Créer un fichier `views/Feed.vue` qui contient le code suivant
+3. Créer un fichier `views/FeedMain.vue` qui contient le code suivant
     ```vue
     <template> 
     Ceci est la vue du Feed.
@@ -58,7 +81,7 @@ Commençons par créer notre première vue.
 4. Remplacez le contenu du fichier `router/index.ts` par le contenu suivant (en fonction de la version de Vue, il se peut que vous ayez un fichier `router.ts` à la place du fichier `router/index.ts`, le fonctionnement est le même) :
     ```ts
     import { createRouter, createWebHistory } from 'vue-router'
-    import Feed from '@/views/Feed.vue'
+    import Feed from '@/views/FeedMain.vue'
 
     const router = createRouter({
         history: createWebHistory(''),
@@ -96,15 +119,23 @@ app.use(router)
 
 La première ligne permet d'importer le routeur en indiquant où il est stocké (ici dans le dossier `router`). La seconde ligne permet de rendre le routeur disponible à l'ensemble des composants qu'on va charger par la suite dans `app`.
 
-Ensuite dans le fichier `router/index.ts` la partie qui nous intéresse est celle qui définie deux routes différentes `/` et `/feed` qu'on associe toutes les deux au composant `Feed`. Notez qu'en haut du fichier le deuxième import défini le composant `Feed` comme étant celui contenu dans le fichier `/views/Feed.vue`.
+Ensuite dans le fichier `router/index.ts` la partie qui nous intéresse est celle qui définie deux routes différentes `/` et `/feed` qu'on associe toutes les deux au composant `Feed`. Le deuxième import du fichier défini le composant `Feed` comme étant celui contenu dans le fichier `/views/FeedMain.vue`.
 
-Finalement, dans le fichier `App.vue`, la ligne intéressante est celle qui contient  
-`<router-view />`. Cette ligne indique que cette partie du template doit être remplacée par le composant correspondant à la route actuelle. En l'occurrence, nous avons indiqué que la route `/`, correspondait au composant `views/Feed.vue` et c'est donc celui qui devrait s'afficher. Ouvrez la console du navigateur et regardez ce qu'il se passe si on ajoute `blabla` au bout de l'URL et qu'on recharge la page. Essayez ensuite avec `/feed` qui devrait fonctionner.
+Finalement, dans le fichier `App.vue`, la seule ligne intéressante est celle qui contient  
+`<router-view />`. Cette ligne indique que cette partie du template doit être remplacée par le composant correspondant à la route actuelle. En l'occurrence, nous avons indiqué que la route `/`, correspondait au composant `views/Feed.vue` et c'est donc celui qui devrait s'afficher. 
 
-Pour s'assurer que nous avons compris, créons une autre vue qui nous servira plus tard.
 
 <div class="exercice" markdown="1">
 
+1. Ouvrez la console du navigateur. Ajoute `/blabla` au bout de l'URL et rechargez la recharge la page. Que constatez-vous dans la page et dans la console ? 
+
+2. Essayez ensuite avec `/feed` à la place de `/blabla` que constatez-vous ?
+
+</div>
+
+Pour s'assurer que vous avez compris, créons une autre vue qui nous servira plus tard.
+
+<div class="exercice" markdown="1">
  
 1. Créez le fichier `AllUsers.vue` sur le même modèle que `Feed.vue`, mais avec le texte `Ceci est la liste des utilisateurs.`
 
@@ -121,7 +152,7 @@ Une fois que nos premières routes sont définies, il est temps de faire nos pre
 </script>
 ```
 
-Ensuite, l'appelle à la méthode `router.push('maroute')` redirige la page vers `maroute`. Ainsi, par exemple en ajoutant l'attribut `@click="router.push('/maroute')"` à une balise `html`, je m'assure qu'un clic sur cette balise change la route.
+Ensuite, l'appelle à la méthode `router.push('maroute')` redirige l'utilisateur vers la route `maroute`. Ainsi, par exemple en ajoutant l'attribut `@click="router.push('/maroute')"` à une balise `html`, je m'assure qu'un clic sur cette balise change la route.
 
 <div class="exercice" markdown="1">
 
@@ -138,18 +169,35 @@ On peut aussi nommez nos routes en rajoutant un `name` à la route comme ceci
     },
 ```
 
-On peut ensuite utiliser la route par son nom comme ceci `router.push({name: 'nomDeLaRoute'})`. Cette syntaxe est légèrement plus lourde que la précédente, mais elle possède quelques avantages. Elle diminue les risques d'erreurs, mais surtout elle va nous simplifier la vie plus tard avec les routes paramétrées.
+On peut ensuite utiliser la route par son nom plutôt que par son chemin dans le reste du projet.Pour l'utiliser avec `router.push`, on écrira:
+```ts
+router.push({name: 'nomDeLaRoute'})
+```
 
+Cette syntaxe est légèrement plus lourde que la précédente, mais elle possède certains avantages. Elle diminue les risques d'erreurs, mais surtout elle va nous simplifier la vie plus tard avec les routes paramétrées.
+
+On peut aussi définir les redirections d'une route. La définition de route suivante indique que la route `/home` redirige en fait vers la route nommée `homepage` (qu'il faut donc avoir définie).
+```ts
+{ path: '/home', redirect: { name: 'homepage' } }
+```
+
+Notez qu'on pourrait aussi rediriger directement vers le `path` d'une autre route plutôt qu'une utilisant son nom.
 
 <div class="exercice" markdown="1">
 
- Nommez la route `/users` avec le nom `allUsers` et utiliser ce `name` dans le `push` comme montré au-dessus.
+1. Nommez la route `/users` avec le nom `allUsers` et utiliser ce `name` dans le `push` comme montré au-dessus.
+
+2. Nommez la route `/feed` avec le nom `feed` et corriger à nouveau le `push` correspondant.
+
+3. Changez la route de chemin `/` pour qu'elle redirige vers la route `feed`.
+
+4. Testez ces modifications. En particulier, visitez la page pour vérifier que la redirection fonctionne `http://localhost:5173/`.
 
 </div>
 
 ## Les routes paramétrées
 
-Pour notre application, nous aurons besoin d'une autre fonctionnalité des routes : les routes paramétrées. Nous avons déjà rencontré le même concept dans Symfony : ce sont des routes dont l'URL contient une variable (par exemple, l'identifiant d'un utilisateur).
+Pour notre application, nous aurons besoin d'une autre fonctionnalité des routes : les routes paramétrées. Nous avons rencontré le même concept dans Symfony : ce sont des routes dont l'URL contient une variable (par exemple, l'identifiant d'un utilisateur).
 
 Pour définir une route paramétrée, il suffit de précéder le paramètre du symbole `:`. Ainsi, par exemple, je peux définir la route suivante :
 ```ts
@@ -159,7 +207,9 @@ Pour définir une route paramétrée, il suffit de précéder le paramètre du s
     component: User 
 },
 ```
-Ensuite dans le composant de notre route pour récupérer le paramètre, il suffit de récupérer l'objet `route`, puis d'aller y chercher le ou les paramètres désirés. Par exemple, pour récupérer le paramètre `id` défini dans la route précédente on pourrait faire : 
+
+Ensuite dans le composant/view correspondant à notre route, il faut récupérer ce paramètre. Il suffit de récupérer l'objet `route`, puis d'aller y chercher le ou les paramètres désirés. Par exemple, pour récupérer le paramètre `id` défini dans la route précédente on pourrait faire : 
+
 ```ts
 import { useRoute } from 'vue-router'
 const route = useRoute()
@@ -171,7 +221,13 @@ const id = route.params.id
  
 1. Créez une vue `views/SingleMessage.vue` qui récupère le paramètre `id` de la route et affiche `J'affiche le message d'id {{id}}`. 
 
-2. Ajoutez dans le routeur une route `/feed/:id` nommée `singleMessage` qui conduit vers la vue précédemment définie. 
+2. Ajoutez dans le routeur une route `/feed/:id` nommée `singleMessage` qui conduit vers la vue précédemment définie. Vous pouvez faire l'import du composant comme précédemment, ou vous pouvez utiliser la syntaxe suivante directement dans la définition de la route :
+
+    ```ts
+    component: () => import('@/views/SingleMessage.vue')
+    
+    ```
+    Cette syntaxe utilise un import dynamique : le fichier correspondant n'est chargé que s'il est réellement utile. Ça peut faire une différence de performance si le composant/view en question est très gros avec lui-même de nombreuses dépendances (ce ne sera pas notre cas).
 
 3. Vérifiez que tout fonctionne en testant l'URL de la route `/feed/17`.
 
@@ -183,7 +239,7 @@ Vous savez maintenant presque tout ce que vous avez besoin de savoir sur les rou
 
 ## Mise en place des composants utilisateurs et message
 
-Avant de chercher à utiliser l'API, nous allons commencer à voir comment nous utiliserons les informations de l'API. Ouvrir la page d'accueil de votre API pourrait être utile à partir de maintenant pour retrouver les informations sur son usage. La première chose à faire est de définir des types correspondants à ce que l'API nous renverra. Deux objets en particulier seront intéressant, l'utilisateur et la publication. On peut voir qu'un utilisateur possède comme données son `id` (un `number`), son `adresseEmail` (un `string`), son `login` (un `string`) et le `boolean premium`. On va définir son interface ainsi
+Avant de chercher à utiliser l'API, nous allons commencer à voir comment nous utiliserons les informations de l'API. Ouvrir la page d'accueil de votre API pourrait être utile à partir de maintenant pour retrouver les informations sur son usage (normalement à l'adresse [https://localhost/the_feed_api/public/api](https://localhost/the_feed_api/public/api)). La première chose à faire est de définir des types correspondants à ce que l'API nous renverra. Deux objets en particulier seront intéressant, l'utilisateur et la publication. On peut voir qu'un utilisateur possède comme données son `id` (un `number`), son `adresseEmail` (un `string`), son `login` (un `string`) et le `boolean premium`. Il faudrait donc définir son interface ainsi
 
 ```ts
 export interface Utilisateur{
@@ -205,14 +261,16 @@ Si plusieurs types sont définis dans mon fichier, je peux en importer plusieurs
 
 <div class="exercice" markdown="1">
 
-   Créez un fichier `src/types.ts` dans lequel vous ajouterez la définition des interfaces d'un utilisateur et d'une publication avec les mots clefs `export`. Pour l'interface `Publication`, basez-vous sur ce que votre API renvoie (il y a 4 champs et on utilisera un `string` pour la date).
+   1. Créez un fichier `src/types.ts` dans lequel vous ajouterez la définition des interfaces d'un utilisateur avec le mot clef `export`.
+
+   2. Ajoutez l'interface d'une publication avec le mot clef `export`. Pour l'interface `Publication`, basez-vous sur ce que votre API renvoie (il y a 4 champs et on utilisera un `string` pour la date). TODO ou Date ???
 
 </div>
 
 La prochaine étape est de définir un composant pour afficher les données de l'utilisateur. Pour ce site, nous allons utiliser une boite qui ressemble à ceci pour les différents éléments de contenus (les messages, les utilisateurs...) :
 ![](../assets/boxComponent.png)
 
-En fonction du contexte, nous allons parfois vouloir rendre ces boites cliquables, parfois y mettre des liens et il est donc assez compliqué d'écrire un composant adapté (mais ce serait tout à fait possible notamment avec quelques outils que nous n'avons pas mentionnés). Par contre, il est très simple d'utiliser un CSS commun pour plusieurs composants. Nous allons donc utiliser le CSS suivant (que vous pouvez adapter à vos goûts) :
+En fonction du contexte, nous allons parfois vouloir rendre ces boites cliquables, parfois y mettre des liens et il est donc assez compliqué d'écrire un composant unique adapté (mais ce serait tout à fait possible notamment avec quelques outils que nous n'avons pas mentionnés). Par contre, il est très simple d'utiliser un CSS commun pour plusieurs composants. Nous allons donc utiliser le CSS suivant (que vous pouvez adapter à vos goûts) :
 
 ```css
 div.contentBox{
@@ -282,7 +340,7 @@ Remarquez que ce n'est pas un ajout de Vue, mais bien quelque chose qui est touj
 ```vue
 <script setup lang="ts">
   import type {Utilisateur} from '@/types'; 
-  const props = defineProps<{utilisateur: Utilisateur}>();
+  defineProps<{utilisateur: Utilisateur}>();
 </script>
 
 <template>
@@ -328,24 +386,40 @@ Remarquez que ce n'est pas un ajout de Vue, mais bien quelque chose qui est touj
     - Ajouter les `import` nécessaires : on a besoin de `ref` et de `BoiteUtilisateur`, ainsi que des types `Ref` et `Utilisateur` (l'IDE doit pouvoir le faire pour vous).
     - Vérifiez que tout fonctionne. Ajoutez un deuxième utilisateur au tableau `users` pour vérifier votre boucle.
 
-3. Modifiez la vue `SingleUser` pour qu'elle crée un faux `Utilisateur` (mais avec le bon `id` qu'on peut récupérer en paramètre de la route) et l'affiche en utilisant le composant `BoiteUtilisateur`. Attention, l'id en paramètre (`route.params.id`) est de type `string` alors que l'id d'un `Utilisateur` doit être un `number`. On peut utiliser `Number(monstring)` pour convertir un `string` en `number`.
+3. Modifiez la vue `SingleUser` pour qu'elle crée un faux `Utilisateur` (mais avec le bon `id` qu'on peut récupérer en paramètre de la route) et l'affiche en utilisant le composant `BoiteUtilisateur`. Attention, l'id en paramètre (`route.params.id`) est de type `string` alors que l'id d'un `Utilisateur` doit être un `number`. On peut utiliser `Number(monstring)` pour convertir un `string` en `number`. Vérifiez que votre route fonctionne.
+
+
 
 </div>
 
  On souhaite qu'un clic sur le login d'un utilisateur affiche son profil. 
  On pourrait utiliser `router.push`, mais pour faire un lien, nous pouvons utiliser à la place la balise `router-link`. Cette balise se comporte comme un `<a>` HTML avec l'URL correspondant à la route donnée en paramètre et s'utilise comme suit :
+
  ```html
+ <router-link :to="RouteAUtiliser">texte du lien</router-link>
+```
+
+Il faut remplacer `RouteAUtiliser` par la route donc comme pour le `router-push`, on peut soit mettre directement le path de la route (`:to = "/users"`) ou son nom (`:to="{name:allUsers}"`). 
+
+Par contre, nous n'avons pas encore vu comment indiquer le paramètre d'une route. La première idée serait d'utiliser le path, par exemple pour afficher le feed de l'utilisateur 2 on pourrait faire `:to = "/users/2"`, mais si l'id était stocké dans une variable `identifiant`, il faudrait écrire `:to = "'/users/'+identifiant"` et il faudrait alors penser encoder les paramètres correctement pour une url. Il existe une syntaxe qui utilise le nom de la route et qui permet de donner les paramètres : 
+```html
  <router-link :to="{name:'nomDeLaRoute',params:{param1:valeureParam1, param2:valeureParam2}}">texte du lien</router-link>
 ```
-Dans notre cas cela donne :
+
+Avec l'exemple précédent ça donne :
  ```html
- <router-link :to="{name:'singleUser', params:{id:utilisateur.id}}">texte du lien</router-link>
+ <router-link :to="{name:'feed', params:{id:identifiant}}">texte du lien</router-link>
 ```
-Ici, il pourrait être tentant de faire `<router-link :to="'/singleUser/'+utilisateur.id">`, mais il faudrait s'assurer que `utilisateur.id` est correctement encodé dans l'URL alors que l'autre syntaxe automatise l'encodage des URL.
+
+Avec cette syntaxe, il n'y a pas besoin de se poser de question d'encodage ou d'échappement de caractères. Elle a aussi l'avantage d'être beaucoup plus explicite puisque le nom de la route et de chaque paramètre apparait explicitement. On peut utiliser cette même syntaxe avec `router.push`.
 
 <div class="exercice" markdown="1">
 
- Modifiez le composant `BoiteUtilisateur.vue` pour que le login de l'utilisateur soit un lien vers la page de cet utilisateur. On pourra ajouter la classe `clickable` à ce lien pour améliorer le CSS. Vérifiez que le lien fonctionne.
+ 1. Modifiez le composant `BoiteUtilisateur.vue` pour que le login de l'utilisateur soit un lien vers la page de cet utilisateur.
+ 
+ 2. Ajoutez la classe `clickable` à ce lien pour améliorer le CSS. 
+ 
+ 3. Vérifiez que le lien fonctionne en vous rendant sur la page `Les membres` (pour l'instant l'utilisateur affiché ne dépend pas du paramètre, mais vous pouvez vérifier dans l'URL que tout se déroule comme prévu).
 
 </div>
 
@@ -357,7 +431,7 @@ Nous avons une première version de l'affichage des utilisateurs prête pour êt
     import type { Publication } from '@/types';
 
     const router = useRouter();
-    const props = defineProps<{publication:Publication}>();
+    defineProps<{publication:Publication}>();
 </script>
 
 <template>
@@ -387,7 +461,7 @@ Prenez le temps de comprendre ce qu'il s'y passe. La seule nouveauté est le `(n
  
 1. Créez `BoitePublication` avec le code donné plus tôt. 
 
-2. En vous inspirant de `AllUsers.vue`, modifiez la vue `Feed.vue` pour qu'elle affiche une liste de publication en utilisant ce composant. On pourra pour l'instant initialiser une fausse liste de publication avec le contenu suivant :
+2. En vous inspirant de `AllUsers.vue`, modifiez la vue `FeedMain.vue` pour qu'elle affiche une liste de publication en utilisant ce composant. On pourra pour l'instant initialiser une fausse liste de publication avec le contenu suivant :
     ```ts
     const publications:Ref<Publication[]> = ref([{
         id:3,
@@ -408,7 +482,20 @@ Prenez le temps de comprendre ce qu'il s'y passe. La seule nouveauté est le `(n
 
 </div>
 
-Nous allons maintenant pouvoir commencer à remplir les vues que nous avons créées avec le contenu fourni par l'API.
+Nous allons maintenant pouvoir commencer à remplir les vues que nous avons créées avec le contenu fourni par l'API. Avant ça pour s'assurer que tout fonctionne nous allons déployer une première fois le site dans son état actuel.
+
+
+<div class="exercice" markdown="1">
+
+1. Nous allons déployer notre front dans le dossier `/var/www/html/the_feed_front/dist` (`mkdir` pour le créer). Commencez donc par aller ajouter la ligne `base: "/the_feed_front/dist"` dans le fichier `vite.config.ts`.
+
+2. Dans le terminal du docker, avant de build commencez par faire un `npm run type-check` suivi d'un `npm run lint`. Corrigez les erreurs éventuelles.
+
+3. Maintenant faite le `npm run build` puis copiez (`cp -R`) le contenu du fichier `dist` dans le dossier `/var/www/html/the_feed_front`. 
+
+4. Vérifier que le site fonctionne à l'adresse [https://localhost/the_feed_front/dist/](https://localhost/the_feed_front/dist/).
+
+</div>
 
 
 ## Premier contact avec l'API
