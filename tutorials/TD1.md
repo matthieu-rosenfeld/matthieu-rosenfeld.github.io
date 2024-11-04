@@ -33,9 +33,12 @@ Npm est déjà disponibles sur l'image docker que nous avons configuré l'instal
 npm init vue@latest
 ```
 
+Nous allons distinguer la version du code "en production" servie par notre serveur web (ici le serveur docker) de la version "en développement" servie par Vite. Notre version en développement ne sera donc pas dans le dossier `/var/www/html`, mais dans le dossier `/root/workspace`.
+
+
 <div class="exercice" markdown="1">
 
-Faites-le **dans le terminal de votre docker**.
+Déplacez-vous **dans le terminal de votre docker** dans le dossier `/root/workspace` et entrez la commande qui permet d'initier le projet.
 
 L'utilitaire vous demande d'abord le nom du projet à créer : vous pouvez choisir `todo_list` (puisque nous allons commencer par réaliser une liste de tâches). Ensuite, il vous propose d'inclure plusieurs fonctionnalités supplémentaires dès la création du projet. Nous allons toutes les refuser sauf TypeScript (nous ignorerons les erreurs de type au début, mais nous y reviendrons ensuite) et ESLint.
 
