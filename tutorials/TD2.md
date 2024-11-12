@@ -31,23 +31,22 @@ L'idée ici est exactement la même. Si plusieurs morceaux de notre page utilise
 
 <div class="exercice" markdown="1" >
 
-1. Pour définir notre premier composant, ajoutez dans le dossier `src` un fichier `ListeDeTaches.vue`. Copiez le code de `App.vue` dans `ListeDeTaches.vue`. Et voilà nous avons créé un composant (en fait, le fichier `App.vue` définissait aussi un composant). 
+1. Pour définir notre premier composant, dupliquez le fichier `App.vue` dans un nouveau fichier `ListeDeTaches.vue`. Et voilà nous avons créé un composant (en fait, le fichier `App.vue` définissait aussi un composant). 
 
 2. Pour utiliser ce composant dans `App.vue`, remplacez le code de `App.vue` par le suivant :
 
-
- ```vue
-<script setup lang="ts">
-    import ListeDeTaches from '@/ListeDeTaches.vue';
-</script>
-
-<template>
-    <ListeDeTaches />
-</template>
-
-<style scoped>
-</style>
-```
+   ```vue
+   <script setup lang="ts">
+       import ListeDeTaches from '@/ListeDeTaches.vue';
+   </script>
+   
+   <template>
+       <ListeDeTaches />
+   </template>
+   
+   <style scoped>
+   </style>
+   ```
 
 3. Vérifiez que tout fonctionne.
 
@@ -66,7 +65,7 @@ L'import est légèrement différent de ceux qu'on a fait jusqu'à maintenant qu
 import {ref} from 'vue';
 ```
 
-En fait, un module JS peut exporter un certain nombre de fonctions, variables et autres par leur nom. La syntaxe `import {nom1, nom2} from 'module'` permet de lister précisément les imports `nom1` et `nom2` qu'on fait et qui doivent être défini dans le module. Cependant, les modules JS peuvent aussi définir un export "par défaut" et quand on utilise la commande sans accolades `import nomLocalChoisi from 'module'` on demande à importer l'export par défaut (et il sera alors accessible sous le nom `nomLocalChoisi` que j'ai choisi). À partir du code de `ListeDeTache.vue`, Vue définit automatiquement un composant dont l'export par défaut correspond au composant.
+En fait, un module JS peut exporter un certain nombre de fonctions, variables et autres par leur nom. La syntaxe `import {nom1, nom2} from 'module'` permet de lister précisément les imports `nom1` et `nom2` qu'on fait importer et qui doivent être défini dans le module. Cependant, les modules JS peuvent aussi définir un export "par défaut" et quand on utilise la commande sans accolades `import nomLocalChoisi from 'module'` on demande à importer l'export par défaut (et il sera alors accessible sous le nom `nomLocalChoisi` que j'ai choisi). À partir du code de `ListeDeTache.vue`, Vue définit automatiquement un composant dont l'export par défaut correspond au composant.
 
 
 
@@ -138,7 +137,7 @@ Nous voulons maintenant ajouter la possibilité d'ajouter des listes de tâches.
 
 3. Vérifiez que tout fonctionne.
 
-4. Ajouter un input textuel et un bouton qui permettent d'ajouter un élément au tableau `todoListes` quand on clique sur le bouton. Inspirez-vous du bouton similaire du TD précédent (il faudra donc créer une variable et une fonction sipplémentaire).
+4. Ajouter un input textuel et un bouton qui permettent d'ajouter un élément au tableau `todoListes` quand on clique sur le bouton. Inspirez-vous du bouton similaire du TD précédent (il faudra donc créer une variable et une fonction supplémentaire).
 
 5. Vérifiez que tout fonctionne. Si vous ne l'avez pas fait depuis un moment, ouvrez l'onglet *Vue* des outils de développement du navigateur. Constatez qu'on peut voir l'arborescence des composants qui évolue en direct. Prenez le temps d'expérimenter un peu (cliquez sur une liste de tache et regardez comment les variables évoluent quand on supprime/valide des taches...).
 
