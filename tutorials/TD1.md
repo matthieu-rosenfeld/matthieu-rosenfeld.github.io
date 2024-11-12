@@ -100,7 +100,7 @@ Si tout va bien, la dernière commande donne la sortie suivante :
 ```
 On peut alors ouvrir le lien `http://localhost:5173/` dans le navigateur web de notre choix (Firefox ou Chrome/Chromium). Notre page est disponible sur ce lien et celle-ci se met à jour dès que l'on modifie les fichiers, ce qui est plutôt pratique pour développer. Actuellement, vous devez avoir la page d'accueil d'un projet *Vue* de base. Ne fermez pas votre terminal sinon le serveur de développement cessera de fonctionner.
 
-L'utilitaire que nous avons utilisé pour créer ce projet et faire tourner le serveur de développement s'appelle *Vite*. Pour l'instant, pas besoin d'en savoir plus, mais nous reparlerons de quelques fichiers de configuration *Vite* plus tard.
+Nous avons utilisé 2 utilitaires : `npm` pour créer ce projet (`npm create`), installer les bibliothèques (`npm install`), et *Vite* pour faire tourner le serveur de développement (lancé avec `npm run`). Pour l'instant, pas besoin d'en savoir plus, mais nous reparlerons de quelques fichiers de configuration *Vite* plus tard.
 
 
 ### Petit point IDE et navigateur
