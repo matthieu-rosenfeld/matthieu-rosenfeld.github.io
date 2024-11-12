@@ -273,7 +273,7 @@ Remplacez le contenu de `App.vue` par le code suivant :
   <div id="wrapper">
     <ul>
       <li v-for="tache in taches" :key="tache.id">
-   	 <span>{{tache.description}}</span>
+        <label>{{tache.description}}</label>
       </li>
     </ul>
   </div>
@@ -301,6 +301,11 @@ Nous allons maintenant permettre d'ajouter un élément à la liste de tâches.
 2. Écrivez une nouvelle fonction `ajouterTache` qui ajoute un nouvel élément à `taches` (on pourra utiliser la méthode [`push`](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Array/push) des tableaux). Ce nouvel élément doit posséder une nouvelle `id` (on peut utiliser `id++`), une description qui correspond au contenu de la variable `nouvelleTache` et le booléen `faite:false`. La fonction `ajouterTache` devra aussi vérifier que `nouvelleTache` est différent de `""` avant de l'ajouter à `taches` puis réinitialiser la valeur de `nouvelleTache` à `""`. N'oubliez pas que pour utiliser nos variables `ref` dans le JS, il faut utiliser `.value`. 
 
 3. Ajoutez un bouton qui appelle `ajouterTache` (on utilisera `@click`). Vérifiez que tout fonctionne.
+
+4. Pour que chaque `<label>` soit associé à son `<input>`, il faut ajouter un
+   attribut `id` à chaque `<input type="checkbox">` et indiquer cet `id` dans
+   l'attribut `for` de la balise `<label>`. Ainsi, un clic sur le `<label>`
+   entrainera un clic sur sa `checkbox` associée.
 </div>
 
 
@@ -334,7 +339,7 @@ On va maintenant ajouter la possibilité de retirer un élément de la liste de 
       border:solid black 2px;
       padding: 10px;
     }
-    ul,span{
+    ul,label{
       padding:10px;
     }
     li{
@@ -376,7 +381,7 @@ Observez que les valeurs des directives et les moustaches [peuvent prendre n'imp
 
 3. Ajoutez les 3 lignes de CSS.
 
-3. Ajoutez au `span` associé à chaque `tache` la classe `fait` quand son booléen `tache.faite` est à `true`. 
+3. Ajoutez au `label` associé à chaque `tache` la classe `fait` quand son booléen `tache.faite` est à `true`. 
 
 4. Vérifiez que tout fonctionne.
 
