@@ -411,7 +411,7 @@ Il suffit alors de définir le `prop` et l'événement correspondant dans le com
 <div class="exercice" markdown="1" >
 
 
-1. Faites les modifications nécessaires pour définir le `v-model` de `TacheElement`. Puisque nous avions déjà codé le bon prop et le bon emit, il suffit de les renommer correctement : cochee` devient `modelValue` et `checkedChange` devient `update:modelValue`. (Attention dans `defineEmits` à bien mettre les guillemets doubles `"update:modelValue"` sinon JavaScript est gêné par les `:`).
+1. Faites les modifications nécessaires pour définir le `v-model` de `TacheElement`. Puisque nous avions déjà codé le bon prop et le bon emit, il suffit de les renommer correctement : `cochee` devient `modelValue` et `checkedChange` devient `update:modelValue`. (Attention dans `defineEmits` à bien mettre les guillemets doubles `"update:modelValue"` sinon JavaScript est gêné par les `:`).
 
 2. Modifiez `ListeDeTache` pour utiliser `v-model` ainsi
 
