@@ -296,7 +296,7 @@ Nous allons maintenant permettre d'ajouter un élément à la liste de tâches.
 
 
 
-1. Commencez par ajouter, avant l'affichage de la liste, un `<input type="texte">` associé à une variable réactive qu'on pourra appeler `nouvelleTache` (il faut donc utiliser `ref` et `v-model`). On ajoutera un `placeholder` pertinent à l'input.
+1. Commencez par ajouter, avant l'affichage de la liste, un `<input type="text">` associé à une variable réactive qu'on pourra appeler `nouvelleTache` (il faut donc utiliser `ref` et `v-model`). On ajoutera un `placeholder` pertinent à l'input.
 
 2. Écrivez une nouvelle fonction `ajouterTache` qui ajoute un nouvel élément à `taches` (on pourra utiliser la méthode [`push`](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Array/push) des tableaux). Ce nouvel élément doit posséder une nouvelle `id` (on peut utiliser `id++`), une description qui correspond au contenu de la variable `nouvelleTache` et le booléen `faite:false`. La fonction `ajouterTache` devra aussi vérifier que `nouvelleTache` est différent de `""` avant de l'ajouter à `taches` puis réinitialiser la valeur de `nouvelleTache` à `""`. N'oubliez pas que pour utiliser nos variables `ref` dans le JS, il faut utiliser `.value`. 
 
