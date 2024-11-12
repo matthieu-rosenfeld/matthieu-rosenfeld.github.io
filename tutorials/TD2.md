@@ -31,7 +31,7 @@ L'idée ici est exactement la même. Si plusieurs morceaux de notre page utilise
 
 <div class="exercice" markdown="1" >
 
-1. Pour définir notre premier composant, dupliquez le fichier `App.vue` dans un nouveau fichier `ListeDeTaches.vue`. Et voilà nous avons créé un composant (en fait, le fichier `App.vue` définissait aussi un composant). 
+1. Pour définir notre premier composant, dupliquez le fichier `App.vue` dans un nouveau fichier `ListeDeTaches.vue`. Et voilà, nous avons créé un composant (en fait, le fichier `App.vue` définissait aussi un composant). 
 
 2. Pour utiliser ce composant dans `App.vue`, remplacez le code de `App.vue` par le suivant :
 
@@ -58,7 +58,7 @@ La ligne `import ...` permet de rendre le composant accessible et on peut alors 
 
 Le `@` dans le chemin correspond au fichier `src`. Cette définition est faite dans le fichier `tsconfig.app.json` et on pourrait la modifier si besoin (vous pouvez ouvrir ce fichier pour avoir une idée de ce qu'il contient). Bref, utiliser ce symbole permet d'éviter des problèmes de chemins pour les imports. 
 
-L'import est légèrement différent de ceux qu'on a fait jusqu'à maintenant qui ressemblaient à
+L'import est légèrement différent de ceux qu'on a faits jusqu'à maintenant qui ressemblaient à
 
 
 ```js
@@ -139,7 +139,7 @@ Nous voulons maintenant ajouter la possibilité d'ajouter des listes de tâches.
 
 4. Ajouter un input textuel et un bouton qui permettent d'ajouter un élément au tableau `todoListes` quand on clique sur le bouton. Inspirez-vous du bouton similaire du TD précédent (il faudra donc créer une variable et une fonction supplémentaire).
 
-5. Vérifiez que tout fonctionne. Si vous ne l'avez pas fait depuis un moment, ouvrez l'onglet *Vue* des outils de développement du navigateur. Constatez qu'on peut voir l'arborescence des composants qui évolue en direct. Prenez le temps d'expérimenter un peu (cliquez sur une liste de tache et regardez comment les variables évoluent quand on supprime/valide des taches...).
+5. Vérifiez que tout fonctionne. Si vous ne l'avez pas fait depuis un moment, ouvrez l'onglet *Vue* des outils de développement du navigateur. Constatez qu'on peut voir l'arborescence des composants qui évolue en direct. Prenez le temps d'expérimenter un peu (cliquez sur une liste de tâches et regardez comment les variables évoluent quand on supprime/valide des taches...).
 
 
 </div>
@@ -158,7 +158,7 @@ Nous aimerions rajouter un bouton dans chaque liste qui permet de supprimer la l
 
 </div>
 
-Cette ligne de code indique que quand on clique sur ce bouton, cela déclenche l'événement *supprimerListe*. On peut maintenant détecter l'événement en ajoutant la directive  `@supprimerListe="truc à faire"` dans un composant `ListeDeTache`. Dans notre cas ça donne
+Cette ligne de code indique que quand on clique sur ce bouton, cela déclenche l'événement *supprimerListe*. On peut maintenant détecter l'événement en ajoutant la directive `@supprimerListe="truc à faire"` dans un composant `ListeDeTache`. Dans notre cas ça donne
 
 ```vue
   <ListeDeTaches v-for="liste in listes" 
@@ -286,7 +286,7 @@ const emit = defineEmits<{
   deuxiemeEvenementAEnregistrer: [premierArgument: sonType]
 }>();
 ```
-Il existe d'autres syntaxes qui ne demandent pas de définir les types, mais puisque nous utilisons TypeScript c'est une bonne habitude de déclarer les types autant que possible. De même, il n'est pas obligatoire de déclarer les `emit`, mais c'est une bonne pratique qui peut permettre de régler de nombreux bugs. Déclarer les événements qu'un composant peut émettre et leurs types améliore aussi l'autocomplétion de l'IDE et la vérification des types par TypeScript.
+Il existe d'autres syntaxes qui ne demandent pas de définir les types, mais puisque nous utilisons TypeScript c'est une bonne habitude de déclarer les types autant que possible. De même, il n'est pas obligatoire de déclarer les `emit`, mais c'est une bonne pratique qui peut permettre de régler de nombreux bugs. Déclarer les événements qu'un composant peut émettre et leurs types améliorent aussi l'autocomplétion de l'IDE et la vérification des types par TypeScript.
 
 
 <div class="exercice" markdown="1" >
@@ -444,12 +444,12 @@ Avant de définir les *slots* faisons une petite parenthèse pour discuter de l'
    
 </div>
 
-Le HTML est échappé automatiquement. C'est un comportement tout à fait volontaire, cela permet d'éviter qu'un utilisateur malicieux puisse "injecter" du HTML (ou pire du JS) dans notre site. Nous n'avons donc pas besoin de nous soucier d'échapper le HTML. Pour simuler la navigation sur notre site, nous utiliserons les routes au prochain TD et nous n'aurons pas besoin de nous soucier d'échapper les variables utilises dans les url de notre site. Par contre, il faut malgré tout garder cette problématique en tête par exemple si nous devons faire des requêtes AJAX qui contiennent une variable.
+Le HTML est échappé automatiquement. C'est un comportement tout à fait volontaire, cela permet d'éviter qu'un utilisateur malicieux puisse "injecter" du HTML (ou pire du JS) dans notre site. Nous n'avons donc pas besoin de nous soucier d'échapper le HTML. Pour simuler la navigation sur notre site, nous utiliserons les routes au prochain TD et nous n'aurons pas besoin de nous soucier d'échapper les variables utilisées dans les URLs de notre site. Par contre, il faut malgré tout garder cette problématique en tête par exemple si nous devons faire des requêtes AJAX qui contiennent une variable.
 
 
 ## Utiliser le slot
 
-Jusqu'à maintenant nous avons utilisé nos composants comme des balises HTML autofermantes `<monComposant />`, mais il est aussi possible de les utiliser avec la syntaxe `<monComposant>...</monComposant>`. Le composant pourra utiliser le code HTML écrit entre les 2 balises. Supposons que j'utilise mon composant ainsi
+Jusqu'à maintenant, nous avons utilisé nos composants comme des balises HTML autofermantes `<monComposant />`, mais il est aussi possible de les utiliser avec la syntaxe `<monComposant>...</monComposant>`. Le composant pourra utiliser le code HTML écrit entre les 2 balises. Supposons que j'utilise mon composant ainsi
 
 ```vue
 <monComposant><span class="toto">du texte</span></monComposant>
@@ -479,12 +479,12 @@ alors la balise `<slot>` est automatiquement remplacée par le HTML contenu entr
 
 Ici l'utilisation que nous avons fait du slot n'est pas impressionnante, mais elle permettrait par exemple d'utiliser facilement une image au lieu d'un texte pour certaines tâches.
 
-C'était la dernière modification au site de gestionnaire de listes de tâches. Il nous reste maintenant à apprendre à déployer le site. Avant cela nous allons faire quelques vérifications.
+C'était la dernière modification au site de gestionnaire de listes de tâches. Il nous reste maintenant à apprendre à déployer le site. Avant cela, nous allons faire quelques vérifications.
 
 <div class="exercice" markdown="1" >
 
  
-1. Refaites un appel au linter (`npm run lint`). Corrigez les erreurs et warnings. En particulier, vous risquer d'avoir des variables inutilisés. Quand nous faisons `const emit = defineEmits<...>();`, la variable emit peut être utile, mais si nous ne l'utilisons pas nous pouvons simplement appeler la fonction sans stocker son résultat dans une variable `defineEmits<...>();`.
+1. Refaites un appel au linter (`npm run lint`). Corrigez les erreurs et warnings. En particulier, vous risquez d'avoir des variables inutilisées. Quand nous faisons `const emit = defineEmits<...>();`, la variable emit peut être utile, mais si nous ne l'utilisons pas, nous pouvons simplement appeler la fonction sans stocker son résultat dans une variable `defineEmits<...>();`.
 
 2. Refaites un `npm run type-check`. Il ne devrait pas y avoir de problème.
 
@@ -506,7 +506,7 @@ Pour l'instant, nous avons utilisé Vite pour faire tourner notre site sur un se
    ```
 
 2. Le résultat de la compilation du site est stocké dans le répertoire
-   `todo_list/dist`. Nous allons maintenant déployer le site sur notre serveur web. Pour cela rien de plus simple, nous allons simplement copier le contenu du dossier `dist` dans le dossier `\var\www\html` qui est servi par notre serveur web (sur les PC de l'IUT il aurait fallu le copier dans le dossier `public_html`). On va donc entrer dans notre terminal du docker:
+   `todo_list/dist`. Nous allons maintenant déployer le site sur notre serveur web. Pour cela rien de plus simple, nous allons simplement copier le contenu du dossier `dist` dans le dossier `\var\www\html` qui est servi par notre serveur web (sur les PC de l'IUT, il aurait fallu le copier dans le dossier `public_html`). On va donc entrer dans notre terminal du docker:
 
    ```bash
     mkdir /var/www/html/todolist
@@ -535,7 +535,7 @@ Nous allons d'abord devoir ouvrir le fichier de configuration `vite.config.ts` p
 
 1. Dans le fichier `vite.config.ts`, ajoutez à la fin du `export default defineConfig` le champ `base: '/todolist/dist'`.
    
-    Notez qu'il est aussi possible d'indiquer l'URL complète du site dans `base` (avec le nom de domaine) ou d'utiliser un chemin relatif(`base:"./",`), mais cela peut poser des difficultés plus tard.
+    Notez qu'il est aussi possible d'indiquer l'URL complète du site dans `base` (avec le nom de domaine) ou d'utiliser un chemin relatif (`base:"./",`), mais cela peut poser des difficultés plus tard.
 
 2. Relancez la compilation avec `npm run build` (pour rappel, il faut se placer dans `/root/workspace/todo_list/`) puis on va recopier le résultat
 ```bash
@@ -551,7 +551,7 @@ N'oubliez pas de relancer le serveur de développement avec `npm run dev` si vou
 
 # Remarques finales
 
-Jusqu'à maintenant quand nous avons utilisé les props dans la partie template nous avons fait `props.titre`. En fait, dans la partie template, la bonne pratique est d'utiliser directement le nom du prop (donc `titre` au lieu de `prop.titre`). D'ailleurs, si on utilise les props uniquement dans le template, la ligne 
+Jusqu'à maintenant, quand nous avons utilisé les props dans la partie template, nous avons fait `props.titre`. En fait, dans la partie template, la bonne pratique est d'utiliser directement le nom du prop (donc `titre` au lieu de `prop.titre`). D'ailleurs, si on utilise les props uniquement dans le template, la ligne 
 
 ```vue
   const props = defineProps<{titre: string}>();
@@ -580,7 +580,7 @@ Les trucs à retenir :
 - comment construire et déployer le site.
 
 
-Dans le prochain TD, nous utiliserons Vue pour produire une façade à notre API theFeed. Pour cela, nous aurons besoin de quelques notions supplémentaires dont les routes pour simuler la navigation sur un site et les stores pour stocker certaines données.
+Dans le prochain TD, nous utiliserons Vue pour produire une façade à notre API *TheFeed*. Pour cela, nous aurons besoin de quelques notions supplémentaires dont les routes pour simuler la navigation sur un site et les stores pour stocker certaines données.
 
 {% endraw %}
 
