@@ -302,10 +302,6 @@ Nous allons maintenant permettre d'ajouter un élément à la liste de tâches.
 
 3. Ajoutez un bouton qui appelle `ajouterTache` (on utilisera `@click`). Vérifiez que tout fonctionne.
 
-4. Pour que chaque `<label>` soit associé à son `<input>`, il faut ajouter un
-   attribut `id` à chaque `<input type="checkbox">` et indiquer cet `id` dans
-   l'attribut `for` de la balise `<label>`. Ainsi, un clic sur le `<label>`
-   entrainera un clic sur sa `checkbox` associée.
 </div>
 
 
@@ -377,13 +373,25 @@ Observez que les valeurs des directives et les moustaches [peuvent prendre n'imp
  
 <div class="exercice" markdown="1" >
 
-1. Devant chaque tâche, ajoutez un `<input type="checkbox">` reliée à la valeur `tache.faite` correspondante. Vous pouvez utiliser l'onglet *Vue* pour vérifier que les booléens `faite` change de valeur quand on clique une *checkbox*. 
+1. Ajoutez un `<input type="checkbox">` dans chaque `<label>` devant chaque tâche : 
+   ```vue
+   <label><input type="checkbox">{{tache.description}}</label>
+   ```
+
+2. Reliez la *checkbox* à la valeur `tache.faite` correspondante. Vous pouvez
+   utiliser l'onglet *Vue* pour vérifier que les booléens `faite` change de
+   valeur quand on clique une *checkbox*. 
 
 3. Ajoutez les 3 lignes de CSS.
 
 3. Ajoutez au `label` associé à chaque `tache` la classe `fait` quand son booléen `tache.faite` est à `true`. 
 
 4. Vérifiez que tout fonctionne.
+
+<!-- 5. Pour que chaque `<label>` soit associé à son `<input>`, il faut ajouter un
+   attribut `id` à chaque `<input type="checkbox">` et indiquer cet `id` dans
+   l'attribut `for` de la balise `<label>`. Ainsi, un clic sur le `<label>`
+   entrainera un clic sur sa `checkbox` associée. -->
 
 </div>
  
