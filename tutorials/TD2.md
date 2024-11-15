@@ -146,7 +146,7 @@ Nous voulons maintenant ajouter la possibilité d'ajouter des listes de tâches.
 
 ### Évènements de composant
 
-Nous aimerions rajouter un bouton dans chaque liste qui permet de supprimer la liste. Une nouvelle difficulté se présente à nous : si le bouton est dans le composant `ListeDeTache` alors c'est ce composant qui peut détecter que le bouton de suppression a été activé. Il faut donc faire remonter l'information à son parent (`App.vue`) pour qu'elle puisse le supprimer. *Vue* offre une manière très simple de surmonter ce problème : la fonction `$emit`. Quand elle est appelée, la fonction `$emit("nomEvenement")` déclenche un événement qui peut être écouté par le parent du composant.
+Nous aimerions rajouter un bouton dans chaque liste qui permet de supprimer la liste. Une nouvelle difficulté se présente à nous : si le bouton est dans le composant `ListeDeTache` alors c'est ce composant qui peut détecter que le bouton de suppression a été activé. Il faut donc faire remonter l'information à son parent (`App.vue`) pour qu'il puisse le supprimer. *Vue* offre une manière très simple de surmonter ce problème : la fonction `$emit`. Quand elle est appelée, la fonction `$emit("nomEvenement")` déclenche un événement qui peut être écouté par le parent du composant.
 
 <div class="exercice" markdown="1" >
 
@@ -182,9 +182,11 @@ Il ne reste plus qu'à coder la fonction `retirerListe` (qui fonctionne comme la
 Nous avons écrit notre premier composant, nous allons extraire du code de `ListeDeTaches` et définir un composant pour améliorer le découpage du code. Plus précisément, nous allons essayer d'extraire la partie qui correspond au HTML suivant :
 
 ```vue
-  <input type="checkbox" v-model="tache.faite" />
-  <span :class="{fait: tache.faite}">{{tache.description}}</span>
-  <button @click="retirerTache(tache)">Retire</button>
+<label :class="{ fait: tache.faite }" >
+  <input type="checkbox" v-model="tache.faite">
+  {{ tache.description }}
+</label>
+<button @click="retirerTache(tache)">Retirer</button>
 ```
 
 Nous allons donc créer un composant `Tache.vue` qui contient ce HTML et que nous utiliserons dans `ListeDeTaches.vue`. Vous devez être capable d'imaginer comment le faire en utilisant des `props`, `emit`, et `emited event`.
@@ -200,9 +202,11 @@ Commençons par définir notre composant `TacheElement.vue`:
 </script>
 
 <template>
-    <input type ="checkbox" v-model="tache.faite">
-    <span :class="{fait: tache.faite}">{{tache.description}}</span>
-    <button @click="retirerTache(tache)">Retirer</button>
+  <label :class="{ fait: tache.faite }" >
+    <input type="checkbox" v-model="tache.faite">
+    {{ tache.description }}
+  </label>
+<button @click="retirerTache(tache)">Retirer</button>
 </template>
 
 <style scoped>
@@ -266,10 +270,11 @@ Vérifiez que le site s'affiche correctement.
 
 </div>
 
-Il reste trois problèmes : les boutons "retirer" ne fonctionnent plus, le bouton "cacher les tâches" ne fonctionne plus et cocher une case ne barre pas la tâche.
+Il reste trois problèmes : les boutons "Retirer" ne fonctionnent plus, le bouton "Cacher les tâches terminées" ne fonctionne plus et cocher une case ne barre pas la tâche.
 
 ### Réparer le bouton retirer et déclarer les emits
-Pour le bouton retirer, il suffit d'appeler la fonction `retirerTache` quand on détecte l'événement `supprimerTache`.
+
+Pour le bouton "Retirer", il suffit d'appeler la fonction `retirerTache` quand on détecte l'événement `supprimerTache`.
 
 
 <div class="exercice" markdown="1" >
@@ -294,11 +299,9 @@ Il existe d'autres syntaxes qui ne demandent pas de définir les types, mais pui
 
 1. Dans notre cas, nous déclarons pour l'instant un seul évènement et celui-ci n'attend pas d'argument donc on écrira en haut de `TacheElement.vue` :
 
-```js
-const emit = defineEmits<{supprimerTache:[]}>();
-```
-
-
+   ```js
+   const emit = defineEmits<{supprimerTache:[]}>();
+   ```
 
 2. Dans `ListeDeTaches.vue`, déclarez l'événement `supprimerListe` puisque ce composant peut émettre cet événement. On va maintenant déclarer tous les évènements de nos composants.
 
@@ -306,7 +309,7 @@ const emit = defineEmits<{supprimerTache:[]}>();
 
 ### Réparer le booléen "faite" et définir le `v-model`
 
-Il reste à réparer le bouton "Cacher les tâches terminées / Montrer tout" et le raturage des tâches terminées. Le problème est que le booléen `tache.faite`, n'est pas mis à jour par un clic sur la case à cocher. Il pourrait être tentant de modifier le *prop*, mais un composant n'a pas le droit de modifier ses *props* ! (En fait, c'est techniquement possible dans pas mal de cas, mais c'est très fortement déconseillé dans tous les cas !) 
+Il reste à réparer le bouton "Cacher les tâches terminées / Tout montrer" et le raturage des tâches terminées. Le problème est que le booléen `tache.faite`, n'est pas mis à jour par un clic sur la case à cocher. Il pourrait être tentant de modifier le *prop*, mais un composant n'a pas le droit de modifier ses *props* ! (En fait, c'est techniquement possible dans pas mal de cas, mais c'est très fortement déconseillé dans tous les cas !) 
 
 La solution est de déclencher un événement dès que ce bouton est cliqué qui indique au parent du composant de changer la valeur du booléen correspondant. Nous allons donc devoir définir un événement qui prend un argument (pour indiquer la valeur actuelle de la case `true`/`false` si elle est cochée ou non).
 
@@ -318,25 +321,25 @@ Commencez par définir un nouvel événement en modifiant la définition de `emi
 ```ts
 const emit = defineEmits<{
   supprimerTache:[],
-  checkedChange:[boolean]}
+  changerTacheFaite:[boolean]}
 >();
 ```
-La nouvelle ligne définie un nouvel événement qui produit une valeur booléenne. 
+La nouvelle ligne définie un nouvel événement qui prend en entrée une valeur booléenne. 
 
 Maintenant, nous pouvons ajouter l'attribut suivant à la checkbox de `TacheElement` :
 
 ```vue
-@change="$emit('checkedChange', ($event.target as HTMLInputElement).checked)"
+@change="$emit('changerTacheFaite', ($event.target as HTMLInputElement).checked)"
 ```
 
 </div>
 
 L'expression `($event.target as HTMLInputElement).checked` est équivalente à `$event.target.checked` (qui vaut `true` si la case est cochée). Le `as HTMLInputElement` indique à TypeScript que ici `$event.target` est forcément un `HTMLInputElement` ce qu'il ne sait pas déduire tout seul. Sans cela, il détecte une erreur qui n'en est pas une (il existe d'autres manières de contourner ce problème). Vous pouvez essayer de retirer temporairement le `as HTMLInputElement` pour voir l'erreur produite.
 
-Il suffit maintenant de détecter l'événement `checkedChange` dans `ListeDeTaches` et de mettre à jour le booléen quand il change avec sa nouvelle valeur. Ce qu'on peut faire en ajoutant le code suivant au bon endroit :
+Il suffit maintenant de détecter l'événement `changerTacheFaite` dans `ListeDeTaches` et de mettre à jour le booléen quand il change avec sa nouvelle valeur. Ce qu'on peut faire en ajoutant le code suivant au bon endroit :
 
 ```vue
-@checkedChange="(v) => tache.faite=v"
+@changerTacheFaite="(v) => tache.faite=v"
 ```
 
 <div class="exercice" markdown="1" >
@@ -344,6 +347,8 @@ Il suffit maintenant de détecter l'événement `checkedChange` dans `ListeDeTac
  Faites-le, vérifiez que tout fonctionne à nouveau et prenez le temps de comprendre tout ce que nous venons de faire.
 
 </div>
+
+### `v-model` sur les composants
 
 Plutôt que de définir un `prop` et un événement, nous aurions pu définir un `v-model` pour notre composant. Revenons d'abord sur le fonctionnement de `v-model`. Étant donné une variable de type `string` on peut associer son contenu avec un `<input>` avec la ligne suivante
 
@@ -360,6 +365,8 @@ En fait, on peut obtenir le même comportement que `v-model` en utilisant `v-bin
 />
 ```
 
+<br>
+
 De même, pour une `<input type="checkbox">`, le code
 
 ```vue
@@ -374,6 +381,8 @@ est équivalent à :
   @change="variableBool = $event.target.checked"
 />
 ```
+
+<br>
 
 De la même manière, `v-model` peut être utilisé dans un composant et sert de
 raccourci (*cf.* [documentation de Vue](https://fr.vuejs.org/guide/components/v-model.html#component-v-model)). Ainsi, la ligne 
@@ -410,7 +419,7 @@ Il suffit alors de définir le `prop` et l'événement correspondant dans le com
 <div class="exercice" markdown="1" >
 
 
-1. Faites les modifications nécessaires pour définir le `v-model` de `TacheElement`. Puisque nous avions déjà codé le bon prop et le bon emit, il suffit de les renommer correctement : `cochee` devient `modelValue` et `checkedChange` devient `update:modelValue`. (Attention dans `defineEmits` à bien mettre les guillemets doubles `"update:modelValue"` sinon JavaScript est gêné par les `:`).
+1. Faites les modifications nécessaires pour définir le `v-model` de `TacheElement`. Puisque nous avions déjà codé le bon prop et le bon emit, il suffit de les renommer correctement : `cochee` devient `modelValue` et `changerTacheFaite` devient `update:modelValue`. (Attention dans `defineEmits` à bien mettre les guillemets doubles `"update:modelValue"` sinon JavaScript est gêné par les `:`).
 
 2. Modifiez `ListeDeTache` pour utiliser `v-model` ainsi
 
@@ -428,7 +437,7 @@ Il suffit alors de définir le `prop` et l'événement correspondant dans le com
 
 </div>
 
-Retenez qu'on utilise les *props* pour faire descendre de l'information d'un composant vers son enfant et les événements pour faire remonter l'information. La directive `v-model` permet de faire descendre et remonter l’information d'un composant, mais c’est simplement un raccourci qui utilise un *prop* et un *évènement*. Remarquez qu'il n'était pas beaucoup plus compliqué de faire fonctionner le `v-model` du côté du composant enfant, mais qu'il est plus simple à utiliser du côté du composant parent. C'est donc une bonne pratique de définir un `v-model` quand c'est pertinent. Nous n'en parlerons pas ici, mais on peut aussi "nommer" les `v-model` ce qui permet d'associer plusieurs `v-model` au même composant.
+Retenez qu'on utilise les *props* pour faire descendre de l'information d'un composant vers son enfant et les événements pour faire remonter l'information. La directive `v-model` permet de faire descendre et remonter l’information d'un composant, mais c’est simplement un raccourci qui utilise un *prop* et un *évènement*. Remarquez qu'il n'était pas beaucoup plus compliqué de faire fonctionner le `v-model` du côté du composant, mais que cela est plus simple pour celui qui utilise le composant. C'est donc une bonne pratique de définir un `v-model` quand c'est pertinent. Nous n'en parlerons pas ici, mais on peut aussi "nommer" les `v-model` ce qui permet d'associer plusieurs `v-model` au même composant.
 
 ## Échappement des variables
 
