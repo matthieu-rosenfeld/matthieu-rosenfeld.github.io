@@ -6,8 +6,9 @@ lang: fr
 
 {% raw %}
 
+Nous souhaitons utiliser Vue pour produire une façade à notre API *TheFeed*. Il se trouve qu'API Platform [peut générer automatiquement](https://api-platform.com/docs/create-client/vuejs/) un code `Vue` en TypeScript associé à une API développée en utilisant API Platform. Le résultat obtenu est évidemment très formaté, mais si l'on comprend son fonctionnement, il est évidemment possible de le personnaliser à souhait. 
 
-Remarquez qu'API Platform fournit [un outil](https://api-platform.com/docs/create-client/vuejs/) qui génère automatiquement le code client `vuejs` en TypeScript associé à une API développée en utilisant API Platform. Le résultat obtenu est évidemment très formaté, mais si l'on comprend son fonctionnement il est évidemment possible de le personnaliser à souhait. Dans ce TD, nous allons réaliser notre client Vue nous-même, mais tout ce que nous verrons est utile pour comprendre le fonctionnement du code généré par API Platform (mais il utilise aussi d'autres notions que nous n'aurons pas le temps d'étudier comme les `composables`).
+Dans ce TD, nous allons réaliser notre client Vue nous-même, mais tout ce que nous verrons est utile pour comprendre le fonctionnement du code généré par API Platform (mais il utilise aussi d'autres notions que nous n'aurons pas le temps d'étudier comme les `composables`).
 
 
 ## Initialisation du projet
@@ -26,7 +27,7 @@ Cette fois, nous allons activer une option supplémentaire en acceptant le `Vue 
 
 <div class="exercice" markdown="1">
 
-1. Faites-le (n'oubliez pas tout se fait dans le terminal du docker). Comme dans le projet précédent il faut rajouter les 4 lignes suivantes dans le fichier `vite.config.ts`
+1. Faites-le (n'oubliez pas tout se fait dans le terminal du docker). Comme dans le projet précédent, il faut rajouter les 4 lignes suivantes dans le fichier `vite.config.ts`
     
    ```ts
     export default defineConfig({
@@ -39,7 +40,7 @@ Cette fois, nous allons activer une option supplémentaire en acceptant le `Vue 
 
    ```
 
-    Même si nous n'allons pas déployer le site tout de suite, indiquer le `base` tout de suite nous permettra de détecter certains bugs potentiels au fur et à mesure plutôt que de découvrir tous les problèmes à la fin.
+    Même si nous n'allons pas déployer le site tout de suite, indiquer le `base` immédiatement nous permettra de détecter certains bugs potentiels au fur et à mesure plutôt que de découvrir tous les problèmes à la fin.
 
 2. Ensuite entrez les 3 lignes suggérées dans le terminal :
 
@@ -58,13 +59,13 @@ Cette fois, nous allons activer une option supplémentaire en acceptant le `Vue 
 
 ## Nos premières routes
 
-Dans ce TD nous allons réaliser une "Application à Page Unique" (Single page application ou SPA). L'idée étant que lors de la navigation sur le site on ne chargera jamais une nouvelle page `html`, mais le JavaScript sera responsable des mises à jour de la page. Cela permet une navigation plus efficace et moins couteuse en bande passante (au lieu de recharger l'ensemble du code `html` de la page on ne charge que les nouvelles données). Cependant, pour rendre la navigation agréable pour l'utilisateur, il faut qu'elle se comporte comme si l'on avait plusieurs pages, il faudrait notamment :
+Dans ce TD, nous allons réaliser une "Application à Page Unique" (Single page application ou SPA). L'idée étant que lors de la navigation sur le site, on ne chargera jamais une nouvelle page `html`, mais le JavaScript sera responsable des mises à jour de la page. Cela permet une navigation plus efficace et moins couteuse en bande passante (au lieu de recharger l'ensemble du code `html` de la page, on ne charge que les nouvelles données). Cependant, pour rendre la navigation agréable pour l'utilisateur, il faut qu'elle se comporte comme si l'on avait plusieurs pages, il faudrait notamment :
 - sauvegarder les "pages visitées" dans l'historique, 
 - autoriser un clic sur le bouton "page précédente",
 - permettre l'utilisation d'une URL qui change en fonction des "pages" (pour pouvoir l'enregistrer dans mes favoris ou la partager avec un autre utilisateur).
 
 On pourrait gérer tout cela nous-même, mais le `router` de Vue est une solution très simple à utiliser qui règle tous ces problèmes. On va définir des "view" (des "vues" en français). Ces vues sont en fait des composants et on va simplement configurer les routes pour indiquer lesquelles pointent vers quels composants/vues. On pourra ensuite utiliser la balise `<router-view />` dans notre composant principal qui se chargera de détecter le composant/vue à charger en fonction de l'URL. On pourra aussi utiliser le routeur pour générer automatiquement l'URL d'une vue pour définir (un lien par exemple). 
-Bien que le contexte et le fonctionnement soient assez différent, l'utilisation et la syntaxe des routes devrait vous rappelez les routes de Symfony.
+Bien que le contexte et le fonctionnement soient assez différents, l'utilisation et la syntaxe des routes devraient vous rappeler les routes de Symfony.
 
 Commençons par créer notre première vue.
 
@@ -73,7 +74,7 @@ Commençons par créer notre première vue.
  
 1. Commencez déjà par vider le contenu des dossiers `components` et `views`.
 
-2. Remplacez le fichier `App.vue` par [celui ci](../assets/App.vue).
+2. Remplacez le fichier `App.vue` par [celui-ci](../assets/App.vue).
 
 
 3. Créer un fichier `views/FeedMain.vue` qui contient le code suivant
@@ -163,7 +164,7 @@ Ensuite, l'appelle à la méthode `$router.push('maroute')` redirige l'utilisate
 
 </div>
 
-On peut aussi nommez nos routes en rajoutant un `name` à la route comme ceci
+On peut aussi nommer nos routes en rajoutant un `name` à la route comme ceci
 ```ts
     {
         path: '/',
@@ -172,7 +173,7 @@ On peut aussi nommez nos routes en rajoutant un `name` à la route comme ceci
     },
 ```
 
-On peut ensuite utiliser la route par son nom plutôt que par son chemin dans le reste du projet.Pour l'utiliser avec `$router.push`, on écrira:
+On peut ensuite utiliser la route par son nom plutôt que par son chemin dans le reste du projet. Pour l'utiliser avec `$router.push`, on écrira :
 ```ts
 $router.push({name: 'nomDeLaRoute'})
 ```
@@ -201,7 +202,7 @@ Notez qu'on pourrait aussi rediriger directement vers le `path` d'une autre rout
 
 3. Changez la route de chemin `/` pour qu'elle redirige vers la route `feed`.
 
-4. Le path spécial `path: '/:pathMatch(.*)*',` permet d'attraper tous les path qui n'ont pas été attrapé par une autre route. On pourrait le traiter soit comme une erreur 404 soit comme un cas par défaut. Dans notre cas, on voudrait que cette route redirige aussi vers la route Feed.
+4. Le *path* spécial `path: '/:pathMatch(.*)*',` permet d'attraper tous les *path* qui n'ont pas été attrapés par une autre route. On pourrait le traiter soit comme une erreur 404 soit comme un cas par défaut. Dans notre cas, on voudrait que cette route redirige aussi vers la route Feed.
 
 5. Testez ces modifications. En particulier, visitez la page pour vérifier que la redirection fonctionne `http://localhost:5173/the_feed_front/dist/`.
 
@@ -210,7 +211,7 @@ Notez qu'on pourrait aussi rediriger directement vers le `path` d'une autre rout
 
 
 
-**Remarque :** La ligne `app.use(router)` nous permet d'utiliser `$router` directement dans le template. Par contre, si l'on veut l'utiliser dans le script il faut commencer par le récupérer en faisant
+**Remarque :** La ligne `app.use(router)` nous permet d'utiliser `$router` directement dans le template. Par contre, si l'on veut l'utiliser dans le script, il faut commencer par le récupérer en faisant
 ```vue 
 <script setup lang="ts">
     import {useRouter} from 'vue-router';
@@ -234,7 +235,7 @@ Pour définir une route paramétrée, il suffit de précéder le paramètre du s
 },
 ```
 
-Ensuite dans le composant/view correspondant à notre route, il faut récupérer ce paramètre. Il suffit de récupérer l'objet `route`, puis d'aller y chercher le ou les paramètres désirés. Par exemple, pour récupérer le paramètre `id` défini dans la route précédente on pourrait faire : 
+Ensuite dans le `composant/view` correspondant à notre route, il faut récupérer ce paramètre. Il suffit de récupérer l'objet `route`, puis d'aller y chercher le ou les paramètres désirés. Par exemple, pour récupérer le paramètre `id` défini dans la route précédente, on pourrait faire : 
 
 ```ts
 import { useRoute } from 'vue-router'
@@ -253,7 +254,7 @@ const id = route.params.id
     component: () => import('@/views/SingleMessage.vue')
     
     ```
-    Cette syntaxe utilise un import dynamique : le fichier correspondant n'est chargé que s'il est réellement utile. Ça peut faire une différence de performance si le composant/view en question est très gros avec lui-même de nombreuses dépendances (ce ne sera pas notre cas).
+    Cette syntaxe utilise un import dynamique : le fichier correspondant n'est chargé que s'il est réellement utile. Ça peut faire une différence de performance si le `composant/view` en question est très gros avec lui-même de nombreuses dépendances (ce ne sera pas notre cas).
 
 3. Vérifiez que tout fonctionne en testant l'URL de la route `/feed/17`.
 
@@ -261,13 +262,13 @@ const id = route.params.id
 
 </div>
 
-Vue router permet de gérer des routes plus compliquées avec
+*Vue Router* permet de gérer des routes plus compliquées avec
 
-Vous savez maintenant presque tout ce que vous avez besoin de savoir sur les routes. Nous allons maintenant pouvoir mettre en place quelques composants avant de commencer à utiliser l'API The Feed pour enfin rendre notre site fonctionnel.
+Vous savez maintenant presque tout ce que vous avez besoin de savoir sur les routes. Nous allons maintenant pouvoir mettre en place quelques composants avant de commencer à utiliser l'API *The Feed* pour enfin rendre notre site fonctionnel.
 
 ## Mise en place des composants utilisateurs et message
 
-Avant de chercher à utiliser l'API, nous allons commencer à voir comment nous utiliserons les informations de l'API. Ouvrir la page d'accueil de votre API pourrait être utile à partir de maintenant pour retrouver les informations sur son usage (normalement à l'adresse [https://localhost/the_feed_api/public/api](https://localhost/the_feed_api/public/api)). La première chose à faire est de définir des types correspondants à ce que l'API nous renverra. Deux objets en particulier seront intéressant, l'utilisateur et la publication. On peut voir qu'un utilisateur possède comme données son `id` (un `number`), son `adresseEmail` (un `string`), son `login` (un `string`) et le `boolean premium`. Il faudrait donc définir son interface ainsi
+Avant de chercher à utiliser l'API, nous allons commencer à voir comment nous utiliserons les informations de l'API. Ouvrir la page d'accueil de votre API pourrait être utile à partir de maintenant pour retrouver les informations sur son usage (normalement à l'adresse [https://localhost/the_feed_api/public/api](https://localhost/the_feed_api/public/api)). La première chose à faire est de définir des types correspondants à ce que l'API nous renverra. Deux objets en particulier seront intéressants, l'utilisateur et la publication. On peut voir qu'un utilisateur possède comme données son `id` (un `number`), son `adresseEmail` (un `string`), son `login` (un `string`) et le `boolean premium`. Il faudrait donc définir son interface ainsi
 
 ```ts
 export interface Utilisateur{
@@ -366,7 +367,7 @@ Remarquez que ce n'est pas un ajout de Vue, mais bien quelque chose qui est touj
 > *Petit point CSS :* Le CSS contenu dans `<style scoped>` n'est appliqué qu'au composant dans lequel, il est écrit. Schématiquement, Vue ajoute des `data-attribut` aux éléments d'un composant et modifie les sélecteurs de notre CSS pour qu'ils utilisent ces `data-attribut`. Mais Vue rajoute de nombreuses possibilités. Par exemple, la pseudo-classe `:deep` permet d'accéder aux enfants d'un composant. Notez qu'on peut aussi charger un CSS global comme c'est actuellement fait dans `main.ts`.
 
 
- Dans un premier temps on pourra donc définir le composant correspondant à un utilisateur ainsi
+ Dans un premier temps, on pourra donc définir le composant correspondant à un utilisateur ainsi
 ```vue
 <script setup lang="ts">
   import type {Utilisateur} from '@/types'; 
@@ -430,9 +431,9 @@ Remarquez que ce n'est pas un ajout de Vue, mais bien quelque chose qui est touj
  <router-link :to="RouteAUtiliser">texte du lien</router-link>
 ```
 
-Il faut remplacer `RouteAUtiliser` par la route donc comme pour le `router-push`, on peut soit mettre directement le path de la route (`:to = "/users"`) ou son nom (`:to="{name:allUsers}"`). 
+Il faut remplacer `RouteAUtiliser` par la route donc comme pour le `router-push`, on peut soit mettre directement le *path* de la route (`:to = "/users"`) ou son nom (`:to="{name:allUsers}"`). 
 
-Par contre, nous n'avons pas encore vu comment indiquer le paramètre d'une route. La première idée serait d'utiliser le path, par exemple pour afficher le feed de l'utilisateur 2 on pourrait faire `:to = "/users/2"`, mais si l'id était stocké dans une variable `identifiant`, il faudrait écrire `:to = "'/users/'+identifiant"` et il faudrait alors penser encoder les paramètres correctement pour une url. Il existe une syntaxe qui utilise le nom de la route et qui permet de donner les paramètres : 
+Par contre, nous n'avons pas encore vu comment indiquer le paramètre d'une route. La première idée serait d'utiliser le *path*, par exemple pour afficher le feed de l'utilisateur 2 on pourrait faire `:to = "/users/2"`, mais si l'id était stocké dans une variable `identifiant`, il faudrait écrire `:to = "'/users/'+identifiant"` et il faudrait alors penser encoder les paramètres correctement pour une URL. Il existe une syntaxe qui utilise le nom de la route et qui permet de donner les paramètres : 
 ```html
  <router-link :to="{name:'nomDeLaRoute',params:{param1:valeureParam1, param2:valeureParam2}}">texte du lien</router-link>
 ```
@@ -454,7 +455,7 @@ Avec cette syntaxe, il n'y a pas besoin de se poser de question d'encodage ou d'
 
 </div>
 
-Nous avons une première version de l'affichage des utilisateurs prête pour être connecté avec notre API. Avant cela nous allons faire la même chose pour les publications. Pour le composant `BoitePublication` nous utiliserons le code suivant
+Nous avons une première version de l'affichage des utilisateurs prête pour être connecté avec notre API. Avant cela, nous allons faire la même chose pour les publications. Pour le composant `BoitePublication` nous utiliserons le code suivant
 
 ```vue
 <script setup lang="ts">
@@ -515,11 +516,12 @@ Prenez le temps de comprendre ce qu'il s'y passe. La seule nouveauté est le `(n
 </div>
 
 ## Déploiement 
-Nous allons pouvoir commencer à remplir les vues que nous avons créées avec le contenu fourni par l'API. Mais avant ça pour s'assurer que tout fonctionne nous allons déployer une première fois le site dans son état actuel.
+
+Nous allons pouvoir commencer à remplir les vues que nous avons créées avec le contenu fourni par l'API. Mais avant ça pour s'assurer que tout fonctionne, nous allons déployer une première fois le site dans son état actuel.
 
 <div class="exercice" markdown="1">
 
-1. Dans le terminal du docker, avant de build commencez par faire un `npm run type-check` suivi d'un `npm run lint`. Corrigez les erreurs éventuelles.
+1. Dans le terminal du docker, avant de *build* commencez par faire un `npm run type-check` suivi d'un `npm run lint`. Corrigez les erreurs éventuelles.
 
 2. Déployez votre site. Rappelez-vous, la commande `npm run build` permet de générer le site à déployer. Nous avions déjà choisi dans le fichier `vite.config.ts` que le site sera déployé à l'adresse `.../the_feed_front/dist/`. Vous pouvez utiliser la commande `mkdir` pour créer le sous-dossier nécessaire dans le dossier `/var/www/html/` puis `cp -R` pour déplacer le répertoire `dist`. 
 
@@ -527,7 +529,7 @@ Nous allons pouvoir commencer à remplir les vues que nous avons créées avec l
 
 </div>
 
-Sur la plupart des pages, rafraîchir la page ne fonctionne pas correctement. La raison est simple : le routeur modifie l'adresse, mais ce n'est pas une vraie adresse donc quand apache essaie de charger une page à cette adresse, il échoue. Il faut donc dire à apache de toujours charger la page index.html dès qu'il charge quelque chose dans le dossier `dist`. Pour cela nous allons utiliser le fichier `.htaccess` suivant : 
+Sur la plupart des pages, rafraîchir la page ne fonctionne pas correctement. La raison est simple : le routeur modifie l'adresse, mais ce n'est pas une vraie adresse donc quand apache essaie de charger une page à cette adresse, il échoue. Il faut donc dire à apache de toujours charger la page index.html dès qu'il charge quelque chose dans le dossier `dist`. Pour cela, nous allons utiliser le fichier `.htaccess` suivant : 
 
 ```apache
 RewriteEngine On
@@ -539,7 +541,7 @@ RewriteRule . index.html [L]
 
 ```
 
-Il faut ajouter ce fichier apache dans le dossier `dist`. Si nous procédons ainsi nous ajoutons le fichier directement dans le dossier `dist` nous risquons de devoir recommencer à chaque déploiement de l'application. Heureusement, il y a une solution toute simple : tous les fichiers qui se trouvent dans le sous-dossier `public` de notre application sont automatiquement copié dans le répertoire `dist` à chaque build (pour l'instant, c'était le cas du favicon).
+Il faut ajouter ce fichier apache dans le dossier `dist`. Si nous procédons ainsi, nous ajoutons le fichier directement dans le dossier `dist` nous risquons de devoir recommencer à chaque déploiement de l'application. Heureusement, il y a une solution toute simple : tous les fichiers qui se trouvent dans le sous-dossier `public` de notre application sont automatiquement copiés dans le répertoire `dist` à chaque build (pour l'instant, c'était le cas du *favicon*).
 
 <div class="exercice" markdown="1">
 
@@ -573,7 +575,7 @@ fetch('https://localhost/the_feed_api/public/api/utilisateurs')
 
 Notez qu'il faut bien s'assurer que `users` est réactif, puisqu'il n'aura pas la bonne valeur tout de suite, mais uniquement quand le `fetch` aura eu lieu et il faudra alors mettre l'affichage à jour. 
 
-Pour une meilleure organisation du code, nous n'allons pas faire le fetch directement dans nos composants. Les composants auront toujours la responsabilité de traiter la réponse HTTP, mais le fetch sera fait dans un objet à part. Nous allons donc créer un nouveau fichier dans `src/util/APIStore.ts` avec le contenu suivant :
+Pour une meilleure organisation du code, nous n'allons pas faire le `fetch()` directement dans nos composants. Les composants auront toujours la responsabilité de traiter la réponse HTTP, mais le `fetch()` sera fait dans un objet à part. Nous allons donc créer un nouveau fichier dans `src/util/APIStore.ts` avec le contenu suivant :
 
 ```ts
 export const APIStore = {
@@ -595,9 +597,9 @@ Il faudra penser à importer l'objet dans les fichiers qui l'utilisent avec la l
 
 1. Créez le fichier `src/util/APIStore.ts` avec le code indiqué.
  
-2. Modifiez le code de `AllUsers` pour qu'il affiche tous les utilisateurs. Vous pouvez initialiser la variable qui contient le résultat du fetch avec un tableau vide. Vérifiez que tout fonctionne.
+2. Modifiez le code de `AllUsers` pour qu'il affiche tous les utilisateurs. Vous pouvez initialiser la variable qui contient le résultat du `fetch()` avec un tableau vide. Vérifiez que tout fonctionne.
 
-3. Faites de même pour la vue Feed en allant chercher toutes les publications, il n'y a pas besoin de modifier le code de `APIStore`.
+3. Faites de même pour la vue *Feed* en allant chercher toutes les publications, il n'y a pas besoin de modifier le code de `APIStore`.
 
 4. On veut maintenant s'occuper des vues `SingleMessage` et `SingleUser`. Cette fois, il va falloir rajouter une méthode à `APIStore` dont voici la signature
    `getById(ressource:string, id:number):Promise<any>`. Il faudra donner une valeur initiale à la variable réactive, vous pouvez simplement écrire `chargement` pour les différentes valeurs.
@@ -655,7 +657,7 @@ Commençons par créer un formulaire de connexion :
 </style>
 ```
 
-Prenez le temps de comprendre tout ce qu'il se passe. Nous utilisons un événement spécial du `form` qui est `@submit` qui permet de détecter si le formulaire a été soumis. Le modificateur `.prevent` permet d'empêcher les autres événement lié à la soumission d'un formulaire d'avoir lieu. Autrement dit, quand on clique sur le bouton "connexion" seul la fonction `connect` sera appelée. Techniquement, `.prevent` est juste une syntaxe de Vue qui appelle la fonction JS [`event.preventDefault()`](https://developer.mozilla.org/fr/docs/Web/API/Event/preventDefault) vu l'an dernier en [cours de JavaScript](http://romainlebreton.github.io/R.4.01-DeveloppementWeb-JavaScript/classes/class2.html#34.0).
+Prenez le temps de comprendre tout ce qu'il se passe. Nous utilisons un événement spécial du `form` qui est `@submit` qui permet de détecter si le formulaire a été soumis. Le modificateur `.prevent` permet d'empêcher les autres événements liés à la soumission d'un formulaire d'avoir lieu. Autrement dit, quand on clique sur le bouton "connexion" seul la fonction `connect` sera appelée. Techniquement, `.prevent` est juste une syntaxe de Vue qui appelle la fonction JS [`event.preventDefault()`](https://developer.mozilla.org/fr/docs/Web/API/Event/preventDefault) vu l'an dernier en [cours de JavaScript](http://romainlebreton.github.io/R.4.01-DeveloppementWeb-JavaScript/classes/class2.html#34.0).
 
 Il faudra compléter les parties manquantes de la fonction `connect`. Rappelez-vous la forme de la requête de connexion grâce à API Platform. Il faudra préciser la méthode de la requête (`POST`), le format du corps de la requête et le corps de la requête. Il faudra aussi ajouter l'option `credentials: 'include'` qui permet de s'assurer que le cookie serra enregistré par notre navigateur. Nous allons donc utiliser la syntaxe plus complète de `fetch` ce qui ressemblera à ceci :
 ```ts
@@ -683,6 +685,7 @@ fetch(".../api/auth", {
 
 
 ### Faire une requête authentifiée
+
 Avant d'aller plus loin dans la gestion de l'utilisateur, nous allons ajouter la possibilité de poster un message au feed qui nous permettra de confirmer que tout fonctionne. Nous allons donc créer un nouveau composant qui permet de poster un message. Nous pourrons par exemple utiliser le template suivant :
 ```vue
 <script setup lang="ts">
@@ -716,7 +719,7 @@ form{
 <div class="exercice" markdown="1">
 
 1. Pour gérer l'appel à l'API, nous allons créer une nouvelle méthode `createRessource(ressource:string, data:any):Promise<any>` dans `APIStore`. `ressou` contiendra le nom de la ressource et `data` l'objet correspondant à la nouvelle ressource. Le corps de cette requête sera simplement `body: JSON.stringify(data)`. En définissant une méthode générique de création, nous pourrons réutiliser la même pour la création d'un utilisateur.
-Pour que notre requête contienne les cookies d'authentification, il suffira à nouveau d'ajouter au fetch l'option `credential:'include'`.
+Pour que notre requête contienne les cookies d'authentification, il suffira à nouveau d'ajouter au `fetch` l'option `credential:'include'`.
 
 2. Créez le composant `views/FormulairePublication.vue` en utilisant l'exemple plus haut. Complétez le composant en définissant la fonction `envoyer` et la variable message comme il faut. Pour l'instant, on peut ne pas mettre de `then` et se contenter d'ignorer la réponse de notre requête.
 
@@ -725,7 +728,7 @@ Pour que notre requête contienne les cookies d'authentification, il suffira à 
 4. Vérifiez que tout fonctionne. Attention pour l'instant la page feed n'est pas rechargée automatiquement avec le nouveau message.
 </div>
 
-Il faut que l'ajout d'un message déclenche le rechargement de la page `feed`. On pourrait ajouter nous-même le nouveau message au tableau (la réponse à notre requête contient toutes les infos sur le nouveau message). Mais nous allons plutôt recharger toute la page. L'avantage de procéder ainsi est que si d'autres changements ont eu lieu entre temps on va aussi les recharger et donc l'état de notre page correspond effectivement à l'état de l'API à un moment donné. L'autre solution aurait l'avantage d'être légèrement plus efficace puisqu'elle nous évite de faire une requête. 
+Il faut que l'ajout d'un message déclenche le rechargement de la page `feed`. On pourrait ajouter nous-même le nouveau message au tableau (la réponse à notre requête contient toutes les infos sur le nouveau message). Mais nous allons plutôt recharger toute la page. L'avantage de procéder ainsi est que si d'autres changements ont eu lieu entre temps, on va aussi les recharger et donc l'état de notre page correspond effectivement à l'état de l'API à un moment donné. L'autre solution aurait l'avantage d'être légèrement plus efficace puisqu'elle nous évite de faire une requête. 
 
 Pour faire cela, notre composant `FormulairePublication` émettra un événement pour signaler à son parent qu'il faut qu'il recharge la page. Rappelez-vous qu'on définit un nouvel évènement avec `const emit = defineEmits<{ updated: []}>();`. On ne peut pas utiliser `$emit` dans le `script setup`, mais la variable `emit` (résultat de l'appel à `defineEmits`) contient une fonction qui s'utilise comme `$emit`, mais dans le `script setup`.
 
@@ -744,15 +747,16 @@ Pour faire cela, notre composant `FormulairePublication` émettra un événement
 </div>
 
 ### Déconnecter l'utilisateur et rafraîchir le token
-Par sécurité, les cookies d'authentification ne sont pas accessibles depuis le JavaScript (ils ont l'option http-only).
+
+Par sécurité, les cookies d'authentification ne sont pas accessibles depuis le JavaScript (ils ont l'option *http-only*).
 Nous ne pouvons donc pas déconnecter l'utilisateur directement.
 Heureusement, la route `.../api/token/invalidate` qui sert à invalider le cookie de rafraîchissement invalide aussi le cookie du JWT. Il suffit donc d'appeler cette route pour supprimer nos cookies. De même la route `.../api/token/refresh` rafraîchit notre JWT si le token de rafraîchissement est présent dans les cookies.
 
 <div class="exercice" markdown="1">
 
-1. Ajoutez une fonction logout qui appel la route `.../api/token/invalidate` et une fonction refresh token pour la route `.../api/token/refresh`.
+1. Ajoutez une fonction *logout* qui appel la route `.../api/token/invalidate` et une fonction *refresh token* pour la route `.../api/token/refresh`.
 
-1. Ajoutez un bouton `Se déconnecter` au menu du header (fichier `App.vue`). Cette fonction doit appeler une nouvelle fonction `deconnexion` qui appelle la fonction `APIStore.logout`.
+1. Ajoutez un bouton `Se déconnecter` au menu du *header* (fichier `App.vue`). Cette fonction doit appeler une nouvelle fonction `deconnexion` qui appelle la fonction `APIStore.logout`.
 
 2. Vérifiez que tout fonctionne en vous déconnectant puis en essayant de poster un message.
 </div>
@@ -765,7 +769,7 @@ Lors de la connexion l'API nous renvoie dans le corps de la requête toutes les 
 Il faut donc se poser la question d'où enregistrer ces informations. Jusqu'à maintenant toutes les informations stockées sont stockées dans un composant et peuvent être envoyées aux enfants du composant par les props et modifier en faisant remonter des événements qu'on gère au niveau du composant. Les informations de l'utilisateur connecté risquent d'être utilisés à de nombreux endroits de l'application, il faudrait donc les stocker dans le composant principal (`app.vue`) et les faire descendre dans de nombreux composants. Au lieu de clarifier le code cela viendrait alourdir tous nos composants. Pour éviter cela, on s'autorise à garder certaines informations de manière globale dans toute l'application. Nous allons créer un **store** et qui va nous permettre de stocker toutes les informations "communes" à l'ensemble de l'application.
 
 
-Nous pourrions utiliser le store de Vue. C'est ce fameux `Pinia` qu'on nous propose d'ajouter quand nous créons notre projet (et il est aussi possible d'utiliser d'autres stores en les installant avec `npm`). Cependant, pour l'usage limité que nous allons en faire il est plus simple d'utiliser notre propre store. Cela nous permettra aussi de comprendre un peu comment un store fonctionne.
+Nous pourrions utiliser le store de Vue. C'est ce fameux `Pinia` qu'on nous propose d'ajouter quand nous créons notre projet (et il est aussi possible d'utiliser d'autres stores en les installant avec `npm`). Cependant, pour l'usage limité que nous allons en faire, il est plus simple d'utiliser notre propre store. Cela nous permettra aussi de comprendre un peu comment un store fonctionne.
 
 
 Un store est simplement un objet commun qui permet de stocker les variables globales et qu'on peut importer dans les composants qui l'utilisent. Pour définir un store qui stocke une donnée, on pourra simplement écrire :
@@ -779,7 +783,7 @@ export const monStore = reactive({
 });
 ```
 
-Maintenant, pour utiliser le store dans un composant on peut faire
+Maintenant, pour utiliser le store dans un composant, on peut faire
 ```vue
 <script setup>
     import { monStore  } from '.../monStore .ts'
@@ -831,23 +835,23 @@ Nous allons en profiter pour commencer à gérer certaines erreurs possibles lor
     },
 ```
 
-La première modification est le type de retour. On renvoie un booléen à true en cas de succès et sinon un booléen à faux avec un message d'erreur.
+La première modification est le type de retour. On renvoie un booléen à `true` en cas de succès et sinon un booléen à faux avec un message d'erreur.
 
-Pour cela, on fait le fetch comme précédemment. Ensuite on utilise `reponsehttp.ok` qui vaut `true` si la requête est un succès. On renvoie une promesse qui contient un booléen décrivant le succès ou l'échec et si besoin un message d'erreur. De plus, en cas de réussite on décode le `json` on enregistre le résultat dans `utilisateurConnecte`.
+Pour cela, on fait le `fetch` comme précédemment. Ensuite, on utilise `reponsehttp.ok` qui vaut `true` si la requête est un succès. On renvoie une promesse qui contient un booléen décrivant le succès ou l'échec et si besoin un message d'erreur. De plus, en cas de réussite, on décode le `json` on enregistre le résultat dans `utilisateurConnecte`.
 Puisqu'on renvoie une promesse, le composant appelant pourra utiliser `.then` pour exécuter du code en fonction de la valeur de retour une fois que la connexion a eu lieu.
 
 <div class="exercice" markdown="1">
 
  
-1. Modifiez le APIStore pour qu'il contienne la variable `utilisateurConnecte: null,` et que ce soit un objet réactif. 
+1. Modifiez le *APIStore* pour qu'il contienne la variable `utilisateurConnecte: null,` et que ce soit un objet réactif. 
 
 2. Modifiez la fonction login en vous basant sur l'exemple donné plus haut.
 
 3. Vérifiez que le formulaire de connexion fonctionne toujours correctement.
 
-4. Dans `FormulaireConnexion` utilisez `.then` sur le résultat de la fonction connexion pour qu'en cas de réussite on redirige vers la page la route `/feed` (à l'aide de `router.push`). Nous ajouterons des notifications (messages flashs) dans la suite du TD.
+4. Dans `FormulaireConnexion` utilisez `.then` sur le résultat de la fonction connexion pour qu'en cas de réussite, on redirige vers la page la route `/feed` (à l'aide de `router.push`). Nous ajouterons des notifications (messages flashs) dans la suite du TD.
 
-5. Modifiez le store pour ajouter un booléen "estConnecte" qui indique si l'utilisateur est connecté. Modifiez la fonction connexion pour qu'elle change la valeur du booléen quand c'est nécessaire.
+5. Modifiez le store pour ajouter un booléen `estConnecte` qui indique si l'utilisateur est connecté. Modifiez la fonction connexion pour qu'elle change la valeur du booléen quand c'est nécessaire.
 
 6. Modifiez la fonction `logout:function(): Promise<{ success: boolean, error?: string }>` pour qu'elle supprime l'utilisateur connecté en cas de réussite (le code est donc très similaire au code ajouté à la fonction `login`).
 
@@ -863,9 +867,9 @@ Puisqu'on renvoie une promesse, le composant appelant pourra utiliser `.then` po
 
 ### Gérer la connexion lors du rechargement de l'app
 
-Lors du rechargement de l'app (par exemple, avec F5) les cookies d'authentification restent présents, mais puisque toutes les variables Javascripts sont réinitialisées on perd ces informations. Nous pourrions utiliser le localStorage pour régler en partie ce problème. Nous allons utiliser une solution plus simple : dès que l'application se charge nous allons appeler la route de rafraîchissement des tokens. En cas de succès du rafraîchissement, nous obtenons directement les donnés utilisateurs, et en cas d'échec, nous pouvons considérer que l'utilisateur n'est pas connecté.
+Lors du rechargement de l'app (par exemple, avec F5) les cookies d'authentification restent présents, mais puisque toutes les variables Javascript sont réinitialisées, on perd ces informations. Nous pourrions utiliser le `localStorage` pour régler en partie ce problème. Nous allons utiliser une solution plus simple : dès que l'application se charge, nous allons appeler la route de rafraîchissement des tokens. En cas de succès du rafraîchissement, nous obtenons directement les données utilisateurs, et en cas d'échec, nous pouvons considérer que l'utilisateur n'est pas connecté.
 
-Jusqu'à maintenant lorsqu'une page devait afficher des données qu'elle n'avait pas encore nous nous contentions d'afficher des fausses données. Ici l'affichage des boutons du menu risque de changer après le chargement de page ce qui est particulièrement gênant. Pour éviter ce problème, nous allons afficher un message de chargement tant que l'on n'a pas vérifié si l'utilisateur est connecté. 
+Jusqu'à maintenant lorsqu'une page devait afficher des données qu'elle n'avait pas encore, nous nous contentions d'afficher des fausses données. Ici l'affichage des boutons du menu risque de changer après le chargement de page ce qui est particulièrement gênant. Pour éviter ce problème, nous allons afficher un message de chargement tant que l'on n'a pas vérifié si l'utilisateur est connecté. 
 
 
 <div class="exercice" markdown="1">
@@ -874,7 +878,7 @@ Jusqu'à maintenant lorsqu'une page devait afficher des données qu'elle n'avait
 
 2. À la fin du `<script setup>` de `App.vue` faite un appel à cette fonction. Vérifiez qu'en cas de rechargement de la page un utilisateur connecté est toujours connecté.
 
-3. Ajoutez à `App.vue` une variable `const loaded = ref(false);`. Après le retour de la fonction refresh changer la valeur du booléen à `true`. En utilisant cette valeur et un `v-if` supprimer l'affichage de la page tant que ce booléen est faux. On pourra aussi ajouter un message "Chargement en cours" quand le booléen est faux.
+3. Ajoutez à `App.vue` une variable `const loaded = ref(false);`. Après le retour de la fonction `refresh` changer la valeur du booléen à `true`. En utilisant cette valeur et un `v-if` supprimer l'affichage de la page tant que ce booléen est faux. On pourra aussi ajouter un message "Chargement en cours" quand le booléen est faux.
 
 </div>
 
@@ -885,7 +889,7 @@ Nous avons commencé à gérer quelques erreurs qui peuvent intervenir lors des 
 
 <div class="exercice" markdown="1">
 
-1. Pour pouvoir tester le rafraichissement du cookie passez la durée de validité du JWT à 10 secondes. Pour cela, il faut rouvrir le projet symfony et aller modifier la ligne `token_ttl` du fichier `packages/lexik_jwt_authentication.yaml`; Vous pouvez mettre 15 secondes par exemple.
+1. Pour pouvoir tester le rafraichissement du *cookie* passez la durée de validité du JWT à 10 secondes. Pour cela, il faut rouvrir le projet Symfony et aller modifier la ligne `token_ttl` du fichier `packages/lexik_jwt_authentication.yaml`. Vous pouvez mettre 15 secondes par exemple.
 
 2. Pour tester : connectez-vous et faites une publication rapidement (qui devrait fonctionner), puis faite une publication après les 15 secondes (qui devrait échouer). 
 
@@ -893,7 +897,7 @@ Nous avons commencé à gérer quelques erreurs qui peuvent intervenir lors des 
 
 </div>
 
-On obtient une erreur `401 Unauthorized`. Dans ce cas, il faudrait donc essayer de renouveler le token. On va donc modifier la méthode `createRessource` pour qu'en cas d'erreur 401 elle appelle refresh puis retente la requête initiale. Évidemment, si le refresh échoue on ne retente pas la requête, mais il faut faire un peu plus attention pour éviter une boucle infinie (la requête échoue, le refresh réussie, mais la requête échoue à nouveau pour une autre raison, le refresh réussi mais ...). On va donc se limiter à deux tentatives. On pourrait adopter une stratégie plus avancée comme attendre entre chaque nouvel essaie en doublant le temps d'attente. Voici une description une implémentation à compléter de cette fonction:
+On obtient une erreur `401 Unauthorized`. Dans ce cas, il faudrait donc essayer de renouveler le token. On va donc modifier la méthode `createRessource` pour qu'en cas d'erreur 401 elle appelle *refresh* puis retente la requête initiale. Évidemment, si le *refresh* échoue on ne retente pas la requête, mais il faut faire un peu plus attention pour éviter une boucle infinie (la requête échoue, le *refresh* réussie, mais la requête échoue à nouveau pour une autre raison, le *refresh* réussi mais ...). On va donc se limiter à deux tentatives. On pourrait adopter une stratégie plus avancée comme attendre entre chaque nouvel essaie en doublant le temps d'attente. Voici une description une implémentation à compléter de cette fonction:
 
 ```ts
 createRessource(ressource: string, data: any, refreshAllowed = true): Promise<{success: boolean, error?: string }> {
@@ -927,7 +931,7 @@ createRessource(ressource: string, data: any, refreshAllowed = true): Promise<{s
 
 1. Modifiez la fonction `createRessource` en vous basant sur l'exemple précédent.
 
-2. Ouvrez les outils de développement pour observer les requêtes puis connecter vous, faites une première publication en moins de 15 secondes et faites en une deuxième après 15 secondes. Vérifiez que tout se passe comme prévu, et que vous comprenez le rôle de toutes les requêtes qui ont lieu (il y a quatre requêtes dans le deuxième cas).
+2. Ouvrez les outils de développement pour observer les requêtes puis connectez-vous, faites une première publication en moins de 15 secondes et faites en une deuxième après 15 secondes. Vérifiez que tout se passe comme prévu, et que vous comprenez le rôle de toutes les requêtes qui ont lieu (il y a quatre requêtes dans le deuxième cas).
 
 3. Redonnez une valeur normale à la durée de validité du JWT.
 
@@ -957,7 +961,7 @@ app.use(Notifications)
 
 ```
 
-Notez que nous pourrions aussi importer les notifications dans chaque composant où nous allons l'utiliser. D'ailleurs, nous pourrions aussi enregistrer certain de nos propres composants ici, pour ne pas avoir besoin de les importer dans le reste du code.
+Notez que nous pourrions aussi importer les notifications dans chaque composant qui les utilise. D'ailleurs, nous pourrions aussi enregistrer certain de nos propres composants ici, pour ne pas avoir besoin de les importer dans le reste du code.
 
 Enfin, pour utiliser les notifications :
 - placer la balise `<notifications />` dans le template du fichier `App.vue`,
@@ -975,11 +979,11 @@ Enfin, pour utiliser les notifications :
  
 1. Utilisez la commande `npm` et modifiez le fichier `main.ts` de manière à pouvoir utiliser les notifications.
 
-2. Ajoutez la balise `<notifications />` dans le main de `App.vue`.
+2. Ajoutez la balise `<notifications />` dans le *main* de `App.vue`.
 
 3. Modifiez la fonction `connect` de la page login pour que :
     - si la connexion échoue, on affiche une notification d'erreur qui affiche le message d'erreur,
-    - si la connexion réussit, on affiche une notification et on redirige la route vers le feed.
+    - si la connexion réussit, on affiche une notification et on redirige la route vers le *feed*.
 
 4. Testez.
 
@@ -1007,7 +1011,7 @@ Et si le temps le permet :
 1. Modifiez la page d'information d'un utilisateur (`SingleUser.vue`) pour qu'elle affiche toutes les publications de cet utilisateur. Profitez-en aussi pour que les champs login et adresse e-mail dans l'interface ne soient modifiables que si l'utilisateur est sur sa propre page (il faudra trouver un moyen de stocker l'utilisateur connecté).
 2. Permettre à un utilisateur de mettre à jour son profil depuis sa page utilisateur.
 3. Ajoutez un bouton de suppression sur ses propres messages. 
-4. Utilisez des notifications à tous les endroits nécessaires et gérer toutes les erreurs possibles lors des fetchs. 
+4. Utilisez des notifications à tous les endroits nécessaires et gérer toutes les erreurs possibles lors des `fetch()`. 
 5. Toutes les améliorations qui vous passent par la tête...
 </div>
 
