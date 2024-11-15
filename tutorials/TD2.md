@@ -453,7 +453,10 @@ Avant de définir les *slots* faisons une petite parenthèse pour discuter de l'
    
 </div>
 
-Le HTML est échappé automatiquement. C'est un comportement tout à fait volontaire, cela permet d'éviter qu'un utilisateur malicieux puisse "injecter" du HTML (ou pire du JS) dans notre site. Nous n'avons donc pas besoin de nous soucier d'échapper le HTML. Pour simuler la navigation sur notre site, nous utiliserons les routes au prochain TD et nous n'aurons pas besoin de nous soucier d'échapper les variables utilisées dans les URLs de notre site. Par contre, il faut malgré tout garder cette problématique en tête par exemple si nous devons faire des requêtes AJAX qui contiennent une variable.
+Le HTML est échappé automatiquement. C'est un comportement tout à fait volontaire, cela permet d'éviter qu'un utilisateur malicieux puisse "injecter" du HTML (ou pire du JS) dans notre site. Nous n'avons donc pas besoin de nous soucier d'échapper le HTML. En effet, les moustaches `{{ expressionJS }}` ont pour effet d'exécuter `baliseCourante.textContent = eval(expressionJS)})`, et `textContent` échappe le HTML comme nous l'avions vu [l'an dernier en cours de JavaScript](https://romainlebreton.github.io/R.4.01-DeveloppementWeb-JavaScript/classes/class2.html#modification-du-contenu).
+
+
+Pour simuler la navigation sur notre site, nous utiliserons les routes au prochain TD et nous n'aurons pas besoin de nous soucier d'échapper les variables utilisées dans les URLs de notre site. Par contre, il faut malgré tout garder cette problématique en tête par exemple si nous devons faire des requêtes AJAX qui contiennent une variable.
 
 
 ## Utiliser le slot
@@ -473,7 +476,7 @@ et que dans le `<template>` de mon composant est
 </template>
 ```
 
-alors la balise `<slot>` est automatiquement remplacée par le HTML contenu entre les balises `<monComposant>` : `<span class="toto"> du texte</span>`. On peut voir cela un peu comme une autre manière d'envoyer de l'information à un composant enfant. La différence majeure avec les *props* est qu'on passe ici du HTML qui sera bien interprété comme du HTML au niveau du composant enfant. Ce HTML est généré par le parent, peut contenir des variables du parent et utilisera le CSS défini par le parent. L'autre différence importante est que le sens sémantique est assez différent : intuitivement, on comprend la différence entre le contenu d'une balise et les attributs d'une balise. Nous n'en parlerons pas, mais il est possible de définir plusieurs `slot` pour la même balise.
+alors la balise `<slot>` est automatiquement remplacée par le HTML contenu entre les balises `<monComposant>` : `<span class="toto"> du texte</span>`. On peut voir cela un peu comme une autre manière d'envoyer de l'information à un composant enfant. La différence majeure avec les *props* est qu'on passe ici du HTML qui sera bien interprété comme du HTML au niveau du composant enfant. Ce HTML est généré par le parent, peut contenir des variables du parent et utilisera le CSS défini par le parent. L'autre différence importante est que le sens sémantique est assez différent : intuitivement, on comprend la différence entre le contenu d'une balise et les attributs d'une balise. Enfin, mentionnons juste qu'il est possible de définir plusieurs `slot` pour la même balise.
 
 
 <div class="exercice" markdown="1" >
@@ -533,7 +536,7 @@ Pour l'instant, nous avons utilisé Vite pour faire tourner notre site sur un se
 
 </div>
 
-Le lien vers le JS est `/assets/index....js`. C'est un lien absolu qui n'est pas le bon ici.
+Le lien vers le JS est `/assets/index-xxx.js`. C'est un lien absolu qui n'est pas le bon ici.
 En effet, Vite part du principe que le site que nous construisons sera le seul site servi par le serveur web et sera donc à la racine du site, c'est-à-dire en l'occurrence à l'URL `https://localhost/` au lieu de
 `https://localhost/todolist/dist`.
 C'est habituellement, ce que l'on fait pour un site professionnel. Cependant, nous utilisons la même machine docker pour tous nos TDs et nous ne pouvons pas procéder ainsi (nous aurions le même problème si nous utilisions le `public_html` à l'IUT). 
@@ -560,20 +563,16 @@ N'oubliez pas de relancer le serveur de développement avec `npm run dev` si vou
 
 # Remarques finales
 
-Jusqu'à maintenant, quand nous avons utilisé les props dans la partie template, nous avons fait `props.titre`. En fait, dans la partie template, la bonne pratique est d'utiliser directement le nom du prop (donc `titre` au lieu de `prop.titre`). D'ailleurs, si on utilise les props uniquement dans le template, la ligne 
-
+La ligne de code suivant effectue 2 actions :
 ```vue
-  const props = defineProps<{titre: string}>();
+const props = defineProps<{titre: string}>();
+```
+La fonction `defineProps` rend les props accessibles dans le `<template>`, alors qu'enregistrer le résultat dans la variable `props` permet d'accéder aux props dans la partie `<script>`. Si on utilise les props uniquement dans le template, on peut écrire simplement
+```vue
+defineProps<{titre: string}>();
 ```
 
-peut être remplacée par
-
-```vue
-  defineProps<{titre: string}>();
-```
-En effet, la fonction `defineProps` rend les props accessibles dans le `<template>`, donc enregistrer le résultat dans la variable `props` permet d'accéder aux props dans la partie `<script>`.
-
-
+Notez enfin que dans la partie template, la bonne pratique est d'utiliser directement le nom du prop (donc `titre` au lieu de `props.titre`). 
 
 # Conclusion
 
@@ -583,7 +582,7 @@ Les trucs à retenir :
 - notion de réactif et de composant dans Vue,
 - `v-bind:attribut` (équivalent à `:attribut`),
 - `v-on:event` (équivalent à `@event`),
-- `v-model` pour synchroniser une variable réactive à un composant fonctionne grâce à un `v-bind` et un `v-on`,
+- `v-model` sur un composant : pour synchroniser une variable réactive avec un prop d'un composant. Revient à faire à la fois un `v-bind` et un `v-on`,
 - `v-for` permet de lister des éléments,
 - comment définir un composant avec ses *props* et ses *events*,
 - comment construire et déployer le site.
