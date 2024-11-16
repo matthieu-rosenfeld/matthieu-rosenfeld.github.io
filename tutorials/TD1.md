@@ -30,7 +30,7 @@ Npm est déjà disponible sur l'image docker que nous avons configuré (l'instal
 
 
 ```sh
-npm create vue@latest
+npm create vue@latest todo_list
 ```
 
 Nous allons distinguer la version du code "en production" servie par notre serveur web (ici le serveur docker) de la version "en développement" servie par [*Vite*](https://vite.dev/guide). Notre version en développement ne sera donc pas dans le dossier `/var/www/html`, mais dans le dossier `/root/workspace`.

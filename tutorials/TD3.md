@@ -17,7 +17,7 @@ Nous allons créer un nouveau projet Vue en utilisant les commandes
 
 ```bash
 cd /root/workspace/
-npm init vue@latest theFeedFront
+npm create vue@latest theFeedFront
 ```
 
 Cette fois, nous allons activer une option supplémentaire en acceptant le `Vue Router` :
@@ -27,7 +27,7 @@ Cette fois, nous allons activer une option supplémentaire en acceptant le `Vue 
 
 <div class="exercice" markdown="1">
 
-1. Faites-le (n'oubliez pas tout se fait dans le terminal du docker). Comme dans le projet précédent, il faut rajouter les 4 lignes suivantes dans le fichier `vite.config.ts`
+1. Faites-le (n'oubliez pas que tout se fait dans le terminal du docker). Comme dans le projet précédent, il faut rajouter les 4 lignes suivantes dans le fichier `vite.config.ts`
     
    ```ts
     export default defineConfig({
@@ -37,7 +37,6 @@ Cette fois, nous allons activer une option supplémentaire en acceptant le `Vue 
             port: 5173
         },
         base: "/the_feed_front/dist"
-
    ```
 
     Même si nous n'allons pas déployer le site tout de suite, indiquer le `base` immédiatement nous permettra de détecter certains bugs potentiels au fur et à mesure plutôt que de découvrir tous les problèmes à la fin.
@@ -64,7 +63,7 @@ Dans ce TD, nous allons réaliser une "Application à Page Unique" (Single page 
 - autoriser un clic sur le bouton "page précédente",
 - permettre l'utilisation d'une URL qui change en fonction des "pages" (pour pouvoir l'enregistrer dans mes favoris ou la partager avec un autre utilisateur).
 
-On pourrait gérer tout cela nous-même, mais le `router` de Vue est une solution très simple à utiliser qui règle tous ces problèmes. On va définir des "view" (des "vues" en français). Ces vues sont en fait des composants et on va simplement configurer les routes pour indiquer lesquelles pointent vers quels composants/vues. On pourra ensuite utiliser la balise `<router-view />` dans notre composant principal qui se chargera de détecter le composant/vue à charger en fonction de l'URL. On pourra aussi utiliser le routeur pour générer automatiquement l'URL d'une vue pour définir (un lien par exemple). 
+On pourrait gérer tout cela nous-même, mais le `router` de Vue est une solution très simple à utiliser qui règle tous ces problèmes. On va définir des "view" (des "vues" en français). Ces vues sont en fait des composants et on va simplement configurer les routes pour indiquer lesquelles pointent vers quels composants/vues. On pourra ensuite utiliser la balise `<router-view />` dans notre composant principal qui se chargera de détecter le composant/vue à charger en fonction de l'URL. On pourra aussi utiliser le routeur pour générer automatiquement l'URL d'une vue (pour définir un lien par exemple). 
 Bien que le contexte et le fonctionnement soient assez différents, l'utilisation et la syntaxe des routes devraient vous rappeler les routes de Symfony.
 
 Commençons par créer notre première vue.
@@ -72,7 +71,7 @@ Commençons par créer notre première vue.
 <div class="exercice" markdown="1">
 
  
-1. Commencez déjà par vider le contenu des dossiers `components` et `views`.
+1. Commencez déjà par vider le contenu des dossiers `src/components` et `src/views`.
 
 2. Remplacez le fichier `App.vue` par [celui-ci](../assets/App.vue).
 
@@ -155,12 +154,12 @@ Pour s'assurer que vous avez compris, créons une autre vue qui nous servira plu
 </div>
 
 Une fois que nos premières routes sont définies, il est temps de faire nos premiers liens vers nos routes. La première manière de faire cela consiste à utiliser la méthode `push` du routeur qui redirige l'utilisateur vers la route donnée en argument. 
-Dans les template le router est directement accessible avec `$router` (c'est la ligne `app.use(router)` qui permet cela).
+Dans les template, le router est directement accessible avec `$router` (c'est la ligne `app.use(router)` qui permet cela).
 Ensuite, l'appelle à la méthode `$router.push('maroute')` redirige l'utilisateur vers la route `maroute`. Ainsi, par exemple en ajoutant l'attribut `@click="$router.push('/maroute')"` à une balise `html`, je m'assure qu'un clic sur cette balise change la route.
 
 <div class="exercice" markdown="1">
 
- Modifiez le fichier `App.vue` pour qu'un clic sur `The feed` renvoie sur la route `/feed` et qu'un clic sur `Les membres` renvoie sur la route `/users`. Vérifiez que tout fonctionne.
+ Modifiez le fichier `App.vue` pour qu'un clic sur le `<h1>The feed</h1>` renvoie sur la route `/feed` et qu'un clic sur de `<div>Les membres</div>` renvoie sur la route `/users`. Vérifiez que tout fonctionne.
 
 </div>
 
@@ -178,7 +177,7 @@ On peut ensuite utiliser la route par son nom plutôt que par son chemin dans le
 $router.push({name: 'nomDeLaRoute'})
 ```
 
-Cette syntaxe peu sembler plus lourde que la précédente, mais elle possède certains avantages. Elle diminue les risques d'erreurs et augmente la clarté du code, mais surtout elle va nous simplifier la vie plus tard avec les routes paramétrées.
+Cette syntaxe peut sembler plus lourde que la précédente, mais elle possède certains avantages. Elle diminue les risques d'erreurs et augmente la clarté du code, mais surtout elle va nous simplifier la vie plus tard avec les routes paramétrées.
 
 On peut aussi définir les redirections d'une route. La définition de route suivante indique que la route `/home` redirige en fait vers la route nommée `homepage` (qu'il faut donc avoir définie).
 ```ts
@@ -192,7 +191,7 @@ On peut aussi définir les redirections d'une route. La définition de route sui
     ]
 ```
 
-Notez qu'on pourrait aussi rediriger directement vers le `path` d'une autre route plutôt qu'une utilisant son nom.
+Notez qu'on pourrait aussi rediriger directement vers le `path` d'une autre route plutôt qu'en utilisant son nom.
 
 <div class="exercice" markdown="1">
 
@@ -235,7 +234,7 @@ Pour définir une route paramétrée, il suffit de précéder le paramètre du s
 },
 ```
 
-Ensuite dans le `composant/view` correspondant à notre route, il faut récupérer ce paramètre. Il suffit de récupérer l'objet `route`, puis d'aller y chercher le ou les paramètres désirés. Par exemple, pour récupérer le paramètre `id` défini dans la route précédente, on pourrait faire : 
+Ensuite dans le composant/vue correspondant à notre route, il faut récupérer ce paramètre. Il suffit de récupérer l'objet `route`, puis d'aller y chercher le ou les paramètres désirés. Par exemple, pour récupérer le paramètre `id` défini dans la route précédente, on pourrait faire : 
 
 ```ts
 import { useRoute } from 'vue-router'
@@ -250,11 +249,10 @@ const id = route.params.id
 
 2. Ajoutez dans le routeur une route `/feed/:id` nommée `singleMessage` qui conduit vers la vue précédemment définie. Vous pouvez faire l'import du composant comme précédemment, ou vous pouvez utiliser la syntaxe suivante directement dans la définition de la route :
 
-    ```ts
-    component: () => import('@/views/SingleMessage.vue')
-    
-    ```
-    Cette syntaxe utilise un import dynamique : le fichier correspondant n'est chargé que s'il est réellement utile. Ça peut faire une différence de performance si le `composant/view` en question est très gros avec lui-même de nombreuses dépendances (ce ne sera pas notre cas).
+   ```ts
+   component: () => import('@/views/SingleMessage.vue')
+   ```
+   Cette syntaxe utilise un import dynamique : le fichier correspondant n'est chargé que s'il est réellement utile. Ça peut faire une différence de performance si le composant/vue en question est très gros avec lui-même de nombreuses dépendances (ce ne sera pas notre cas).
 
 3. Vérifiez que tout fonctionne en testant l'URL de la route `/feed/17`.
 
@@ -262,7 +260,7 @@ const id = route.params.id
 
 </div>
 
-*Vue Router* permet de gérer des routes plus compliquées avec
+<!-- *Vue Router* permet de gérer des routes plus compliquées avec -->
 
 Vous savez maintenant presque tout ce que vous avez besoin de savoir sur les routes. Nous allons maintenant pouvoir mettre en place quelques composants avant de commencer à utiliser l'API *The Feed* pour enfin rendre notre site fonctionnel.
 
@@ -304,7 +302,7 @@ La prochaine étape est de définir un composant pour afficher les données de l
 En fonction du contexte, nous allons parfois vouloir rendre ces boites cliquables, parfois y mettre des liens et il est donc assez compliqué d'écrire un composant unique adapté (mais ce serait tout à fait possible notamment avec quelques outils que nous n'avons pas mentionnés). Par contre, il est très simple d'utiliser un CSS commun pour plusieurs composants. Nous allons donc utiliser le CSS suivant (que vous pouvez adapter à vos goûts) :
 
 ```css
-div.contentBox{
+div.content-box{
     width:100%;
     margin:10px auto;
     display:flex;
@@ -327,7 +325,6 @@ div.contentBox{
 .top .clickable:hover{
     color:aliceblue;
 }
-
 .content{
     margin:0px;
     padding:20px;
@@ -340,7 +337,6 @@ div.contentBox{
     box-shadow: 0 0 0.3rem #000;
     cursor: pointer;
 }
-
 ```
 
 Le HTML quant à lui ressemblera à ça
@@ -364,7 +360,7 @@ Pour pouvoir importer un CSS dans le CSS de notre composant, il suffit d'utilise
 
 Remarquez que ce n'est pas un ajout de Vue, mais bien quelque chose qui est toujours possible en CSS (ici Vue se chargera d'appliquer aussi le `scoped` au fichier importé).
 
-> *Petit point CSS :* Le CSS contenu dans `<style scoped>` n'est appliqué qu'au composant dans lequel, il est écrit. Schématiquement, Vue ajoute des `data-attribut` aux éléments d'un composant et modifie les sélecteurs de notre CSS pour qu'ils utilisent ces `data-attribut`. Mais Vue rajoute de nombreuses possibilités. Par exemple, la pseudo-classe `:deep` permet d'accéder aux enfants d'un composant. Notez qu'on peut aussi charger un CSS global comme c'est actuellement fait dans `main.ts`.
+> *Petit point CSS :* Le CSS contenu dans `<style scoped>` n'est appliqué qu'au composant dans lequel, il est écrit. Schématiquement, Vue ajoute des `data-attribut` aux éléments d'un composant et modifie les sélecteurs de notre CSS pour qu'ils utilisent ces `data-attribut`. Mais [Vue rajoute de nombreuses possibilités](https://vuejs.org/api/sfc-css-features.html). Par exemple, la pseudo-classe `:deep` permet d'accéder aux enfants d'un composant. Notez qu'on peut aussi charger un CSS global comme c'est actuellement fait dans `main.ts`.
 
 
  Dans un premier temps, on pourra donc définir le composant correspondant à un utilisateur ainsi
@@ -375,7 +371,7 @@ Remarquez que ce n'est pas un ajout de Vue, mais bien quelque chose qui est touj
 </script>
 
 <template>
-  <div class="contentBox">
+  <div class="content-box">
     <div class="top">
       Profil de {{ utilisateur.login }}
     </div>
@@ -394,16 +390,16 @@ Remarquez que ce n'est pas un ajout de Vue, mais bien quelque chose qui est touj
 
 
 <style scoped>
-    @import "@/components/css/ContentBox.css";
+    @import "@/components/css/content-box.css";
 </style>
 ```
 
 <div class="exercice" markdown="1">
 
  
-1. Créez un fichier `components/css/ContentBox.css` et le fichier du composant `components/BoiteUtilisateur.vue` avec les contenus indiqués au-dessus.
+1. Créez un fichier `components/css/content-box.css` et le fichier du composant `components/BoiteUtilisateur.vue` avec les contenus indiqués au-dessus.
 
-2. Modifiez le contenu de `AllUser.vue` pour :
+2. Modifiez le contenu de `AllUsers.vue` pour :
     - Ajouter dans le script la définition du tableau `users` qui contient un `user` comme suit (plus tard nous remplirons ce tableau en interrogeant l'API)
     ```ts 
     const users:Ref<Utilisateur[]> = ref([{
@@ -433,7 +429,7 @@ Remarquez que ce n'est pas un ajout de Vue, mais bien quelque chose qui est touj
 
 Il faut remplacer `RouteAUtiliser` par la route donc comme pour le `router-push`, on peut soit mettre directement le *path* de la route (`:to = "/users"`) ou son nom (`:to="{name:allUsers}"`). 
 
-Par contre, nous n'avons pas encore vu comment indiquer le paramètre d'une route. La première idée serait d'utiliser le *path*, par exemple pour afficher le feed de l'utilisateur 2 on pourrait faire `:to = "/users/2"`, mais si l'id était stocké dans une variable `identifiant`, il faudrait écrire `:to = "'/users/'+identifiant"` et il faudrait alors penser encoder les paramètres correctement pour une URL. Il existe une syntaxe qui utilise le nom de la route et qui permet de donner les paramètres : 
+Par contre, nous n'avons pas encore vu comment indiquer le paramètre d'une route. La première idée serait d'utiliser le *path*, par exemple pour afficher le feed de l'utilisateur 2 on pourrait faire `:to = "/users/2"`. Mais si l'id était stocké dans une variable `identifiant`, il faudrait écrire `:to = "'/users/'+identifiant"` et il faudrait alors penser à encoder les paramètres correctement pour une URL. Il existe une syntaxe qui utilise le nom de la route et qui permet de donner les paramètres : 
 ```html
  <router-link :to="{name:'nomDeLaRoute',params:{param1:valeureParam1, param2:valeureParam2}}">texte du lien</router-link>
 ```
@@ -447,7 +443,7 @@ Avec cette syntaxe, il n'y a pas besoin de se poser de question d'encodage ou d'
 
 <div class="exercice" markdown="1">
 
- 1. Modifiez le composant `BoiteUtilisateur.vue` pour que le login de l'utilisateur soit un lien vers la page de cet utilisateur.
+ 1. Modifiez le composant `BoiteUtilisateur.vue` pour que le login de l'utilisateur (celui écrit avec `{{ ... }}`) soit un lien vers la page de cet utilisateur.
  
  2. Ajoutez la classe `clickable` à ce lien pour améliorer le CSS. 
  
@@ -464,7 +460,7 @@ Nous avons une première version de l'affichage des utilisateurs prête pour êt
 </script>
 
 <template>
-    <div class="contentBox">
+    <div class="content-box">
         <div class="top">
             <router-link 
                 :to="{name:'singleUser', params: {id: publication.auteur.id}}" 
@@ -480,7 +476,7 @@ Nous avons une première version de l'affichage des utilisateurs prête pour êt
 </template>
 
 <style scoped>
-     @import "@/components/css/ContentBox.css";
+     @import "@/components/css/content-box.css";
 </style>
 ```
 
@@ -529,16 +525,27 @@ Nous allons pouvoir commencer à remplir les vues que nous avons créées avec l
 
 </div>
 
-Sur la plupart des pages, rafraîchir la page ne fonctionne pas correctement. La raison est simple : le routeur modifie l'adresse, mais ce n'est pas une vraie adresse donc quand apache essaie de charger une page à cette adresse, il échoue. Il faut donc dire à apache de toujours charger la page index.html dès qu'il charge quelque chose dans le dossier `dist`. Pour cela, nous allons utiliser le fichier `.htaccess` suivant : 
+Sur la plupart des pages, rafraîchir la page ne fonctionne pas correctement. La raison est simple : le routeur modifie l'adresse, mais ce n'est pas une vraie adresse donc quand apache essaie de charger une page à cette adresse, il échoue. Il faut donc dire à apache de toujours charger la page `index.html` dès qu'il charge quelque chose dans le dossier `dist`. Pour cela, nous allons utiliser le fichier `.htaccess` suivant : 
 
 ```apache
+# Activates the mod_rewrite module in Apache, which is necessary for processing the rewrite rules.
 RewriteEngine On
 
+# If the requested URL matches exactly index.html, no rewriting is performed (- means "no substitution").
+# Flag [L] (for Last) : Stops processing further rules if this rule matches.
 RewriteRule ^index\.html$ - [L]
+
+# Conditions: Only apply the following rule if the request is not a file nor a directory.
+# RewriteCond: Adds conditions to the next RewriteRule. Both conditions must be true for the rule to execute.
+# -f: Checks if the requested path corresponds to an existing file.
+# -d: Checks if the requested path corresponds to an existing directory.
+#  !: Negates the condition
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . index.html [L]
 
+# Rule: For any other request (. matches any character), rewrite the URL to index.html.
+# Flag [L] (for Last): Stops further rule processing once this rule is applied.
+RewriteRule . index.html [L]
 ```
 
 Il faut ajouter ce fichier apache dans le dossier `dist`. Si nous procédons ainsi, nous ajoutons le fichier directement dans le dossier `dist` nous risquons de devoir recommencer à chaque déploiement de l'application. Heureusement, il y a une solution toute simple : tous les fichiers qui se trouvent dans le sous-dossier `public` de notre application sont automatiquement copiés dans le répertoire `dist` à chaque build (pour l'instant, c'était le cas du *favicon*).
@@ -555,7 +562,7 @@ Il faut ajouter ce fichier apache dans le dossier `dist`. Si nous procédons ain
 
 Commençons par nous occuper du composant `AllUsers.vue` qui doit récupérer la liste des utilisateurs sur l'API, puis l'afficher. Rappelez-vous que pour obtenir la liste des utilisateurs, il suffit de faire un `GET` à l'adresse `.../the_feed_api/public/api/utilisateurs` (il faut bien sûr remplacer `...` par l'URL à laquelle votre api `the_feed_api` est disponible). 
 
-Dans notre composant `AllUser`, on pourrait donc inclure le code suivant pour récupérer la liste des utilisateurs.
+Dans notre composant `AllUsers`, on pourrait donc inclure le code suivant pour récupérer la liste des utilisateurs.
 ```vue
 <script setup lang="ts">
 import {ref} from 'vue'
@@ -575,33 +582,33 @@ fetch('https://localhost/the_feed_api/public/api/utilisateurs')
 
 Notez qu'il faut bien s'assurer que `users` est réactif, puisqu'il n'aura pas la bonne valeur tout de suite, mais uniquement quand le `fetch` aura eu lieu et il faudra alors mettre l'affichage à jour. 
 
-Pour une meilleure organisation du code, nous n'allons pas faire le `fetch()` directement dans nos composants. Les composants auront toujours la responsabilité de traiter la réponse HTTP, mais le `fetch()` sera fait dans un objet à part. Nous allons donc créer un nouveau fichier dans `src/util/APIStore.ts` avec le contenu suivant :
+Pour une meilleure organisation du code, nous n'allons pas faire le `fetch()` directement dans nos composants. Les composants auront toujours la responsabilité de traiter la réponse HTTP, mais le `fetch()` sera fait dans un objet à part. Nous allons donc créer un nouveau fichier dans `src/util/apiStore.ts` avec le contenu suivant :
 
 ```ts
-export const APIStore = {
-    APIurl: "https://localhost/the_feed_api/public/api/",
+export const apiStore = {
+    apiUrl: "https://localhost/the_feed_api/public/api/",
 
     getAll(ressource:string):Promise<any>{
-        return fetch(this.APIurl+ressource)
+        return fetch(this.apiUrl+ressource)
         .then(reponsehttp => reponsehttp.json())
     },
     //à compléter plus tard avec les autres appels à l'API
 }
 ```
 
-Avec notre `APIStore` on pourra remplacer le `fetch` et le premier `then` par `APIStore.getAll('utilisateurs')`. Cet objet rend le code de nos composants beaucoup plus explicite. En cas de changement d'API, il suffit alors d'aller modifier ce fichier pour maintenir le fonctionnement de notre front.
-Il faudra penser à importer l'objet dans les fichiers qui l'utilisent avec la ligne `import { APIStore } from '@/util/APIStore'`. 
+Avec notre `apiStore`, on pourra remplacer le `fetch` et le premier `then` par `apiStore.getAll('utilisateurs')`. Cet objet rend le code de nos composants beaucoup plus explicite. En cas de changement d'API, il suffit alors d'aller modifier ce fichier pour maintenir le fonctionnement de notre front.
+Il faudra penser à importer l'objet dans les fichiers qui l'utilisent avec la ligne `import { apiStore } from '@/util/apiStore'`. 
 
 
 <div class="exercice" markdown="1">
 
-1. Créez le fichier `src/util/APIStore.ts` avec le code indiqué.
+1. Créez le fichier `src/util/apiStore.ts` avec le code indiqué.
  
-2. Modifiez le code de `AllUsers` pour qu'il affiche tous les utilisateurs. Vous pouvez initialiser la variable qui contient le résultat du `fetch()` avec un tableau vide. Vérifiez que tout fonctionne.
+2. Modifiez le code de `AllUsers` pour qu'il affiche tous les utilisateurs. Vous pouvez initialiser la variable qui contient le résultat du `fetch()` avec une `ref` de tableau vide. Vérifiez que tout fonctionne.
 
-3. Faites de même pour la vue *Feed* en allant chercher toutes les publications, il n'y a pas besoin de modifier le code de `APIStore`.
+3. Faites de même pour le composant/vue `FeedMain` en allant chercher toutes les publications. Il n'y a pas besoin de modifier le code de `apiStore`.
 
-4. On veut maintenant s'occuper des vues `SingleMessage` et `SingleUser`. Cette fois, il va falloir rajouter une méthode à `APIStore` dont voici la signature
+4. On veut maintenant s'occuper des vues `SingleMessage` et `SingleUser`. Cette fois, il va falloir rajouter une méthode à `apiStore` dont voici la signature
    `getById(ressource:string, id:number):Promise<any>`. Il faudra donner une valeur initiale à la variable réactive, vous pouvez simplement écrire `chargement` pour les différentes valeurs.
 
 
@@ -630,13 +637,12 @@ Commençons par créer un formulaire de connexion :
     }
 </script>
 
-
 <template>
   <div class="wrapper">
     <div class="top">
       <h3>Création du profil</h3>
     </div>
-    <form  @submit.prevent="connect" class="content">
+    <form @submit.prevent="connect" class="content">
         <div class="group">
             <label>Login</label>
             <input v-model="connectingUser.login" >
@@ -653,11 +659,11 @@ Commençons par créer un formulaire de connexion :
 </template>
 
 <style scoped>
-    @import "@/components/css/ContentBox.css";
+    @import "@/components/css/content-box.css";
 </style>
 ```
 
-Prenez le temps de comprendre tout ce qu'il se passe. Nous utilisons un événement spécial du `form` qui est `@submit` qui permet de détecter si le formulaire a été soumis. Le modificateur `.prevent` permet d'empêcher les autres événements liés à la soumission d'un formulaire d'avoir lieu. Autrement dit, quand on clique sur le bouton "connexion" seul la fonction `connect` sera appelée. Techniquement, `.prevent` est juste une syntaxe de Vue qui appelle la fonction JS [`event.preventDefault()`](https://developer.mozilla.org/fr/docs/Web/API/Event/preventDefault) vu l'an dernier en [cours de JavaScript](http://romainlebreton.github.io/R.4.01-DeveloppementWeb-JavaScript/classes/class2.html#34.0).
+Prenez le temps de comprendre tout ce qu'il se passe. Nous utilisons un événement spécial du `form` qui est `@submit` qui permet de détecter si le formulaire a été soumis. Le modificateur `.prevent` permet d'empêcher les autres événements liés à la soumission d'un formulaire d'avoir lieu. Autrement dit, quand on clique sur le bouton "Connexion" seul la fonction `connect` sera appelée. Techniquement, `.prevent` est juste une syntaxe de Vue qui appelle la fonction JS [`event.preventDefault()`](https://developer.mozilla.org/fr/docs/Web/API/Event/preventDefault) vu l'an dernier en [cours de JavaScript](https://romainlebreton.github.io/R.4.01-DeveloppementWeb-JavaScript/classes/class2.html#comportement-par-dfaut).
 
 Il faudra compléter les parties manquantes de la fonction `connect`. Rappelez-vous la forme de la requête de connexion grâce à API Platform. Il faudra préciser la méthode de la requête (`POST`), le format du corps de la requête et le corps de la requête. Il faudra aussi ajouter l'option `credentials: 'include'` qui permet de s'assurer que le cookie serra enregistré par notre navigateur. Nous allons donc utiliser la syntaxe plus complète de `fetch` ce qui ressemblera à ceci :
 ```ts
@@ -673,13 +679,13 @@ fetch(".../api/auth", {
 
 <div class="exercice" markdown="1">
 
-1. Ajoutez et complétez la méthode `login (login:string, password:string):Promise<any>` à `APIStore`.
+1. Ajoutez et complétez la méthode `login (login:string, password:string):Promise<any>` à `apiStore`.
  
-2. Créez la vue `FormulaireConnexion.vue` et complétez là. Pour l'instant, nous allons simplement afficher dans le terminal (`console.log`) le retour de la demande de connexion.
+2. Créez le composant/vue `FormulaireConnexion.vue` et complétez-le. Pour l'instant, nous allons simplement afficher dans le terminal (`console.log`) la réponse JSON à la requête de connexion.
 
 3. Configurez la route `login` correspondante dans le fichier `router/index.ts` et ajoutez le lien correspondant dans le menu. 
 
-4. Vérifiez que cela fonctionne. En particulier, si vous essayez de vous connecter avec des identifiants valides, vous devriez voir les nouveaux cookies (dans l'onglet Stockage/Cookies des outils de développement), vous devriez aussi voir les informations de l'utilisateur connecté dans le terminal
+4. Vérifiez que cela fonctionne. En particulier, si vous essayez de vous connecter avec des identifiants valides, vous devriez voir les nouveaux cookies (dans l'onglet Stockage/Cookies des outils de développement), vous devriez aussi voir les informations de l'utilisateur connecté dans le terminal.
 
 </div>
 
@@ -691,8 +697,9 @@ Avant d'aller plus loin dans la gestion de l'utilisateur, nous allons ajouter la
 <script setup lang="ts">
 //todo
 </script>
+
 <template>
-    <form  @submit.prevent="envoyer">
+    <form @submit.prevent="envoyer">
         <fieldset>
             <legend>Nouveau feedy</legend>
             <div>
@@ -704,6 +711,7 @@ Avant d'aller plus loin dans la gestion de l'utilisateur, nous allons ajouter la
         </fieldset>
     </form>
 </template>
+
 <style scoped>
 form{
     display:flex;
@@ -712,25 +720,26 @@ form{
     background-color: rgb(225, 235, 250);
 }
 </style>
-
 ```
 
 
 <div class="exercice" markdown="1">
 
-1. Pour gérer l'appel à l'API, nous allons créer une nouvelle méthode `createRessource(ressource:string, data:any):Promise<any>` dans `APIStore`. `ressou` contiendra le nom de la ressource et `data` l'objet correspondant à la nouvelle ressource. Le corps de cette requête sera simplement `body: JSON.stringify(data)`. En définissant une méthode générique de création, nous pourrons réutiliser la même pour la création d'un utilisateur.
+1. Pour gérer l'appel à l'API, nous allons créer une nouvelle méthode `createRessource(ressource:string, data:any):Promise<any>` dans `apiStore`. `ressource` contiendra le nom de la ressource et `data` l'objet correspondant à la nouvelle ressource. Le corps de cette requête sera simplement `body: JSON.stringify(data)`. En définissant une méthode générique de création, nous pourrons réutiliser la même pour la création d'un utilisateur.
 Pour que notre requête contienne les cookies d'authentification, il suffira à nouveau d'ajouter au `fetch` l'option `credential:'include'`.
 
-2. Créez le composant `views/FormulairePublication.vue` en utilisant l'exemple plus haut. Complétez le composant en définissant la fonction `envoyer` et la variable message comme il faut. Pour l'instant, on peut ne pas mettre de `then` et se contenter d'ignorer la réponse de notre requête.
+2. Créez le composant/vue `views/FormulairePublication.vue` en utilisant l'exemple plus haut. Complétez le composant en définissant la fonction `envoyer` et la variable message comme il faut. Pour l'instant, on peut ne pas mettre de `then` et se contenter d'ignorer la réponse de notre requête.
 
-3. Ajoutez ce nouveau composant à la page Feed au-dessus de la liste des publications.
+3. Ajoutez ce nouveau composant à la page `Feed` au-dessus de la liste des publications.
 
-4. Vérifiez que tout fonctionne. Attention pour l'instant la page feed n'est pas rechargée automatiquement avec le nouveau message.
+4. Vérifiez que tout fonctionne. Attention pour l'instant la page `Feed` n'est pas rechargée automatiquement avec le nouveau message.
 </div>
 
 Il faut que l'ajout d'un message déclenche le rechargement de la page `feed`. On pourrait ajouter nous-même le nouveau message au tableau (la réponse à notre requête contient toutes les infos sur le nouveau message). Mais nous allons plutôt recharger toute la page. L'avantage de procéder ainsi est que si d'autres changements ont eu lieu entre temps, on va aussi les recharger et donc l'état de notre page correspond effectivement à l'état de l'API à un moment donné. L'autre solution aurait l'avantage d'être légèrement plus efficace puisqu'elle nous évite de faire une requête. 
 
-Pour faire cela, notre composant `FormulairePublication` émettra un événement pour signaler à son parent qu'il faut qu'il recharge la page. Rappelez-vous qu'on définit un nouvel évènement avec `const emit = defineEmits<{ updated: []}>();`. On ne peut pas utiliser `$emit` dans le `script setup`, mais la variable `emit` (résultat de l'appel à `defineEmits`) contient une fonction qui s'utilise comme `$emit`, mais dans le `script setup`.
+Pour faire cela, notre composant `FormulairePublication` émettra un événement pour signaler à son parent qu'il faut qu'il recharge la page. Rappelez-vous qu'on définit un nouvel évènement avec `const emit = defineEmits<{ updated: []}>();`. 
+
+Rappelons qu'on ne peut pas utiliser `$emit` dans le `script setup` (mais dans le `template`), alors que la variable `emit` (résultat de l'appel à `defineEmits`) contient une fonction qui s'utilise comme `$emit`, mais dans le `script setup`.
 
 
 <div class="exercice" markdown="1">
@@ -756,7 +765,7 @@ Heureusement, la route `.../api/token/invalidate` qui sert à invalider le cooki
 
 1. Ajoutez une fonction *logout* qui appel la route `.../api/token/invalidate` et une fonction *refresh token* pour la route `.../api/token/refresh`.
 
-1. Ajoutez un bouton `Se déconnecter` au menu du *header* (fichier `App.vue`). Cette fonction doit appeler une nouvelle fonction `deconnexion` qui appelle la fonction `APIStore.logout`.
+1. Ajoutez un bouton `Se déconnecter` au menu du *header* (fichier `App.vue`). Cette fonction doit appeler une nouvelle fonction `deconnexion` qui appelle la fonction `apiStore.logout`.
 
 2. Vérifiez que tout fonctionne en vous déconnectant puis en essayant de poster un message.
 </div>
@@ -797,7 +806,7 @@ En effet, si votre application grandit il se peut que vous soyez obligé de modi
 
 ```ts
 import { reactive } from 'vue'
-import { APIStore } from '@/store/APICalls';
+import { apiStore } from '@/store/APICalls';
 
 export const storeAuthentification = reactive({
   utilisateurConnecte: null,
@@ -809,12 +818,12 @@ export const storeAuthentification = reactive({
 });
 ```
 
-Dans notre cas, nous transformer en store notre fichier `APIStore.ts` existant.
+Dans notre cas, nous transformer en store notre fichier `apiStore.ts` existant.
 Nous allons en profiter pour commencer à gérer certaines erreurs possibles lors des requêtes, nous allons donc remplacer la fonction login par la fonction suivante :
 
 ```ts
     login(login: string, password: string): Promise<{ success: boolean, error?: string }> {
-        return fetch(this.APIurl + "auth", {
+        return fetch(this.apiUrl + "auth", {
             //... ne change pas
             // à compléter
         })
@@ -843,7 +852,7 @@ Puisqu'on renvoie une promesse, le composant appelant pourra utiliser `.then` po
 <div class="exercice" markdown="1">
 
  
-1. Modifiez le *APIStore* pour qu'il contienne la variable `utilisateurConnecte: null,` et que ce soit un objet réactif. 
+1. Modifiez le *apiStore* pour qu'il contienne la variable `utilisateurConnecte: null,` et que ce soit un objet réactif. 
 
 2. Modifiez la fonction login en vous basant sur l'exemple donné plus haut.
 
@@ -874,7 +883,7 @@ Jusqu'à maintenant lorsqu'une page devait afficher des données qu'elle n'avait
 
 <div class="exercice" markdown="1">
 
-1. Modifiez la fonction `APIStore.refresh` pour que, en cas d'erreur, elle mette `connectedUser` à `null` et renvoie `"echec"`. En cas de réussite, on procède comme dans la fonction de connexion.
+1. Modifiez la fonction `apiStore.refresh` pour que, en cas d'erreur, elle mette `connectedUser` à `null` et renvoie `"echec"`. En cas de réussite, on procède comme dans la fonction de connexion.
 
 2. À la fin du `<script setup>` de `App.vue` faite un appel à cette fonction. Vérifiez qu'en cas de rechargement de la page un utilisateur connecté est toujours connecté.
 
