@@ -264,7 +264,7 @@ Vous savez maintenant presque tout ce que vous avez besoin de savoir sur les rou
 
 ## Mise en place des composants utilisateurs et message
 
-Avant de chercher à utiliser l'API, nous allons commencer à voir comment nous utiliserons les informations de l'API. Ouvrir la page d'accueil de votre API pourrait être utile à partir de maintenant pour retrouver les informations sur son usage (normalement à l'adresse [https://localhost/the_feed_api/public/api](https://localhost/the_feed_api/public/api)). La première chose à faire est de définir des types correspondants à ce que l'API nous renverra. Deux objets en particulier seront intéressants, l'utilisateur et la publication. On peut voir qu'un utilisateur possède comme données son `id` (un `number`), son `adresseEmail` (un `string`), son `login` (un `string`) et le `boolean premium`. Il faudrait donc définir son interface ainsi
+Avant de chercher à utiliser l'API, nous allons commencer à voir comment nous utiliserons les informations de l'API. Ouvrir la page d'accueil de votre API pourrait être utile à partir de maintenant pour retrouver les informations sur son usage (normalement à l'adresse [http://localhost/the_feed_api/public/api](http://localhost/the_feed_api/public/api)). La première chose à faire est de définir des types correspondants à ce que l'API nous renverra. Deux objets en particulier seront intéressants, l'utilisateur et la publication. On peut voir qu'un utilisateur possède comme données son `id` (un `number`), son `adresseEmail` (un `string`), son `login` (un `string`) et le `boolean premium`. Il faudrait donc définir son interface ainsi
 
 ```ts
 export interface Utilisateur{
@@ -568,7 +568,7 @@ const users = ref([]);
 
 ...
 
-fetch('https://localhost/the_feed_api/public/api/utilisateurs')
+fetch('http://localhost/the_feed_api/public/api/utilisateurs')
   .then(reponsehttp => reponsehttp.json())
   .then(reponseJSON => {
     users.value = reponseJSON["hydra:member"];
@@ -584,7 +584,7 @@ Pour une meilleure organisation du code, nous n'allons pas faire le `fetch()` di
 
 ```ts
 export const apiStore = {
-    apiUrl: "https://localhost/the_feed_api/public/api/",
+    apiUrl: "http://localhost/the_feed_api/public/api/",
 
     getAll(ressource:string):Promise<any>{
         return fetch(this.apiUrl+ressource)
