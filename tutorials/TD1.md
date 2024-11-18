@@ -737,7 +737,6 @@ accesseurs](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Funct
 mutateurs](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Functions/set),
 qui sont utilisés dans *Vue* pour les `ref`, dont voici une implémentation simplifiée : 
 ```js
-function toReactive(value) {return isObject(value) ? reactive(value) : value};
 class RefImpl {
   constructor(value) {
     // On rend value réactif, ce qui n'est possible que si c'est un objet

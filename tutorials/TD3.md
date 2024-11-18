@@ -260,8 +260,6 @@ const id = route.params.id
 
 </div>
 
-<!-- *Vue Router* permet de gérer des routes plus compliquées avec -->
-
 Vous savez maintenant presque tout ce que vous avez besoin de savoir sur les routes. Nous allons maintenant pouvoir mettre en place quelques composants avant de commencer à utiliser l'API *The Feed* pour enfin rendre notre site fonctionnel.
 
 ## Mise en place des composants utilisateurs et message
@@ -938,7 +936,6 @@ createRessource(
             //  "unauthorized, failure to refresh token."
           )
       } else {
-        this.refresh()
         return reponsehttp.json()
           .then(reponseJSON => {
             return {success: false, error: reponseJSON.message};

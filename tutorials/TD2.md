@@ -56,7 +56,7 @@ Il se peut que votre IDE signale que le fichier du composant n'existe pas : rela
 
 La ligne `import ...` permet de rendre le composant accessible et on peut alors l'utiliser dans `<template>` comme si c'était une balise HTML. Une grosse partie du travail de *Vue* est de faire fonctionner tout ça. 
 
-Le `@` dans le chemin correspond au fichier `src`. Cette définition est faite dans le fichier `tsconfig.app.json` et on pourrait la modifier si besoin (vous pouvez ouvrir ce fichier pour avoir une idée de ce qu'il contient). Bref, utiliser ce symbole permet d'éviter des problèmes de chemins pour les imports. 
+Le `@` dans le chemin correspond au dossier `src`. Cette définition est faite dans le fichier `tsconfig.app.json` et on pourrait la modifier si besoin (vous pouvez ouvrir ce fichier pour avoir une idée de ce qu'il contient). Bref, utiliser ce symbole permet d'éviter des problèmes de chemins pour les imports. 
 
 L'import est légèrement différent de ceux qu'on a faits jusqu'à maintenant qui ressemblaient à
 
@@ -456,7 +456,7 @@ Avant de définir les *slots* faisons une petite parenthèse pour discuter de l'
 Le HTML est échappé automatiquement. C'est un comportement tout à fait volontaire, cela permet d'éviter qu'un utilisateur malicieux puisse "injecter" du HTML (ou pire du JS) dans notre site. Nous n'avons donc pas besoin de nous soucier d'échapper le HTML. En effet, les moustaches `{{ expressionJS }}` ont pour effet d'exécuter `baliseCourante.textContent = eval(expressionJS)})`, et `textContent` échappe le HTML comme nous l'avions vu [l'an dernier en cours de JavaScript](https://romainlebreton.github.io/R.4.01-DeveloppementWeb-JavaScript/classes/class2.html#modification-du-contenu).
 
 
-Pour simuler la navigation sur notre site, nous utiliserons les routes au prochain TD et nous n'aurons pas besoin de nous soucier d'échapper les variables utilisées dans les URLs de notre site. Par contre, il faut malgré tout garder cette problématique en tête par exemple si nous devons faire des requêtes AJAX qui contiennent une variable.
+Pour simuler la navigation sur notre site, nous utiliserons les routes au prochain TD et nous n'aurons pas besoin de nous soucier d'échapper les variables utilisées dans les URLs de notre site. Par contre, il faut malgré tout garder cette problématique en tête par exemple si nous devons faire des requêtes AJAX dont l'URL contient une variable.
 
 
 ## Utiliser le slot
@@ -532,7 +532,7 @@ Pour l'instant, nous avons utilisé Vite pour faire tourner notre site sur un se
    Échec du chargement pour le module dont la source est « https://localhost/assets/index-C1PZ9DA2.js »
    ```
   
-3. Ouvrez les sources de la page pour essayer de comprendre le problème (`ctrl+u` dans le navigateur).
+3. Ouvrez les sources de la page pour essayer de comprendre le problème (`Ctrl+U` dans le navigateur).
 
 </div>
 
