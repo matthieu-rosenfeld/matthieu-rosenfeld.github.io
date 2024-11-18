@@ -737,9 +737,7 @@ Pour que notre requête contienne les cookies d'authentification, il suffira à 
 
 Il faut que l'ajout d'un message déclenche le rechargement de la page `feed`. On pourrait ajouter nous-même le nouveau message au tableau (la réponse à notre requête contient toutes les infos sur le nouveau message). Mais nous allons plutôt recharger toute la page. L'avantage de procéder ainsi est que si d'autres changements ont eu lieu entre temps, on va aussi les recharger et donc l'état de notre page correspond effectivement à l'état de l'API à un moment donné. L'autre solution aurait l'avantage d'être légèrement plus efficace puisqu'elle nous évite de faire une requête. 
 
-Pour faire cela, notre composant `FormulairePublication` émettra un événement pour signaler à son parent qu'il faut qu'il recharge la page. Rappelez-vous qu'on définit un nouvel évènement avec `const emit = defineEmits<{ updated: []}>();`. 
-
-Rappelons qu'on ne peut pas utiliser `$emit` dans le `script setup` (mais dans le `template`), alors que la variable `emit` (résultat de l'appel à `defineEmits`) contient une fonction qui s'utilise comme `$emit`, mais dans le `script setup`.
+Pour faire cela, notre composant `FormulairePublication` émettra un événement pour signaler à son parent qu'il faut qu'il recharge la page. Rappelez-vous qu'on définit un nouvel évènement avec `const emit = defineEmits<{ updated: []}>();`, et qu'on ne peut pas utiliser `$emit` dans le `script setup` (mais dans le `template`), alors que la variable `emit` (résultat de l'appel à `defineEmits`) contient une fonction qui s'utilise comme `$emit`, mais dans le `script setup`.
 
 
 <div class="exercice" markdown="1">
@@ -759,23 +757,25 @@ Rappelons qu'on ne peut pas utiliser `$emit` dans le `script setup` (mais dans l
 
 Par sécurité, les cookies d'authentification ne sont pas accessibles depuis le JavaScript (ils ont l'option *http-only*).
 Nous ne pouvons donc pas déconnecter l'utilisateur directement.
-Heureusement, la route `.../api/token/invalidate` qui sert à invalider le cookie de rafraîchissement invalide aussi le cookie du JWT. Il suffit donc d'appeler cette route pour supprimer nos cookies. De même la route `.../api/token/refresh` rafraîchit notre JWT si le token de rafraîchissement est présent dans les cookies.
+Heureusement, la route `.../api/token/invalidate`, qui sert à invalider le cookie de rafraîchissement, invalide aussi le cookie du JWT. Il suffit donc d'appeler cette route pour supprimer nos cookies. De même la route `.../api/token/refresh` rafraîchit notre JWT si le token de rafraîchissement est présent dans les cookies.
 
 <div class="exercice" markdown="1">
 
-1. Ajoutez une fonction *logout* qui appel la route `.../api/token/invalidate` et une fonction *refresh token* pour la route `.../api/token/refresh`.
+1. Ajoutez une fonction `logout` à `apiStore.ts` qui appelle la route `POST` `api/token/invalidate`. Ajoutez aussi une fonction `refresh` pour la route `POST` `api/token/refresh`.
 
-1. Ajoutez un bouton `Se déconnecter` au menu du *header* (fichier `App.vue`). Cette fonction doit appeler une nouvelle fonction `deconnexion` qui appelle la fonction `apiStore.logout`.
+2. Ajoutez un bouton `Se déconnecter` au menu du *header* (fichier `App.vue`). Cette fonction doit appeler une nouvelle fonction `deconnexion` qui appelle la fonction `apiStore.logout`.
 
-2. Vérifiez que tout fonctionne en vous déconnectant puis en essayant de poster un message.
+3. Vérifiez que tout fonctionne en vous déconnectant puis en essayant de poster un message.
 </div>
 
 
 ### Stocker les informations de l'utilisateur connecté
-Pour l'instant, nous n'avons aucun moyen de savoir si un utilisateur est connecté et qui est l'utilisateur connecté. N'oubliez pas qu'on ne peut pas aller consulter les cookies des tokens, car ils sont en `httponly` par sécurité. Il va falloir corriger ça, notamment pour permettre une navigation adaptée à l'utilisateur (en particulier, on veut un affichage différencié si l'utilisateur n'est pas connecté). 
-Lors de la connexion l'API nous renvoie dans le corps de la requête toutes les informations utiles concernant l'utilisateur, nous allons donc devoir stocker ces informations. 
+Pour l'instant, nous n'avons aucun moyen de savoir si un utilisateur est connecté et qui est l'utilisateur connecté. N'oubliez pas qu'on ne peut pas aller consulter les *JWT*, car ils sont stockés dans des cookies qui ont l'option `httponly` par sécurité. Il va falloir corriger ça, notamment pour permettre une navigation adaptée à l'utilisateur (en particulier, on veut un affichage différencié si l'utilisateur est connecté ou non). 
+Lors de la connexion, l'API nous renvoie dans le corps de la requête toutes les informations utiles concernant l'utilisateur, nous allons donc devoir stocker ces informations. 
 
-Il faut donc se poser la question d'où enregistrer ces informations. Jusqu'à maintenant toutes les informations stockées sont stockées dans un composant et peuvent être envoyées aux enfants du composant par les props et modifier en faisant remonter des événements qu'on gère au niveau du composant. Les informations de l'utilisateur connecté risquent d'être utilisés à de nombreux endroits de l'application, il faudrait donc les stocker dans le composant principal (`app.vue`) et les faire descendre dans de nombreux composants. Au lieu de clarifier le code cela viendrait alourdir tous nos composants. Pour éviter cela, on s'autorise à garder certaines informations de manière globale dans toute l'application. Nous allons créer un **store** et qui va nous permettre de stocker toutes les informations "communes" à l'ensemble de l'application.
+Il faut donc se poser la question d'où enregistrer ces informations. Jusqu'à maintenant, toutes les informations sont stockées dans des composants. Ces informations peuvent être envoyées aux enfants du composant par les *props*, et être modifiées par les enfants en faisant remonter des événements qu'on gère au niveau du composant. 
+
+Les informations de l'utilisateur connecté risquent d'être utilisées à de nombreux endroits de l'application, il faudrait donc les stocker dans le composant principal (`App.vue`) et les faire descendre dans de nombreux composants. Au lieu de clarifier le code, cela viendrait alourdir tous nos composants. Pour éviter cela, on s'autorise à garder certaines informations de manière globale dans toute l'application. Nous allons créer un **store** et qui va nous permettre de stocker les informations "communes" à l'ensemble de l'application.
 
 
 Nous pourrions utiliser le store de Vue. C'est ce fameux `Pinia` qu'on nous propose d'ajouter quand nous créons notre projet (et il est aussi possible d'utiliser d'autres stores en les installant avec `npm`). Cependant, pour l'usage limité que nous allons en faire, il est plus simple d'utiliser notre propre store. Cela nous permettra aussi de comprendre un peu comment un store fonctionne.
@@ -784,7 +784,6 @@ Nous pourrions utiliser le store de Vue. C'est ce fameux `Pinia` qu'on nous prop
 Un store est simplement un objet commun qui permet de stocker les variables globales et qu'on peut importer dans les composants qui l'utilisent. Pour définir un store qui stocke une donnée, on pourra simplement écrire :
 
 ```ts
-
 import { reactive } from 'vue'
 
 export const monStore = reactive({
@@ -795,24 +794,23 @@ export const monStore = reactive({
 Maintenant, pour utiliser le store dans un composant, on peut faire
 ```vue
 <script setup>
-    import { monStore  } from '.../monStore .ts'
+    import { monStore } from '.../monStore.ts'
 </script>
-
 ```
 
 Si j'importe le store dans plusieurs composants, c'est bien le même objet qui est importé à chaque fois donc il y a un seul objet store commun pour tous mes composants (ce que nous pourrions par exemple faire avec une classe singleton en Java ou en PHP). Par contre, puisque cet objet est accessible depuis tous les composants, il est conseillé de ne pas modifier ses attributs directement, mais plutôt de fournir des méthodes (des **actions**) pour les différentes manières de le modifier. 
 
-En effet, si votre application grandit il se peut que vous soyez obligé de modifier l'organisation de votre store. Si vos composants utilisent directement les attributs, il se peut que vous ayez besoin de modifier du code dans l'ensemble des composants de votre application. Au contraire, si vous utilisez uniquement des méthodes du store, vous pourrez modifier l'organisation du store et il suffira alors d'adapter ces méthodes sans toucher au reste du code de l'application. La première chose à faire serait donc d'ajouter des setters. En fait, on peut aller plus loin et faire gérer l'authentification par le store directement, ce qui donnerait le code suivant.
+En effet, si votre application grandit, il se peut que vous soyez obligé de modifier l'organisation de votre store. Si vos composants utilisent directement les attributs, il se peut que vous ayez besoin de modifier du code dans l'ensemble des composants de votre application. Au contraire, si vous utilisez uniquement des méthodes du store, vous pourrez modifier l'organisation du store et il suffira alors d'adapter ces méthodes sans toucher au reste du code de l'application. La première chose à faire serait donc d'ajouter des setters. En fait, on peut aller plus loin et faire gérer l'authentification par le store directement, ce qui donnerait le code suivant.
 
 ```ts
 import { reactive } from 'vue'
-import { apiStore } from '@/store/APICalls';
+import { apiStore } from "@/util/apiStore";
 
 export const storeAuthentification = reactive({
   utilisateurConnecte: null,
   connexion(...){
         //...
-        this.tilisateurConnecte = reponseJSON;
+        this.utilisateurConnecte = reponseJSON;
     },
     // les autres méthodes
 });
@@ -822,49 +820,49 @@ Dans notre cas, nous transformer en store notre fichier `apiStore.ts` existant.
 Nous allons en profiter pour commencer à gérer certaines erreurs possibles lors des requêtes, nous allons donc remplacer la fonction login par la fonction suivante :
 
 ```ts
-    login(login: string, password: string): Promise<{ success: boolean, error?: string }> {
-        return fetch(this.apiUrl + "auth", {
-            //... ne change pas
-            // à compléter
-        })
-            .then(reponsehttp => {
-                if (!reponsehttp.ok) {
-                    return reponsehttp.json()
-                        .then(reponseJSON => {
-                            return { success: false, error: reponseJSON.message };
-                        })
-                } else {
-                    return reponsehttp.json()
-                        .then(reponseJSON => {
-                            this.utilisateurConnecte = reponseJSON;
-                            return { success: true };
-                        })
-                }
-            })
-    },
+login(login: string, password: string): Promise<{ success: boolean, error?: string }> {
+  return fetch(this.apiUrl + "auth", {
+    //... ne change pas
+    // à compléter
+  })
+    .then(reponsehttp => {
+      if (!reponsehttp.ok) {
+        return reponsehttp.json()
+          .then(reponseJSON => {
+            return {success: false, error: reponseJSON.message};
+          })
+      } else {
+        return reponsehttp.json()
+          .then(reponseJSON => {
+            this.utilisateurConnecte = reponseJSON;
+            return {success: true};
+          })
+      }
+    })
+},
 ```
 
 La première modification est le type de retour. On renvoie un booléen à `true` en cas de succès et sinon un booléen à faux avec un message d'erreur.
 
-Pour cela, on fait le `fetch` comme précédemment. Ensuite, on utilise `reponsehttp.ok` qui vaut `true` si la requête est un succès. On renvoie une promesse qui contient un booléen décrivant le succès ou l'échec et si besoin un message d'erreur. De plus, en cas de réussite, on décode le `json` on enregistre le résultat dans `utilisateurConnecte`.
+Pour cela, on fait le `fetch` comme précédemment. Ensuite, on utilise `reponsehttp.ok` qui vaut `true` si la requête est un succès. On renvoie une promesse qui contient un booléen décrivant le succès ou l'échec et si besoin un message d'erreur. De plus, en cas de réussite, on décode le `json` et on enregistre le résultat dans `utilisateurConnecte`.
 Puisqu'on renvoie une promesse, le composant appelant pourra utiliser `.then` pour exécuter du code en fonction de la valeur de retour une fois que la connexion a eu lieu.
 
 <div class="exercice" markdown="1">
 
  
-1. Modifiez le *apiStore* pour qu'il contienne la variable `utilisateurConnecte: null,` et que ce soit un objet réactif. 
+1. Modifiez `apiStore` pour qu'il contienne la variable `utilisateurConnecte: null,` et que ce soit un objet réactif. 
 
-2. Modifiez la fonction login en vous basant sur l'exemple donné plus haut.
+2. Modifiez la fonction `login` en vous basant sur l'exemple donné plus haut.
 
 3. Vérifiez que le formulaire de connexion fonctionne toujours correctement.
 
 4. Dans `FormulaireConnexion` utilisez `.then` sur le résultat de la fonction connexion pour qu'en cas de réussite, on redirige vers la page la route `/feed` (à l'aide de `router.push`). Nous ajouterons des notifications (messages flashs) dans la suite du TD.
 
-5. Modifiez le store pour ajouter un booléen `estConnecte` qui indique si l'utilisateur est connecté. Modifiez la fonction connexion pour qu'elle change la valeur du booléen quand c'est nécessaire.
+5. Modifiez le store pour ajouter un booléen `estConnecte` qui indique si l'utilisateur est connecté. Modifiez la fonction `login` pour qu'elle change la valeur du booléen quand c'est nécessaire.
 
 6. Modifiez la fonction `logout:function(): Promise<{ success: boolean, error?: string }>` pour qu'elle supprime l'utilisateur connecté en cas de réussite (le code est donc très similaire au code ajouté à la fonction `login`).
 
-7. Dans la vue principale `App.vue`, importez le store et utilisez ce booléen pour cacher les boutons `s'incrire`, `se connecter` et `Se déconnecter` en se basant sur l'état de connexion de l'utilisateur. On pourra utiliser la directive `v-if` dont le fonctionnement est expliqué [ici](https://fr.vuejs.org/guide/essentials/conditional.html).
+7. Dans la vue principale `App.vue`, importez le store et utilisez ce booléen pour cacher les boutons `S'incrire`, `Se connecter` et `Se déconnecter` en se basant sur l'état de connexion de l'utilisateur. On pourra utiliser la directive `v-if` et lire [sa documentation](https://fr.vuejs.org/guide/essentials/conditional.html) si nécessaire.
 
 8. Faites de même pour cacher/afficher le formulaire d'ajout d'une publication dans la route Feed.
 
@@ -876,18 +874,22 @@ Puisqu'on renvoie une promesse, le composant appelant pourra utiliser `.then` po
 
 ### Gérer la connexion lors du rechargement de l'app
 
-Lors du rechargement de l'app (par exemple, avec F5) les cookies d'authentification restent présents, mais puisque toutes les variables Javascript sont réinitialisées, on perd ces informations. Nous pourrions utiliser le `localStorage` pour régler en partie ce problème. Nous allons utiliser une solution plus simple : dès que l'application se charge, nous allons appeler la route de rafraîchissement des tokens. En cas de succès du rafraîchissement, nous obtenons directement les données utilisateurs, et en cas d'échec, nous pouvons considérer que l'utilisateur n'est pas connecté.
+Lors du rechargement de l'app (par exemple, avec F5) les cookies d'authentification restent présents, mais puisque toutes les variables Javascript sont réinitialisées, on perd les informations d'authentification dans le store. Nous pourrions utiliser le `localStorage` pour régler en partie ce problème. Nous allons utiliser une solution plus simple : dès que l'application se charge, nous allons appeler la route de rafraîchissement des tokens. En cas de succès du rafraîchissement, nous obtenons directement les données utilisateurs, et en cas d'échec, nous pouvons considérer que l'utilisateur n'est pas connecté.
 
 Jusqu'à maintenant lorsqu'une page devait afficher des données qu'elle n'avait pas encore, nous nous contentions d'afficher des fausses données. Ici l'affichage des boutons du menu risque de changer après le chargement de page ce qui est particulièrement gênant. Pour éviter ce problème, nous allons afficher un message de chargement tant que l'on n'a pas vérifié si l'utilisateur est connecté. 
 
 
 <div class="exercice" markdown="1">
 
-1. Modifiez la fonction `apiStore.refresh` pour que, en cas d'erreur, elle mette `connectedUser` à `null` et renvoie `"echec"`. En cas de réussite, on procède comme dans la fonction de connexion.
+<!-- 1. Modifiez la fonction `apiStore.refresh` pour que, en cas d'erreur, elle mette `utilisateurConnecte` à `null` et renvoie `"echec"`. En cas de réussite, on procède comme dans la fonction de connexion. -->
+
+1. Modifiez la fonction `apiStore.refresh` pour qu'elle soit identique à la fonction de connexion (type de retour, corps de la fonction), sauf 
+   * l'URL qui est toujours `token/refresh`, 
+   * `refresh` n'envoie pas de données. Du coup, la fonction ne prend pas d'arguments, elle n'envoie pas de données dans le corps de la requête. Enlevez aussi l'en-tête `Content-Type: application/json` qui spécifiait le format des données envoyées.
 
 2. À la fin du `<script setup>` de `App.vue` faite un appel à cette fonction. Vérifiez qu'en cas de rechargement de la page un utilisateur connecté est toujours connecté.
 
-3. Ajoutez à `App.vue` une variable `const loaded = ref(false);`. Après le retour de la fonction `refresh` changer la valeur du booléen à `true`. En utilisant cette valeur et un `v-if` supprimer l'affichage de la page tant que ce booléen est faux. On pourra aussi ajouter un message "Chargement en cours" quand le booléen est faux.
+3. Ajoutez à `App.vue` une variable `const loaded = ref(false);`. Après le retour de la fonction `refresh`, changez la valeur du booléen à `true`. En utilisant cette valeur et un `v-if` supprimer l'affichage de la page tant que ce booléen est faux. On pourra aussi ajouter un message "Chargement en cours" quand le booléen est faux.
 
 </div>
 
@@ -898,7 +900,13 @@ Nous avons commencé à gérer quelques erreurs qui peuvent intervenir lors des 
 
 <div class="exercice" markdown="1">
 
-1. Pour pouvoir tester le rafraichissement du *cookie* passez la durée de validité du JWT à 10 secondes. Pour cela, il faut rouvrir le projet Symfony et aller modifier la ligne `token_ttl` du fichier `packages/lexik_jwt_authentication.yaml`. Vous pouvez mettre 15 secondes par exemple.
+1. Pour pouvoir tester le rafraichissement du *cookie* passez la durée de validité du JWT à 10 secondes. Pour cela, il faut rouvrir le projet Symfony Api Platform et modifier le fichier `lexik_jwt_authentication.yaml` pour rajouter la ligne `token_ttl` (*time to live*) :
+   ```yaml
+   # config/packages/lexik_jwt_authentication.yaml
+   lexik_jwt_authentication:
+    # ... 
+    token_ttl: 10 # in seconds, default is 3600
+   ```
 
 2. Pour tester : connectez-vous et faites une publication rapidement (qui devrait fonctionner), puis faite une publication après les 15 secondes (qui devrait échouer). 
 
@@ -906,34 +914,38 @@ Nous avons commencé à gérer quelques erreurs qui peuvent intervenir lors des 
 
 </div>
 
-On obtient une erreur `401 Unauthorized`. Dans ce cas, il faudrait donc essayer de renouveler le token. On va donc modifier la méthode `createRessource` pour qu'en cas d'erreur 401 elle appelle *refresh* puis retente la requête initiale. Évidemment, si le *refresh* échoue on ne retente pas la requête, mais il faut faire un peu plus attention pour éviter une boucle infinie (la requête échoue, le *refresh* réussie, mais la requête échoue à nouveau pour une autre raison, le *refresh* réussi mais ...). On va donc se limiter à deux tentatives. On pourrait adopter une stratégie plus avancée comme attendre entre chaque nouvel essaie en doublant le temps d'attente. Voici une description une implémentation à compléter de cette fonction:
+On obtient une erreur `401 Unauthorized`. Dans ce cas, il faudrait donc essayer de renouveler le token. On va donc modifier la méthode `createRessource` pour qu'en cas d'erreur 401, elle appelle *refresh* puis retente la requête initiale. Évidemment, si le *refresh* échoue on ne retente pas la requête, mais il faut faire un peu plus attention pour éviter une boucle infinie (la requête échoue, le *refresh* réussie, mais la requête échoue à nouveau pour une autre raison, le *refresh* réussi mais ...). On va donc se limiter à deux tentatives. On pourrait adopter une stratégie plus avancée comme attendre entre chaque nouvel essai en doublant le temps d'attente. Voici la description d'une implémentation à compléter de cette fonction :
 
 ```ts
-createRessource(ressource: string, data: any, refreshAllowed = true): Promise<{success: boolean, error?: string }> {
-    return fetch(...)//le fetch ne change pas
+createRessource(
+  ressource: string,
+  data: any,
+  refreshAllowed = true
+): Promise<{ success: boolean, error?: string }> {
+  return fetch(...) // le fetch ne change pas
     .then(reponsehttp => {
-        if(reponsehttp.ok){
-            return reponsehttp.json()
-                .then( () => {
-                    return { success: true };
-                })
-        } else if(reponsehttp.status == 401 && refreshAllowed){
-            return this.refresh() 
-                .then(
-                    //si le refresh réussi on réappel createRessource, mais cette fois en interdisant le refresh grace au paramètre refreshAllowed
-                    //sinon on retourne un echec avec le message d'erreur "unauthorized, failure to refresh token." 
-                })
-        } else {
-            this.refresh()
-            return reponsehttp.json()
-                .then(reponseJSON => {
-                    return { success: false, error: reponseJSON.message };
-                })
-        }
+      if (reponsehttp.ok) {
+        return reponsehttp.json()
+          .then(() => {
+            return {success: true};
+          })
+      } else if (reponsehttp.status == 401 && refreshAllowed) {
+        return this.refresh()
+          .then(
+            // si le refresh réussi on réappelle createRessource, 
+            //  mais cette fois en interdisant le refresh (refreshAllowed false)
+            // sinon on retourne un échec avec le message d'erreur 
+            //  "unauthorized, failure to refresh token."
+          )
+      } else {
+        this.refresh()
+        return reponsehttp.json()
+          .then(reponseJSON => {
+            return {success: false, error: reponseJSON.message};
+          })
+      }
     })
 }
-
-
 ```
 
 <div class="exercice" markdown="1">
