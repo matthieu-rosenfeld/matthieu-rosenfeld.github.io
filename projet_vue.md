@@ -1,8 +1,5 @@
 ---
-title: Projet - API REST (gestion d'événements)
-subtitle: API REST, Symfony
-layout: tutorial
-lang: fr
+title: Projet - Front de l'API (gestion d'événements)
 ---
 
 ## Dernier rendu des projets Framework Web
@@ -10,7 +7,7 @@ lang: fr
 Le projet se fera avec en **trinôme** et s'intéressera au développement du **front** de l'**API REST** de **gestions d'événements**. Pour la réalisation du projet, il faudra se baser sur le contenu des TDs Vue.js. 
 Vous pouvez modifier les deux précédents projets si besoin. 
 Les modifications faites au projet annuaire, ne seront pas évaluées, mais sont autorisées si besoin. 
-Par contre, **la version évaluée de l'API REST sera la version que vous rendrez à ce rendu**. Les consignes pour [l'API REST sont toujours disponibles à cette adresse](https://mgasquet.github.io/R5.A.05-ProgrammationAvancee-Web/tutorials/projet2). Les consignes de réalisation du projet sont dans la suite de ce document.
+Par contre, **la version évaluée de l'API REST sera la version que vous rendrez à ce rendu**. Les consignes pour [l'API REST sont toujours disponibles à cette adresse](https://mgasquet.github.io/R5.A.05-ProgrammationAvancee-Web/tutorials/projet2). Les consignes de réalisation du projet front en vue.js sont dans la suite de ce document.
 
 Pour ce dernier rendu, il faudra **déployer vos trois projets sur le serveur webinfo**. Des consignes pour vous aider sont à la fin de ce document.
 
@@ -33,7 +30,7 @@ Cette archive devra contenir :
     * Éventuellement, des indications supplémentaires s'il y a des choses particulières à faire pour lancer et tester vos applications en local (autrement que de lancer le serveur, faire les `composer/npm install` des projets, configurer et générer la base de données,  etc...).
 
 
-## Sujet - Front pour l'API REST
+## Front en vue.js pour l'API REST
 L'objectif est de développer ce front à l'aide de `Vue.js`. Il faudra aussi compléter votre API si besoin. 
 Ce front devra donc permettre d'utiliser les fonctionnalités suivantes :
 
