@@ -261,7 +261,7 @@ Pour utiliser le composant, remplacez les trois lignes à l'intérieur du `<li>`
 <TacheElement :description-tache="tache.description" :cochee="tache.faite" />
 ```
 
-Notez que `descriptionTache` est devenu `description-tache`. En HTML, les noms d'attributs ne sont généralement pas en CamelCase mais en kebab-case, ce qui n'est normalement pas possible en JS (vous avez normalement déjà vu ce problème notamment pour les styles en CSS : `background-color` devient `backgroundColor`). Ici, on *peut* utiliser `descriptionTache`, mais on peut aussi utiliser `description-tache`. Le plus important est d'être cohérent tout le long d'un projet.
+**Remarque :** Ici `descriptionTache` est devenu `description-tache`. En HTML, les noms d'attributs ne sont généralement pas en CamelCase, mais en kebab-case. C'est normalement le contraire en JS (vous avez déjà vu ce problème pour les styles en CSS : `background-color` devient `backgroundColor`). L'étape de build des SFC nous autorise à utiliser l'un ou l'autre (tout est "converti" en kebab-case). Si l'on utilisait directement des composants personnalisés dans un fichier `.html` il faudrait utiliser le kebab-case. Cela s'applique aussi au nom des composants : `TacheElement` pourrait être remplacé par `tache-element` (et devrait être remplacé si l'on était dans le fichier `html`). Bref pour nous les deux sont possibles et le plus important est d'utiliser une convention cohérente tout le long d'un projet.
 
 <div class="exercice" markdown="1" >
 
@@ -573,6 +573,8 @@ defineProps<{titre: string}>();
 ```
 
 Notez enfin que dans la partie template, la bonne pratique est d'utiliser directement le nom du prop (donc `titre` au lieu de `props.titre`). 
+
+Une remarque similaire s'applique à `$emit` et `defineEmits`. Nous avons vu qu'il vaut mieux écrire `defineEmits<...>()` que `const emit = defineEmits<...>()` si nous n'utilisons pas la variable `emit`. Cependant, la fonction `$emit` que nous avons utilisée n'est disponible que dans le template. Par contre, la fonction `defineEmits` renvoie une fonction qui fait la même chose que `$emit`. Donc pour faire un emit depuis le script, il faut écrire `const emit = ...` et c'est alors cette fonction `emit` que nous utilisons (avec la même syntaxe que `$emit`, c'est-à-dire `emit("nomDeLevenement")`).
 
 # Conclusion
 
