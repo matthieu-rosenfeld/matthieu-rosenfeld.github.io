@@ -63,7 +63,7 @@ Dans ce TD, nous allons réaliser une "Application à Page Unique" (Single page 
 - autoriser un clic sur le bouton "page précédente",
 - permettre l'utilisation d'une URL qui change en fonction des "pages" (pour pouvoir l'enregistrer dans mes favoris ou la partager avec un autre utilisateur).
 
-On pourrait gérer tout cela nous-même, mais le `router` de Vue est une solution très simple à utiliser qui règle tous ces problèmes. On va définir des "view" (des "vues" en français). Ces vues sont en fait des composants et on va simplement configurer les routes pour indiquer lesquelles pointent vers quels composants/vues. On pourra ensuite utiliser la balise `<router-view />` dans notre composant principal qui se chargera de détecter le composant/vue à charger en fonction de l'URL. On pourra aussi utiliser le routeur pour générer automatiquement l'URL d'une vue (pour définir un lien par exemple). 
+On pourrait gérer tout cela nous-même, mais le `router` de Vue est une solution très simple à utiliser qui règle tous ces problèmes. On va définir des "view" (des "vues" en français). Ces vues sont en fait des composants et on va simplement configurer les routes pour indiquer lesquelles pointent vers quels composants/vues. On pourra ensuite utiliser la balise `<RouterView />` dans notre composant principal qui se chargera de détecter le composant/vue à charger en fonction de l'URL. On pourra aussi utiliser le routeur pour générer automatiquement l'URL d'une vue (pour définir un lien par exemple). 
 Bien que le contexte et le fonctionnement soient assez différents, l'utilisation et la syntaxe des routes devraient vous rappeler les routes de Symfony.
 
 Commençons par créer notre première vue.
@@ -131,7 +131,7 @@ La première ligne permet d'importer le routeur en indiquant où il est stocké 
 Ensuite dans le fichier `router/index.ts` la partie qui nous intéresse est celle qui définie deux routes différentes `/` et `/feed` qu'on associe toutes les deux au composant `Feed`. Le deuxième import du fichier défini le composant `Feed` comme étant celui contenu dans le fichier `/views/FeedMain.vue`.
 
 Finalement, dans le fichier `App.vue`, la seule ligne intéressante est celle qui contient  
-`<router-view />`. Cette ligne indique que cette partie du template doit être remplacée par le composant correspondant à la route actuelle. En l'occurrence, nous avons indiqué que la route `/`, correspondait au composant `views/FeedMain.vue` et c'est donc celui qui devrait s'afficher. 
+`<RouterView />`. Cette ligne indique que cette partie du template doit être remplacée par le composant correspondant à la route actuelle. En l'occurrence, nous avons indiqué que la route `/`, correspondait au composant `views/FeedMain.vue` et c'est donc celui qui devrait s'afficher. 
 
 
 <div class="exercice" markdown="1">
@@ -419,22 +419,22 @@ Remarquez que ce n'est pas un ajout de Vue, mais bien quelque chose qui est touj
 </div>
 
  On souhaite qu'un clic sur le login d'un utilisateur affiche son profil. 
- On pourrait utiliser `router.push`, mais pour faire un lien, nous pouvons utiliser à la place la balise `router-link`. Cette balise se comporte comme un `<a>` HTML avec l'URL correspondant à la route donnée en paramètre et s'utilise comme suit :
+ On pourrait utiliser `router.push`, mais pour faire un lien, nous pouvons utiliser à la place la balise `RouterLink`. Cette balise se comporte comme un `<a>` HTML avec l'URL correspondant à la route donnée en paramètre et s'utilise comme suit :
 
  ```html
- <router-link :to="RouteAUtiliser">texte du lien</router-link>
+ <RouterLink :to="RouteAUtiliser">texte du lien</RouterLink>
 ```
 
 Il faut remplacer `RouteAUtiliser` par la route donc comme pour le `router-push`, on peut soit mettre directement le *path* de la route (`:to = "/users"`) ou son nom (`:to="{name:allUsers}"`). 
 
 Par contre, nous n'avons pas encore vu comment indiquer le paramètre d'une route. La première idée serait d'utiliser le *path*, par exemple pour afficher le feed de l'utilisateur 2 on pourrait faire `:to = "/users/2"`. Mais si l'id était stocké dans une variable `identifiant`, il faudrait écrire `:to = "'/users/'+identifiant"` et il faudrait alors penser à encoder les paramètres correctement pour une URL. Il existe une syntaxe qui utilise le nom de la route et qui permet de donner les paramètres : 
 ```html
- <router-link :to="{name:'nomDeLaRoute',params:{param1:valeureParam1, param2:valeureParam2}}">texte du lien</router-link>
+ <RouterLink :to="{name:'nomDeLaRoute',params:{param1:valeureParam1, param2:valeureParam2}}">texte du lien</RouterLink>
 ```
 
 Avec l'exemple précédent ça donne :
  ```html
- <router-link :to="{name:'feed', params:{id:identifiant}}">texte du lien</router-link>
+ <RouterLink :to="{name:'feed', params:{id:identifiant}}">texte du lien</RouterLink>
 ```
 
 Avec cette syntaxe, il n'y a pas besoin de se poser de question d'encodage ou d'échappement de caractères. Elle a aussi l'avantage d'être beaucoup plus explicite puisque le nom de la route et de chaque paramètre apparait explicitement. On peut utiliser cette même syntaxe avec `router.push`.
@@ -460,11 +460,11 @@ Nous avons une première version de l'affichage des utilisateurs prête pour êt
 <template>
     <div class="content-box">
         <div class="top">
-            <router-link 
+            <RouterLink 
                 :to="{name:'singleUser', params: {id: publication.auteur.id}}" 
                 class="clickable">
                     {{publication.auteur.login}}
-            </router-link>
+            </RouterLink>
             -- {{(new Date(publication.datePublication)).toLocaleString("fr")}}
         </div>
         <div class="content clickable" @click="$router.push({name:'singleMessage', params: {id: publication.id}})">
