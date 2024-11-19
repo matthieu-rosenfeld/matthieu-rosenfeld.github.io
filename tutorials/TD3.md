@@ -726,7 +726,7 @@ form{
 1. Pour gérer l'appel à l'API, nous allons créer une nouvelle méthode `createRessource(ressource:string, data:any):Promise<any>` dans `apiStore`. `ressource` contiendra le nom de la ressource et `data` l'objet correspondant à la nouvelle ressource. Le corps de cette requête sera simplement `body: JSON.stringify(data)`. En définissant une méthode générique de création, nous pourrons réutiliser la même pour la création d'un utilisateur.
 Pour que notre requête contienne les cookies d'authentification, il suffira à nouveau d'ajouter au `fetch` l'option `credential:'include'`.
 
-2. Créez le composant/vue `views/FormulairePublication.vue` en utilisant l'exemple plus haut. Complétez le composant en définissant la fonction `envoyer` et la variable message comme il faut. Pour l'instant, on peut ne pas mettre de `then` et se contenter d'ignorer la réponse de notre requête.
+2. Créez le composant `components/FormulairePublication.vue` en utilisant l'exemple plus haut. Complétez le composant en définissant la fonction `envoyer` et la variable message comme il faut. Pour l'instant, on peut ne pas mettre de `then` et se contenter d'ignorer la réponse de notre requête.
 
 3. Ajoutez ce nouveau composant à la page `Feed` au-dessus de la liste des publications.
 
@@ -743,7 +743,7 @@ Pour faire cela, notre composant `FormulairePublication` émettra un événement
  
 1. Dans le composant `FormulairePublication`, définissez l'emit et modifiez le traitement du `fetch` pour émettre cet évènement après la requête.
 
-2. Modifiez maintenant le composant `Feed` pour appeler la fonction `chargerFeed` quand le composant `FormulairePublication` émet l'évènement `update` (il suffit de faire `@updated="chargerFeed"` au bon endroit).
+2. Modifiez maintenant le composant `Feed` pour appeler la fonction `chargerFeed` quand le composant `FormulairePublication` émet l'évènement `updated` (il suffit de faire `@updated="chargerFeed"` au bon endroit).
 
 3. Définissez la fonction `chargerFeed` qui réutilise le code déjà écrit pour recharger le feed. Modifiez le script setup pour qu'il appelle aussi la fonction `chargerFeed`.
 
@@ -752,7 +752,7 @@ Pour faire cela, notre composant `FormulairePublication` émettra un événement
 </div>
 
 ### Déconnecter l'utilisateur et rafraîchir le token
-
+**Attention cette partie nécessite d'avoir complétement terminée les [tokens de rafraichissement du TD4](https://mgasquet.github.io/R5.A.05-ProgrammationAvancee-Web/tutorials/tutorial4#suppression-du-cookie-et-invalidation-du-token-d%C3%A9connexion)**
 Par sécurité, les cookies d'authentification ne sont pas accessibles depuis le JavaScript (ils ont l'option *http-only*).
 Nous ne pouvons donc pas déconnecter l'utilisateur directement.
 Heureusement, la route `.../api/token/invalidate`, qui sert à invalider le cookie de rafraîchissement, invalide aussi le cookie du JWT. Il suffit donc d'appeler cette route pour supprimer nos cookies. De même la route `.../api/token/refresh` rafraîchit notre JWT si le token de rafraîchissement est présent dans les cookies.
@@ -871,6 +871,7 @@ Puisqu'on renvoie une promesse, le composant appelant pourra utiliser `.then` po
 
 
 ### Gérer la connexion lors du rechargement de l'app
+**Attention cette partie nécessite d'avoir complétement terminée les [tokens de rafraichissement du TD4](https://mgasquet.github.io/R5.A.05-ProgrammationAvancee-Web/tutorials/tutorial4#suppression-du-cookie-et-invalidation-du-token-d%C3%A9connexion)**
 
 Lors du rechargement de l'app (par exemple, avec F5) les cookies d'authentification restent présents, mais puisque toutes les variables Javascript sont réinitialisées, on perd les informations d'authentification dans le store. Nous pourrions utiliser le `localStorage` pour régler en partie ce problème. Nous allons utiliser une solution plus simple : dès que l'application se charge, nous allons appeler la route de rafraîchissement des tokens. En cas de succès du rafraîchissement, nous obtenons directement les données utilisateurs, et en cas d'échec, nous pouvons considérer que l'utilisateur n'est pas connecté.
 
