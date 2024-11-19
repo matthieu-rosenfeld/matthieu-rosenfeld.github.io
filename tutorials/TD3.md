@@ -526,23 +526,22 @@ Nous allons pouvoir commencer à remplir les vues que nous avons créées avec l
 Sur la plupart des pages, rafraîchir la page ne fonctionne pas correctement. La raison est simple : le routeur modifie l'adresse, mais ce n'est pas une vraie adresse donc quand apache essaie de charger une page à cette adresse, il échoue. Il faut donc dire à apache de toujours charger la page `index.html` dès qu'il charge quelque chose dans le dossier `dist`. Pour cela, nous allons utiliser le fichier `.htaccess` suivant : 
 
 ```apache
-# Activates the mod_rewrite module in Apache, which is necessary for processing the rewrite rules.
+# Active le module mod_rewrite dans Apache, nécessaire pour traiter les règles de réécriture.
 RewriteEngine On
 
-# If the requested URL matches exactly index.html, no rewriting is performed (- means "no substitution").
-# Flag [L] (for Last) : Stops processing further rules if this rule matches.
+# Si l'URL demandée correspond exactement à index.html, aucune réécriture n'est effectuée (- signifie "pas de substitution").
+# [L] (pour Last) : Arrête le traitement des règles supplémentaires si cette règle correspond.
 RewriteRule ^index\.html$ - [L]
 
-# Conditions: Only apply the following rule if the request is not a file nor a directory.
-# RewriteCond: Adds conditions to the next RewriteRule. Both conditions must be true for the rule to execute.
-# -f: Checks if the requested path corresponds to an existing file.
-# -d: Checks if the requested path corresponds to an existing directory.
-#  !: Negates the condition
+# Conditions : Applique la règle suivante uniquement si la requête ne correspond pas à un fichier ni à un répertoire.
+# RewriteCond : Ajoute des conditions à la prochaine RewriteRule. Les deux conditions doivent être vraies pour que la règle s'exécute.
+# -f : Vérifie si le chemin demandé correspond à un fichier existant.
+# -d : Vérifie si le chemin demandé correspond à un répertoire existant.
+#  ! : Négation de la condition.
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-# Rule: For any other request (. matches any character), rewrite the URL to index.html.
-# Flag [L] (for Last): Stops further rule processing once this rule is applied.
+# Pour toute requête qui passe les conditions précédentes, réécrit l'URL vers index.html.
 RewriteRule . index.html [L]
 ```
 

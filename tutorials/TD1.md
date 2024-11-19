@@ -688,13 +688,11 @@ expliquer le fonctionnement de Vue :
    ```js
    const tachesFiltrees = computed(filtrerTaches);
    ```
-   sont réécrites en 
+   ont un comportement similaire au code suivant
    ```js
    const tachesFiltrees = ref()
    applyAndRegister( function() { tachesFiltrees.value = filtrerTaches() })
    ```
-   lors de la compilation des Single File Component (SFC) dont nous reparlerons au
-   prochain TD. 
 
 Replongeons-nous maintenant sur le fonctionnement de la réactivité vu au
 semestre 4. Ce fonctionnement était d'ailleurs basé sur celui de *Vue* (*cf.* la
