@@ -898,12 +898,12 @@ Nous avons commencé à gérer quelques erreurs qui peuvent intervenir lors des 
 
 <div class="exercice" markdown="1">
 
-1. Pour pouvoir tester le rafraichissement du *cookie* passez la durée de validité du JWT à 10 secondes. Pour cela, il faut rouvrir le projet Symfony Api Platform et modifier le fichier `lexik_jwt_authentication.yaml` pour rajouter la ligne `token_ttl` (*time to live*) :
+1. Pour pouvoir tester le rafraichissement du *cookie* passez la durée de validité du JWT à 15 secondes. Pour cela, il faut rouvrir le projet Symfony Api Platform et modifier le fichier `lexik_jwt_authentication.yaml` pour rajouter la ligne `token_ttl` (*time to live*) :
    ```yaml
    # config/packages/lexik_jwt_authentication.yaml
    lexik_jwt_authentication:
     # ... 
-    token_ttl: 10 # in seconds, default is 3600
+    token_ttl: 15 # in seconds, default is 3600
    ```
 
 2. Pour tester : connectez-vous et faites une publication rapidement (qui devrait fonctionner), puis faite une publication après les 15 secondes (qui devrait échouer). 
