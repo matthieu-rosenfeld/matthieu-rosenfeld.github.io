@@ -18,43 +18,69 @@ Un seul membre du trinôme dépose une archive **zip** nommée selon le format :
 
 Cette archive devra contenir :
 
-* L'ensemble des sources des trois projets et du docker. Attention à ne pas inclure les répertoires **vendor**, **var** des projets Symfony et les dossiers **node_modules** et **dist** du projet vue
+* L'ensemble des sources des trois projets organisés comme dans le docker du cours pour nous faciliter le déploiement en local (c'est-à-dire, les deux projets Symfony dans le dossier `public_html` et le projet Vue.js dans le dossier `workspace`). Attention à ne pas inclure les répertoires **vendor**, **var** des projets Symfony et les dossiers **node_modules** et **dist** du projet vue.
+
+* Une manière de faire fonctionner une BD non vide quand le code tourne en local. Plusieurs solutions sont possibles :
+    * utiliser SQLite et nous fournir le fichier de la BD,
+    * nous fournir un fichier d'import mysql,
+    * fournir une commande PHP qui peuple la base,
+    * connecter la version dev à la BD déployé sur webinfo.
 
 * Un fichier **README** qui contient :
 
-    * Les URL où les projets sont déployés.
+    * Les URL où les trois projets sont déployés.
 
     * Le lien du dépôt git où le code source de l'application est hébergé.
 
     * Un récapitulatif de l’investissement de chaque membre du groupe dans les deux derniers projets (globalement, qui a fait quoi).
 
     * Éventuellement, des indications supplémentaires s'il y a des choses particulières à faire pour lancer et tester vos applications en local (autrement que de lancer le serveur, faire les `composer/npm install` des projets, configurer et générer la base de données,  etc...).
+    
+    * Une explication sur comment peupler la BD. 
+
+    * Tout autre commentaire que vous jugez pertinent.
 
 
 ## Front en vue.js pour l'API REST
-L'objectif est de développer ce front à l'aide de `Vue.js`. Il faudra aussi compléter votre API si besoin. 
-Ce front devra donc permettre d'utiliser les fonctionnalités suivantes :
-
-* Gérer des **événements** d'un certain **thème**, organisés par différents utilisateurs. 
-
-* L'interface doit permettre d'accéder à toutes les possibilités offertes par l'API, et ce, de manière claire (par exemple, un utilisateur verra le bouton de suppression d'un élément s'il a le droit de le supprimer). 
+L'objectif est de développer un front pour les utilisateurs basiques à l'aide de `Vue.js`. On imagine que les administrateurs et les organisateurs d'événement ont accès à une autre interface. Ce front devra donc permettre d'utiliser les fonctionnalités suivantes :
 
 * Permettre à des utilisateurs de s'**inscrire**, de s'**authentifier**, de **modifier** les informations de leurs comptes, de supprimer leur compte, etc.
 
+* N'importe quel utilisateur (connecté ou non) doit pouvoir consulter la liste des événements organisés
+
+* Un utilisateur connecté doit pouvoir consulter la liste des événement auquel il est inscrit, et s'inscrire ou se désinscrire d'un événement. 
+
 * Ce projet sera aussi relié au projet annuaire : un utilisateur aura la possibilité d'ajouter son code identifiant du projet annuaire pour que certaines informations de l'API de l'annuaire soient utilisées sur la page profil (en bonus on pourrait aussi l'utiliser pour remplir automatiquement certains champs lors de l'inscription).
 
+* Vous pouvez si vous le désirez ajouter d'autres fonctionnalités, notamment pour les autres rôles, mais cela ne vous est pas demandé. 
 
 Vous serez attentif à ce que votre projet contienne :
 * des routes nommées,
 * une gestion correcte de la connexion / déconnexion / rafraichissement du token s'il expire pendant la navigation,
 * un découpage pertinent en vues et composants,
-* au moins un composant importé en plus des messages flashs.
+* une gestion des différentes erreurs possibles lors des requêtes à l'API,
+* un code correctement typé avec TypeScript,
+* des notifications (messages flashes) pour améliorer la navigation.
 
 Vous pouvez utiliser un framework CSS.
+
+Pour vous guider, voici les catégories utilisées dans notre barème de l'an passé pour la notation du projet Vue :
+* Le déploiement fonctionne
+* Linter ok + Typage valide
+* Utilisation correcte des routes
+* Utilisation correcte des composants
+* Liens avec l'API et stockage des données
+* Gestion de la connexion
+* Utilisation des messages flashes
+* Utilisation de l'annuaire
+* Impression générale
+* Bonus malus
 
 
 ## Hébergement des applications
  Vous devrez les héberger dans le dossier `public_html` d'un des membres de l'équipe (pas nécessairement le même pour toutes les applications).
+
+ Attention, vous n'avez qu'une seule base mysql chacun et vous ne pourrez pas déployer vos deux projets Sumfony sur la même base. Vous pouvez soit utiliser la base d'une autre membre du groupe pour le deuxième projet ou simplement utiliser des bases sqlite.
 
 
 Pour pouvoir accéder à votre *home* à distance et y déposer des fichiers, il faudra d'abord trouver vos identifiants de connexion login et mot de passe.
