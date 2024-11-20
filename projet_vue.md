@@ -22,7 +22,7 @@ Cette archive devra contenir :
 
 * Une manière de faire fonctionner une BD non vide quand le code tourne en local. Plusieurs solutions sont possibles :
     * utiliser SQLite et nous fournir le fichier de la BD,
-    * nous fournir un fichier d'import mysql,
+    * nous fournir un fichier d'import MySQL,
     * fournir une commande PHP qui peuple la base,
     * connecter la version dev à la BD déployé sur webinfo.
 
@@ -34,7 +34,7 @@ Cette archive devra contenir :
 
     * Un récapitulatif de l’investissement de chaque membre du groupe dans les deux derniers projets (globalement, qui a fait quoi).
 
-    * Éventuellement, des indications supplémentaires s'il y a des choses particulières à faire pour lancer et tester vos applications en local (autrement que de lancer le serveur, faire les `composer/npm install` des projets, configurer et générer la base de données,  etc...).
+    * Éventuellement, des indications supplémentaires s'il y a des choses particulières à faire pour lancer et tester vos applications en local (autrement que de lancer le serveur, faire les `composer/npm install` des projets, configurer et générer la base de données, etc.).
     
     * Une explication sur comment peupler la BD. 
 
@@ -80,7 +80,7 @@ Pour vous guider, voici les catégories utilisées dans notre barème de l'an pa
 ## Hébergement des applications
  Vous devrez les héberger dans le dossier `public_html` d'un des membres de l'équipe (pas nécessairement le même pour toutes les applications).
 
- Attention, vous n'avez qu'une seule base mysql chacun et vous ne pourrez pas déployer vos deux projets Sumfony sur la même base. Vous pouvez soit utiliser la base d'une autre membre du groupe pour le deuxième projet ou simplement utiliser des bases sqlite.
+ Attention, vous n'avez qu'une seule base MySQL chacun et vous ne pourrez pas déployer vos deux projets Symfony sur la même base. Vous pouvez soit utiliser la base d'une autre membre du groupe pour le deuxième projet ou simplement utiliser des bases SQLite.
 
 
 Pour pouvoir accéder à votre *home* à distance et y déposer des fichiers, il faudra d'abord trouver vos identifiants de connexion login et mot de passe.
