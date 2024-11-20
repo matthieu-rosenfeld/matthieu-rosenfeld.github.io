@@ -962,7 +962,7 @@ Nous n'avons pas géré toutes les erreurs possibles. Il manque les deux fonctio
 
 ## Importer un composant pour les notifications
 
-Il est possible d'utiliser de nombreux composants créés par d'autres développeurs au sein de notre application. Pour notre site, nous allons utiliser le composant `notifications` disponible [ici](https://www.npmjs.com/package/@kyvg/vue3-notification) pour afficher des notifications (messages flashs) quand certains événements ont lieu.
+Il est possible d'utiliser de nombreux composants créés par d'autres développeurs au sein de notre application. Pour notre site, nous allons utiliser le [composant `notifications`](https://kyvg.github.io/vue3-notification/) pour afficher des notifications (messages flashs) quand certains événements ont lieu.
 
 Pour commencer, il faut installer la dépendance nécessaire à notre projet. Il suffit d'utiliser la commande suivante dans le terminal à la racine du projet :
 ```sh
@@ -997,19 +997,19 @@ Enfin, pour utiliser les notifications :
  
 1. Utilisez la commande `npm` et modifiez le fichier `main.ts` de manière à pouvoir utiliser les notifications.
 
-2. Ajoutez la balise `<notifications />` dans le *main* de `App.vue`.
+2. Ajoutez la balise `<notifications />` dans le `<main>` de `App.vue`.
 
-3. Modifiez la fonction `connect` de la page login pour que :
+3. Modifiez la fonction `connect` de `FormulaireConnexion` pour que :
     - si la connexion échoue, on affiche une notification d'erreur qui affiche le message d'erreur,
     - si la connexion réussit, on affiche une notification et on redirige la route vers le *feed*.
 
 4. Testez.
 
-4. Ajoutez des notifications, lors de l'ajout d'une publication et de la déconnexion.
+5. Ajoutez des notifications, lors de l'ajout d'une publication et de la déconnexion.
 
-5. On peut configurer le comportement de nos notifications en utilisant les props. Tout est détaillé dans cette [page](https://www.npmjs.com/package/@kyvg/vue3-notification). Trouvez comment mettre les notifications en bas à droite plutôt qu'en haut à droite et comment les faire durer 10 secondes plutôt que 3 secondes.
+6. On peut configurer le comportement de nos notifications en utilisant les props. Tout est détaillé dans [la documentation du paquet](https://kyvg.github.io/vue3-notification/api/). Trouvez comment mettre les notifications en bas à droite plutôt qu'en haut à droite et comment les faire durer 10 secondes plutôt que 3 secondes.
 
-6. Testez. Si vous avez une difficulté avec les 10 secondes : la valeur qu'on met dans un attribut HTML/un prop avec la syntaxe `monprop="17"`est de type string, mais en faisant `v-on:monprop="17"` (ou simplement `:monprop="17"`) le prop contiendra le résultat de l'expression JS évaluée donc de type number en l'occurrence.
+7. Testez. Si vous avez une difficulté avec les 10 secondes : la valeur qu'on met dans un attribut HTML/un prop avec la syntaxe `monprop="17"`est de type string, mais en faisant `v-on:monprop="17"` (ou simplement `:monprop="17"`) le prop contiendra le résultat de l'expression JS évaluée donc de type number en l'occurrence.
 
 </div>
 
@@ -1026,7 +1026,7 @@ Voici une liste de ce qu'il reste à faire :
 
 
 Et si le temps le permet :
-1. Modifiez la page d'information d'un utilisateur (`SingleUser.vue`) pour qu'elle affiche toutes les publications de cet utilisateur. Profitez-en aussi pour que les champs login et adresse e-mail dans l'interface ne soient modifiables que si l'utilisateur est sur sa propre page (il faudra trouver un moyen de stocker l'utilisateur connecté).
+1. Modifiez la page d'information d'un utilisateur (`SingleUser.vue`) pour qu'elle affiche toutes les publications de cet utilisateur. Profitez-en aussi pour que les champs login et adresse e-mail dans l'interface ne soient modifiables que si l'utilisateur est sur sa propre page.
 2. Permettre à un utilisateur de mettre à jour son profil depuis sa page utilisateur.
 3. Ajoutez un bouton de suppression sur ses propres messages. 
 4. Utilisez des notifications à tous les endroits nécessaires et gérer toutes les erreurs possibles lors des `fetch()`. 
