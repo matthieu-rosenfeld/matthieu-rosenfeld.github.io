@@ -1,5 +1,6 @@
 ---
 title: Projet - Front de l'API (gestion d'événements)
+lang: fr
 ---
 
 ## Dernier rendu des projets Framework Web
@@ -44,7 +45,7 @@ Ce front devra donc permettre d'utiliser les fonctionnalités suivantes :
 
 
 Vous serez attentif à ce que votre projet contienne :
-* des routes correctement configurées,
+* des routes nommées,
 * une gestion correcte de la connexion / déconnexion / rafraichissement du token s'il expire pendant la navigation,
 * un découpage pertinent en vues et composants,
 * au moins un composant importé en plus des messages flashs.
