@@ -425,9 +425,9 @@ Remarquez que ce n'est pas un ajout de Vue, mais bien quelque chose qui est touj
  <RouterLink :to="RouteAUtiliser">texte du lien</RouterLink>
 ```
 
-Il faut remplacer `RouteAUtiliser` par la route donc comme pour le `router-push`, on peut soit mettre directement le *path* de la route (`:to = "/users"`) ou son nom (`:to="{name:allUsers}"`). 
+Il faut remplacer `RouteAUtiliser` par la route donc comme pour le `router-push`, on peut soit mettre directement le *path* de la route (`to = "/users"`) ou son nom (`:to="{name:allUsers}"`). 
 
-Par contre, nous n'avons pas encore vu comment indiquer le paramètre d'une route. La première idée serait d'utiliser le *path*, par exemple pour afficher le feed de l'utilisateur 2 on pourrait faire `:to = "/users/2"`. Mais si l'id était stocké dans une variable `identifiant`, il faudrait écrire `:to = "'/users/'+identifiant"` et il faudrait alors penser à encoder les paramètres correctement pour une URL. Il existe une syntaxe qui utilise le nom de la route et qui permet de donner les paramètres : 
+Par contre, nous n'avons pas encore vu comment indiquer le paramètre d'une route. La première idée serait d'utiliser le *path*, par exemple pour afficher le feed de l'utilisateur 2 on pourrait faire `to = "/users/2"`. Mais si l'id était stocké dans une variable `identifiant`, il faudrait écrire `:to = "'/users/'+identifiant"` et il faudrait alors penser à encoder les paramètres correctement pour une URL. Il existe une syntaxe qui utilise le nom de la route et qui permet de donner les paramètres : 
 ```html
  <RouterLink :to="{name:'nomDeLaRoute',params:{param1:valeureParam1, param2:valeureParam2}}">texte du lien</RouterLink>
 ```
