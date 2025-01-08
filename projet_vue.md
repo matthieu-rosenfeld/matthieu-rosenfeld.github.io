@@ -88,7 +88,7 @@ Pour pouvoir accéder à votre *home* à distance et y déposer des fichiers, il
 Vous pourrez utiliser FileZilla (il faudra certainement l'installer) pour déposer des fichiers dans votre dossier `~/public_html` sur le serveur de l'IUT. Pour vous connecter, il faudra choisir comme protocole `SFTP`, comme hôte `ftpinfo.iutmontp.univ-montp2.fr` et vous devrez utiliser votre login et mot de passe. Vous pouvez alors facilement déplacer des fichiers de votre machine vers votre `home`.
 
 
-Vous aurez surtout besoin de vous connecter en `ssh` pour pouvoir exécuter les commandes nécessaires au bon déploiement. Vous pouvez d'ailleurs utiliser git depuis `ssh` pour récupérer vos projets sans utiliser FTP. Pour les projets Symfony, il faudra notamment faire les `composer instal` et probablement créer les bases. Pour le projet Vue, vous pouvez normalement copier directement la version build du projet.
+Vous aurez surtout besoin de vous connecter en `ssh` pour pouvoir exécuter les commandes nécessaires au bon déploiement. Vous pouvez d'ailleurs utiliser git depuis `ssh` pour récupérer vos projets sans utiliser FTP. Pour les projets Symfony, il faudra notamment faire les `composer install` et probablement créer les bases. Pour le projet Vue, vous pouvez normalement copier directement la version build du projet.
 
 Sous Linux, la commande vous permettant de vous connecter au serveur est la suivante (en remplaçant `mon_login_IUT` par votre login)
 
