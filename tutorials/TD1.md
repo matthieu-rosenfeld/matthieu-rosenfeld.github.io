@@ -40,7 +40,7 @@ Nous allons distinguer la version du code "en production" servie par notre serve
 
 Déplacez-vous **dans le terminal de votre docker** dans le dossier `/root/workspace` et entrez la commande qui permet d'initier le projet.
 
-L'utilitaire vous demande d'abord le nom du projet à créer : vous pouvez choisir `todo_list` (puisque nous allons commencer par réaliser une liste de tâches). Ensuite, il vous propose d'inclure plusieurs fonctionnalités supplémentaires dès la création du projet. Nous allons toutes les refuser sauf TypeScript (nous ignorerons les erreurs de type au début, mais nous y reviendrons ensuite) et ESLint.
+L'utilitaire vous demande  de confirmer l'installation du package `create-vue`, faites-le. Ensuite, il vous demande de choisir plusieurs fonctionnalités supplémentaires dès la création du projet, nous allons séléctionner TypeScript et ESLint (dans un premier temps nous allosn ignorer les erreurs Typescript). Ensuite, il faudra refuser les `experimental features` et selecionner non à la question `Skip all example code and start with a blank Vue project? `.
 
 ![](../assets/output_vite.png)
 </div>
@@ -60,11 +60,13 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import vueDevTools from 'vite-plugin-vue-devtools'
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    vueDevTools(),
   ],
   resolve: {
     alias: {
