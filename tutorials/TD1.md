@@ -40,7 +40,7 @@ Nous allons distinguer la version du code "en production" servie par notre serve
 
 Déplacez-vous **dans le terminal de votre docker** dans le dossier `/root/workspace` et entrez la commande qui permet d'initier le projet.
 
-L'utilitaire vous demande  de confirmer l'installation du package `create-vue`, faites-le. Ensuite, il vous demande de choisir plusieurs fonctionnalités supplémentaires dès la création du projet, nous allons séléctionner TypeScript et ESLint (dans un premier temps nous allosn ignorer les erreurs Typescript). Ensuite, il faudra refuser les `experimental features` et selecionner non à la question `Skip all example code and start with a blank Vue project? `.
+L'utilitaire vous demande de confirmer l'installation du package `create-vue`, faites-le. Ensuite, il vous demande de choisir plusieurs fonctionnalités supplémentaires dès la création du projet, nous allons sélectionner TypeScript et ESLint (dans un premier temps, nous allons ignorer les erreurs Typescript). Ensuite, il faudra refuser les `experimental features` et sélectionner non à la question `Skip all example code and start with a blank Vue project? `.
 
 ![](../assets/output_vite.png)
 </div>
@@ -109,24 +109,29 @@ Nous avons utilisé 2 utilitaires : `npm` pour créer ce projet (`npm create`), 
 
 La documentation *Vue* semble encourager l'usage de VS code. De même, TypeScript que nous allons utiliser est développé par le même éditeur que VScode (Microsoft). Tous ces outils sont libres et open source. Pour ces différentes raisons, c'est un bon choix d'utiliser VS code (ou l'alternative VScodium qui est une version de VScode sans la télémétrie de Microsoft) et d'installer le plugin `Vue - Official` (on pourrait aussi installer un paquet d'autres plugins utiles tels que `ESLint` par exemple). Cependant, Webstorm propose a priori aussi un très bon support pour TypeScript et *Vue* sans installation préalable de plugin.
 
-Nous allons aussi installer un plugin au navigateur pour nous aider à déboguer un site codé avec *Vue*:
+Vous pouvez aussi installer un plugin au navigateur pour nous aider à déboguer un site codé avec *Vue*:
 sous [Firefox](https://addons.mozilla.org/fr/firefox/addon/vue-js-devtools/) et sous [Chrome](https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd). Ces plugins offrent un nouvel onglet dans les outils de développement qui ressemble à ceci :
 
 ![](../assets/screen_fire_vue.png)
 
+Depuis 2025, les projets Vue crées avec `npm create vue@latest` contiennent automatiquement `vite-plugin-vue-devtools` (voir la ligne correspondante du fichier `vite.config.ts`). Cela permet d'accéder aux mêmes outils de développements que le plugin du navigateur sans installer le plugin. En fait, il est maintenant [recommandé](https://devtools.vuejs.org/guide/vite-plugin) de préférer cet outil pour les projets utilisant `vite`.
+
 ### La première page
 
 
-Ouvrez le projet dans votre IDE et commencez à observer le contenu du dossier `todo_list/src`. Commençons par regarder les deux fichiers `main.ts` et `App.vue`. Le fichier `main.ts` est le point d'entrée principal du site et pour l'instant, il se contente d'importer un composant définit dans le fichier `App` et de le déclarer comme composant principal avec la dernière ligne. Ouvrez le fichier `index.html` pour voir à quoi le `#app` fait référence: on pourrait le remplacer par n'importe quel sélecteur valide.
+Ouvrez le projet dans votre IDE et commencez à observer le contenu du dossier `todo_list/src`. Commençons par regarder les deux fichiers `main.ts` et `App.vue`. Le fichier `main.ts` est le point d'entrée principal du site et pour l'instant, il se contente d'importer un composant définit dans le fichier `App` et de le déclarer comme composant principal avec la dernière ligne. Ouvrez le fichier `index.html` pour voir à quoi le `#app` fait référence : on pourrait le remplacer par n'importe quel sélecteur valide.
 
-Nous allons pour l'instant surtout nous concentrer sur le fichier `App.vue`. La première chose à constater c'est qu'il contient:
+Nous allons pour l'instant surtout nous concentrer sur le fichier `App.vue`. La première chose à constater c'est qu'il contient :
 - du JS entre les balises `<script>`, 
 - du HTML entre les balises `<template>` 
 - et enfin du CSS entre les balises `<style>`. 
 
 Ce découpage contredit l'organisation du code à laquelle vous êtes habitués. Nous allons tout de même effectuer un découpage, mais il sera "composant" par "composant". C'est le choix fait par la plupart des frameworks JS populaires. Certains proposent de séparer le code en composant et de séparer le HTML, le CSS et le JS de chaque composant. Nous verrons les détails des composants plus tard. Pour l'instant, le JS importe deux composants (`HelloWorld` et `TheWelcome`) qui sont ensuite utilisés dans le HTML.
 
-Remplacez le contenu de `App.vue` par
+
+<div class="exercice" markdown="1" >
+
+1. Remplacez le contenu de `App.vue` par
  
 ```vue
 <script setup lang="ts">
@@ -145,7 +150,11 @@ Remplacez le contenu de `App.vue` par
 </style>
 ```
 
-Vérifiez dans le navigateur que l'affichage a bien été mis-à-jour. Vous pouvez aussi supprimer le dossier `src/component` que nous n'utiliserons pas dans le premier exercice.
+2. Vérifiez dans le navigateur que l'affichage a bien été mis-à-jour. 
+
+3. Supprimez le dossier `src/component` que nous n'utiliserons pas dans le premier TD.
+
+</div>
 
 ## Base du réactive : moustache, v-bind, v-on et v-model
 
@@ -204,7 +213,7 @@ Faites-le et vérifiez que tout fonctionne.
 
 La fonction `ref` renvoie un objet réactif qui encapsule l'objet donné en argument. Il faut donc maintenant utiliser `monobjet.value` pour accéder à sa valeur dans le JS. En contrepartie, dès qu'il change, l'interface se met-à-jour correctement. Il faudra définir et utiliser tous les objets réactifs de cette manière.
 
-> La fonction `ref` utilise l'objet proxy de JavaScript que nous avons utilisé dans un contexte similaire l'an dernier. En fait, *Vue* définie une fonction `reactive` dont le fonctionnement est très proche de la fonction `reactive` que nous avons écrit l'an dernier. La fonction `ref` utilise en fait `reactive`, mais `ref` est plus simple d'utilisation et nous utiliserons donc principalement `ref`.
+> La fonction `ref` utilise l'objet proxy de JavaScript que nous avons utilisé dans un contexte similaire l'an dernier. En fait, *Vue* définie une fonction `reactive` dont le fonctionnement est très proche de la fonction `reactive` que nous avons écrit l'an dernier. La fonction `ref` utilise d'ailleurs `reactive`, mais `ref` est plus simple d'utilisation et nous utiliserons donc principalement `ref`.
 
 
 > **Attention :** Pour utiliser une variable `ref` dans la partie `script JS` il faut écrire `maVariable.value` pour accéder à sa valeur alors qu'il faut faire `maVariable` dans la partie `template HTML`. Cela risque de vous causer pas mal d'erreur au début si vous l'oubliez !!
@@ -572,6 +581,9 @@ Normalement, votre IDE soulève déjà une première erreur TypeScript que nous 
 ```
 Parameter 'tache' implicitly has an 'any' type.
 ```
+
+Si votre IDE ne détecte pas l'erreur, vous pouvez essayer la commande qui lance la vérification des types `npm run type-check` dans le terminal du docker.
+
 
 Le type `any` est un type spécial qui correspond à "n'importe quel type". Ici l'IDE nous dit qu'il a été obligé de deviner que c'était le type attendu pour cette fonction. On peut dans un premier temps corriger l'erreur en corrigeant la déclaration de `function retirerTache(tache:any)`. Ce n'est évidemment pas très utile de mettre `any` partout puisqu'il y a alors trop peu d'information pour que les types permettent de détecter une erreur. Nous allons donc définir une interface comme ceci :
 

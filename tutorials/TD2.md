@@ -189,7 +189,7 @@ Nous avons écrit notre premier composant, nous allons extraire du code de `List
 <button @click="retirerTache(tache)">Retirer</button>
 ```
 
-Nous allons donc créer un composant `Tache.vue` qui contient ce HTML et que nous utiliserons dans `ListeDeTaches.vue`. Vous devez être capable d'imaginer comment le faire en utilisant des `props`, `emit`, et `emited event`.
+Nous allons donc créer un composant `TacheElement.vue` qui contient ce HTML et que nous utiliserons dans `ListeDeTaches.vue`. Vous devez être capable d'imaginer comment le faire en utilisant des `props`, `emit`, et `emited event`.
 
 <div class="exercice" markdown="1" >
 
@@ -255,7 +255,7 @@ Le composant n'est pas encore fonctionnel, mais il ne cause plus d'erreur. Nous 
 ```js
 import TacheElement from '@/composants/TacheElement.vue';
 ```
-Pour utiliser le composant, remplacez les trois lignes à l'intérieur du `<li>` par :
+Pour utiliser le composant, remplacez les lignes à l'intérieur des balises `<li>` par :
 
 ```vue
 <TacheElement :description-tache="tache.description" :cochee="tache.faite" />
