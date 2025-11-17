@@ -6,9 +6,9 @@ lang: fr
 
 {% raw %}
 
-Nous souhaitons utiliser Vue pour produire une façade à notre API *TheFeed*. Il se trouve qu'API Platform [peut générer automatiquement](https://api-platform.com/docs/create-client/vuejs/) un code `Vue` en TypeScript associé à une API développée en utilisant API Platform. Le résultat obtenu est évidemment très formaté, mais si l'on comprend son fonctionnement, il est évidemment possible de le personnaliser à souhait. 
+Nous souhaitons utiliser Vue pour produire une façade à notre API *TheFeed*. Il se trouve qu'API Platform [peut générer automatiquement](https://api-platform.com/docs/create-client/vuejs/) un code `Vue` en TypeScript associé à une API développée en utilisant API Platform. Le résultat obtenu est évidemment très formaté, mais si l'on comprend son fonctionnement, il est possible de le personnaliser à souhait. 
 
-Dans ce TD, nous allons réaliser notre client Vue nous-même, mais tout ce que nous verrons est utile pour comprendre le fonctionnement du code généré par API Platform (mais il utilise aussi d'autres notions que nous n'aurons pas le temps d'étudier comme les `composables`).
+Dans ce TD, nous allons plutôt réaliser notre client Vue nous-même, mais tout ce que nous verrons est utile pour comprendre le fonctionnement du code généré par API Platform (mais il utilise aussi d'autres notions que nous n'aurons pas le temps d'étudier comme les `composables`).
 
 
 ## Initialisation du projet
@@ -20,7 +20,7 @@ cd /root/workspace/
 npm create vue@latest theFeedFront
 ```
 
-Cette fois, nous allons activer une option supplémentaire en acceptant le `Vue Router` :
+Cette fois, nous allons activer une option supplémentaire en acceptant le `Vue Router` en plus de `TypeScript` et `ESLint` :
 
 ![](../assets/console_creation_thefeedapi.png)
 
@@ -153,9 +153,9 @@ Pour s'assurer que vous avez compris, créons une autre vue qui nous servira plu
 3. Vérifiez que cette nouvelle route fonctionne.
 </div>
 
-Une fois que nos premières routes sont définies, il est temps de faire nos premiers liens vers nos routes. La première manière de faire cela consiste à utiliser la méthode `push` du routeur qui redirige l'utilisateur vers la route donnée en argument. 
+Maintenant que nos premières routes sont définies, il est temps de faire des liens vers nos routes. La première manière de faire cela consiste à utiliser la méthode `push` du routeur qui redirige l'utilisateur vers la route donnée en argument. 
 Dans les template, le router est directement accessible avec `$router` (c'est la ligne `app.use(router)` qui permet cela).
-Ensuite, l'appelle à la méthode `$router.push('maroute')` redirige l'utilisateur vers la route `maroute`. Ainsi, par exemple en ajoutant l'attribut `@click="$router.push('/maroute')"` à une balise `html`, je m'assure qu'un clic sur cette balise change la route.
+Ensuite, l'appelle à la méthode `$router.push('maroute')` redirige l'utilisateur vers la route `maroute`. Ainsi, par exemple en ajoutant l'attribut `@click="$router.push('/maroute')"` à une balise `html`, on s'assure qu'un clic sur cette balise change la route.
 
 <div class="exercice" markdown="1">
 
@@ -225,7 +225,7 @@ Notez qu'on pourrait aussi rediriger directement vers le `path` d'une autre rout
 
 Pour notre application, nous aurons besoin d'une autre fonctionnalité des routes : les routes paramétrées. Nous avons rencontré le même concept dans Symfony : ce sont des routes dont l'URL contient une variable (par exemple, l'identifiant d'un utilisateur).
 
-Pour définir une route paramétrée, il suffit de précéder le paramètre du symbole `:`. Ainsi, par exemple, je peux définir la route suivante :
+Pour définir une route paramétrée, il suffit de précéder le paramètre du symbole `:`. Ainsi, par exemple, on pourrait définir la route suivante :
 ```ts
 { 
     path: '/users/:id', 
@@ -427,7 +427,7 @@ Remarquez que ce n'est pas un ajout de Vue, mais bien quelque chose qui est touj
 
 Il faut remplacer `RouteAUtiliser` par la route donc comme pour le `router-push`, on peut soit mettre directement le *path* de la route (`to = "/users"`) ou son nom (`:to="{name:allUsers}"`). 
 
-Par contre, nous n'avons pas encore vu comment indiquer le paramètre d'une route. La première idée serait d'utiliser le *path*, par exemple pour afficher le feed de l'utilisateur 2 on pourrait faire `to = "/users/2"`. Mais si l'id était stocké dans une variable `identifiant`, il faudrait écrire `:to = "'/users/'+identifiant"` et il faudrait alors penser à encoder les paramètres correctement pour une URL. Il existe une syntaxe qui utilise le nom de la route et qui permet de donner les paramètres : 
+Par contre, nous n'avons pas encore vu comment indiquer le paramètre d'une route. La première idée serait d'utiliser le *path*, par exemple pour afficher le feed de l'utilisateur 2 on pourrait faire `to = "/users/2"`. Mais si l'id était stocké dans une variable `identifiant`, il faudrait écrire `:to = "'/users/'+identifiant"` et il faudrait alors penser à encoder les paramètres correctement pour une URL. La syntaxe qui utilise le nom de la route permet d'indiquer directement les paramètres : 
 ```html
  <RouterLink :to="{name:'nomDeLaRoute',params:{param1:valeureParam1, param2:valeureParam2}}">texte du lien</RouterLink>
 ```
@@ -570,7 +570,7 @@ const users = ref([]);
 fetch('http://localhost/the_feed_api/public/api/utilisateurs')
   .then(reponsehttp => reponsehttp.json())
   .then(reponseJSON => {
-    users.value = reponseJSON["hydra:member"];
+    users.value = reponseJSON.member;
   });
 </script>
 
@@ -585,15 +585,25 @@ Pour une meilleure organisation du code, nous n'allons pas faire le `fetch()` di
 export const apiStore = {
     apiUrl: "http://localhost/the_feed_api/public/api/",
 
-    getAll(ressource:string):Promise<any>{
+    getAll(ressource:string):Promise<unknown>{
         return fetch(this.apiUrl+ressource)
         .then(reponsehttp => reponsehttp.json())
+        .then (data => data.member);
     },
     //à compléter plus tard avec les autres appels à l'API
 }
 ```
 
-Avec notre `apiStore`, on pourra remplacer le `fetch` et le premier `then` par `apiStore.getAll('utilisateurs')`. Cet objet rend le code de nos composants beaucoup plus explicite. En cas de changement d'API, il suffit alors d'aller modifier ce fichier pour maintenir le fonctionnement de notre front.
+Avec notre `apiStore`, on pourra remplacer le `fetch` et les deux `then` par `apiStore.getAll('utilisateurs')`, ce qui donnera:
+```ts  
+apiStore.getAll('utilisateurs').then((data)=>{
+    users.value = data as Utilisateur[];
+});
+```
+
+Notez le `as Utilisateur[];` qui permet d'indiquer que le type de data est bien le type attendu. TypeScript n'a aucun moyen de connaitre les types des objets fournis par l'API donc il faut bien lui indiquer à un moment que les types retournés sont bien ceux qu'on espère. Il serait plus élégant de gérer cela dans l'objet `apiStore` et d'éviter de renvoyer des types `unknown`. Nous verrons comment améliorer ça par la suite.
+
+Cet objet rend le code de nos composants beaucoup plus explicite. En cas de changement d'API, il suffit alors d'aller modifier ce fichier pour maintenir le fonctionnement de notre front.
 Il faudra penser à importer l'objet dans les fichiers qui l'utilisent avec la ligne `import { apiStore } from '@/util/apiStore'`. 
 
 
@@ -606,7 +616,7 @@ Il faudra penser à importer l'objet dans les fichiers qui l'utilisent avec la l
 3. Faites de même pour le composant/vue `FeedMain` en allant chercher toutes les publications. Il n'y a pas besoin de modifier le code de `apiStore`.
 
 4. On veut maintenant s'occuper des vues `SingleMessage` et `SingleUser`. Cette fois, il va falloir rajouter une méthode à `apiStore` dont voici la signature
-   `getById(ressource:string, id:number):Promise<any>`. Il faudra donner une valeur initiale à la variable réactive, vous pouvez simplement écrire `chargement` pour les différentes valeurs.
+   `getById(ressource:string, id:number):Promise<unknown>`. Il faudra donner une valeur initiale à la variable réactive, vous pouvez simplement écrire `chargement` pour les différentes valeurs.
 
 
 <!-- 4. N'oubliez pas d'utiliser `encodeURI()` sur toute variable qui pourrait se retrouver dans l'URL du `fetch`. Il faudra peut-être d'abord les convertir en string avec la fonction `String`. -->
@@ -676,7 +686,7 @@ fetch(".../api/auth", {
 
 <div class="exercice" markdown="1">
 
-1. Ajoutez et complétez la méthode `login (login:string, password:string):Promise<any>` à `apiStore`.
+1. Ajoutez et complétez la méthode `login (login:string, password:string):Promise<unknown>` à `apiStore`.
  
 2. Créez le composant/vue `FormulaireConnexion.vue` et complétez-le. Pour l'instant, nous allons simplement afficher dans le terminal (`console.log`) la réponse JSON à la requête de connexion.
 
@@ -722,7 +732,7 @@ form{
 
 <div class="exercice" markdown="1">
 
-1. Pour gérer l'appel à l'API, nous allons créer une nouvelle méthode `createRessource(ressource:string, data:any):Promise<any>` dans `apiStore`. `ressource` contiendra le nom de la ressource et `data` l'objet correspondant à la nouvelle ressource. Le corps de cette requête sera simplement `body: JSON.stringify(data)`. En définissant une méthode générique de création, nous pourrons réutiliser la même pour la création d'un utilisateur.
+1. Pour gérer l'appel à l'API, nous allons créer une nouvelle méthode `createRessource(ressource:string, data:unknown):Promise<unknown>` dans `apiStore`. `ressource` contiendra le nom de la ressource et `data` l'objet correspondant à la nouvelle ressource. Le corps de cette requête sera simplement `body: JSON.stringify(data)`. En définissant une méthode générique de création, nous pourrons réutiliser la même pour la création d'un utilisateur.
 Pour que notre requête contienne les cookies d'authentification, il suffira à nouveau d'ajouter au `fetch` l'option `credential:'include'`.
 
 2. Créez le composant `components/FormulairePublication.vue` en utilisant l'exemple plus haut. Complétez le composant en définissant la fonction `envoyer` et la variable message comme il faut. Pour l'instant, on peut ne pas mettre de `then` et se contenter d'ignorer la réponse de notre requête.
@@ -813,7 +823,7 @@ export const storeAuthentification = reactive({
 });
 ```
 
-Dans notre cas, nous transformer en store notre fichier `apiStore.ts` existant.
+Dans notre cas, nous allons transformer en store notre fichier `apiStore.ts` existant.
 Nous allons en profiter pour commencer à gérer certaines erreurs possibles lors des requêtes, nous allons donc remplacer la fonction login par la fonction suivante :
 
 ```ts
@@ -983,7 +993,7 @@ Notez que nous pourrions aussi importer les notifications dans chaque composant 
 
 Enfin, pour utiliser les notifications :
 - placer la balise `<notifications />` dans le template du fichier `App.vue`,
-- pour afficher une notification, je peux ensuite appeler la fonction `notify` dont voici un exemple d'utilisation
+- pour afficher une notification, on peut ensuite appeler la fonction `notify` dont voici un exemple d'utilisation
     ```ts
      notify({
         type: "success",// on peut aussi utiliser warn et error, ou en définir d'autres
