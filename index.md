@@ -13,9 +13,10 @@ Parcours IAMSI – Cours R5.D.04 – Développement pour progiciels
 
 ## TDs
 
-1. Semaine du 17 novembre 2025 -- [TD1 -- Introduction à Vue](tutorials/TD1.html)
-2. Semaine du 17 novembre 2025 -- [TD2 -- Les composants](tutorials/TD2.html)
-3. Semaine du 8 décembre 2025 -- [TD3 -- Front end pour l'API The Feed](tutorials/TD3.html)
+1. Semaine du 16 novembre 2026 -- [TD1 -- Introduction à Vue](tutorials/TD1.html)
+2. Semaine du 16 novembre 2026 -- [TD2 -- Les composants](tutorials/TD2.html)
+3. Semaine du 7 décembre 2026 -- [TD3 -- Front end pour l'API The Feed](tutorials/TD3.html)
+3. Semaine du 14 décembre 2026 -- Suite et fin du [TD3](tutorials/TD3.html) et travail sur le projet.
 
 {% comment %}
 ## Projet Vue.js

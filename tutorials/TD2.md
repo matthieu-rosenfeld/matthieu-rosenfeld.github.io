@@ -71,7 +71,7 @@ En fait, un module JS peut exporter un certain nombre de fonctions, variables et
 
 <div class="exercice" markdown="1" >
 
-1. Pour améliorer l'organisation du projet, vous allez plutôt créer dans le dossier `src` un dossier `composants` dans lequel nous mettrons tous nos composants. Déplacez le fichier `ListeDeTaches.vue` dans ce dossier. Votre IDE vous propose certainement de corriger l'import dans le fichier `App.vue`: si oui acceptez, si non allez le faire par vous-même. 
+1. Pour améliorer l'organisation du projet, vous allez plutôt utiliser le dossier `components` (dans `src`) dans lequel nous mettrons tous nos composants. Videz les fichiers et dossiers d'exemples présents dans ce dossier (`HelloWorld.vue`, `icons`, etc) puis déplacez-y le fichier `ListeDeTaches.vue`. Votre IDE vous propose certainement de corriger l'import dans le fichier `App.vue`: si oui, acceptez, si non, allez le faire par vous-même. 
 
 2. Trouvez comment afficher trois listes de tâches dans la page (indice : c'est très simple). 
 
@@ -194,7 +194,7 @@ Nous allons donc créer un composant `TacheElement.vue` qui contient ce HTML et 
 <div class="exercice" markdown="1" >
 
 
-Commençons par définir notre composant `TacheElement.vue`:
+Commençons par définir notre composant `TacheElement.vue` (toujours dans le dossier `src/components`) :
 
 ```vue
 <script setup lang="ts">
@@ -253,7 +253,7 @@ const props = defineProps<{descriptionTache: string, cochee:boolean}>();
 Le composant n'est pas encore fonctionnel, mais il ne cause plus d'erreur. Nous pouvons donc l'inclure dans notre page pour le tester au fur et à mesure. Nous allons l'importer dans `ListeDeTaches.vue` avec la ligne :
 
 ```js
-import TacheElement from '@/composants/TacheElement.vue';
+import TacheElement from '@/components/TacheElement.vue';
 ```
 Pour utiliser le composant, remplacez les lignes à l'intérieur des balises `<li>` par :
 
@@ -416,10 +416,30 @@ Il suffit alors de définir le `prop` et l'événement correspondant dans le com
 </template>
 ```
 
+Cependant, même si ce système fonctionne toujours, depuis les dernières versions de vue, la syntaxe a été grandement simplifiée. Il est maintenant simplement possible d'utiliser la fonction `defineModel` dans le composant, comme ceci :
+
+```vue
+<script setup>
+  const model = defineModel();
+</script>
+
+<template>
+<input type="texte" v-model="model"/>
+</template>
+```
+
+Et dans le parent, on garde toujours :
+
+```vue
+<monComposantPersonalise v-model="maVariable">
+```
+
+En arrière-plan, tout cela est automatiquement traduit avec le système présenté précédemment, en utilisant un prop `modelValue` et un événement `update:modelValue`.
+
 <div class="exercice" markdown="1" >
 
 
-1. Faites les modifications nécessaires pour définir le `v-model` de `TacheElement`. Puisque nous avions déjà codé le bon prop et le bon emit, il suffit de les renommer correctement : `cochee` devient `modelValue` et `changerTacheFaite` devient `update:modelValue`. (Attention dans `defineEmits` à bien mettre les guillemets doubles `"update:modelValue"` sinon JavaScript est gêné par les `:`).
+1. Faites les modifications nécessaires pour définir le `v-model` de `TacheElement` en utilisant la fonction `defineModel` pour définir une variable `model` dans `TacheElement`, comme montré dans le dernier exemple. Supprimez le prop `cochee` et l'événement `changerTacheFaite` qui ne nous sont plus utiles (le prop `coche` est maintenant notre `model`). En conséquence, remplacez la ligne `<label :class="{ fait: props.cochee }">` par `<label :class="{ fait: model }" >`.
 
 2. Modifiez `ListeDeTache` pour utiliser `v-model` ainsi
 
@@ -437,7 +457,7 @@ Il suffit alors de définir le `prop` et l'événement correspondant dans le com
 
 </div>
 
-Retenez qu'on utilise les *props* pour faire descendre de l'information d'un composant vers son enfant et les événements pour faire remonter l'information. La directive `v-model` permet de faire descendre et remonter l’information d'un composant, mais c’est simplement un raccourci qui utilise un *prop* et un *évènement*. Remarquez qu'il n'était pas beaucoup plus compliqué de faire fonctionner le `v-model` du côté du composant, mais que cela est plus simple pour celui qui utilise le composant. C'est donc une bonne pratique de définir un `v-model` quand c'est pertinent. Nous n'en parlerons pas ici, mais on peut aussi "nommer" les `v-model` ce qui permet d'associer plusieurs `v-model` au même composant.
+Retenez qu'on utilise les *props* pour faire descendre de l'information d'un composant vers son enfant et les événements pour faire remonter l'information. La directive `v-model` permet de faire descendre et remonter l’information d'un composant, mais c’est simplement un raccourci qui utilise un *prop* et un *évènement*. Remarquez qu'il n'était pas beaucoup plus compliqué de faire fonctionner le `v-model` du côté du composant, mais que cela est plus simple pour celui qui utilise le composant. C'est donc une bonne pratique de définir un `v-model` quand c'est pertinent. Nous n'en parlerons pas ici, mais on peut aussi "nommer" les `v-model` ce qui permet d'associer plusieurs `v-model` au même composant (voir [la documentation correspondante](https://fr.vuejs.org/guide/components/v-model.html#multiple-v-model-bindings) si cela vous intéresse).
 
 ## Échappement des variables
 
@@ -481,7 +501,7 @@ alors la balise `<slot>` est automatiquement remplacée par le HTML contenu entr
 
 <div class="exercice" markdown="1" >
 
-1. Retirer le prop `description-tache` de `TacheElement.Vue` et utiliser `<slot></slot>` à sa place dans le `<template>`. 
+1. Retirer le prop `description-tache` de `TacheElement.Vue` (et par conséquent, supprimer également l'appel à la fonction `defineProps` qui ne nous sert plus à rien dans ce composant) puis utiliser `<slot></slot>` à sa place dans le `<template>`. 
 
 2. Modifier ensuite son utilisation dans `ListeDeTaches` : au lieu de passer `tache.description` dans un attribut, utiliser la syntaxe moustache à l'intérieur de la balise. 
 

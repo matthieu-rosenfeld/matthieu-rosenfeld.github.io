@@ -20,7 +20,11 @@ cd /root/workspace/
 npm create vue@latest theFeedFront
 ```
 
-Cette fois, nous allons activer une option supplémentaire en acceptant le `Vue Router` en plus de `TypeScript` et `ESLint` :
+Concernant les options à choisir :
+* Répondez **oui** pour l'utilisation de `TypeScript`.
+* On vous affiche ensuite une liste d'options. Sélectionnez les options `Router` et `Linter` (déplacez vous avec les flèches du clavier, puis appuyez sur espace pour sélectionner une option). Confirmez en appuyant sur entrée.
+* On vous affiche ensuite une seconde liste `experimental features`. Ne sélectionnez aucune option et validez en appuyant sur entrée.
+* Enfin, répondez **non** à la question `Skip all example code and start with a blank Vue project?`.
 
 ![](../assets/console_creation_thefeedapi.png)
 

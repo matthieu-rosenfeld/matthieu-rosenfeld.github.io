@@ -13,7 +13,7 @@ lang: fr
 
 
 ## Introduction
-<!-- Indique à liquide d'ignorer les {{ }} jusqu'au enraw en fin de document -->
+<!-- Indique à liquide d'ignorer les {{ }} jusqu'au endraw en fin de document -->
 Jusqu'à maintenant, nous n'avons utilisé que du JavaScript "nature".
 Ce langage offre beaucoup de possibilités, mais de nombreux frameworks permettent d'aller beaucoup plus loin.
 Ces frameworks offrent souvent des outils permettant de faire un certain nombre de tâches récurrentes plus facilement. Ils imposent (ou suggèrent) la plupart du temps une manière d'organiser le code d'un projet ainsi qu'un certain nombre de bonnes pratiques associées. Notez que puisque JavaScript peut aussi s'utiliser côté serveur, il existe des frameworks *frontend* et des frameworks *backend*.
@@ -24,7 +24,7 @@ Dans ce TD, nous allons étudier les bases de *Vue* qui est l'un des frameworks 
 Ce TD est partiellement inspiré du [tutoriel *Vue*](https://vuejs.org/tutorial/#step-1). La [documentation de *Vue*](https://vuejs.org/guide/introduction.html) fournit beaucoup d'information de manière assez lisible sur l'ensemble des fonctionnalités de *Vue*.
 
 ## Première page avec `Vue.js` et `npm`
-Jusqu'à maintenant, nous n'avons utilisé que du JavaScript "nature". Nous pouvions donc simplement écrire notre fichier `js`, l'inclure dans le fichier `html` et le navigateur web faisait le reste du travail sans même avoir besoin d'un serveur web. Beaucoup de frameworks JS coexistent avec tout un paquet d'utilitaires (compilateur, *linter*, serveur de développement...). Ces utilitaires sont très simples à installer grâce à Node.JS et [npm](https://fr.wikipedia.org/wiki/Npm) (officieusement l'acronyme de "Node Package Manager", officiellement le rétroacronyme de "npm is not an acronym").
+Jusqu'à maintenant, nous n'avons utilisé que du JavaScript "nature". Nous pouvions donc simplement écrire notre fichier `js`, l'inclure dans le fichier `html` (comme nous faisions en seconde année) ou bien passer par un contrôleur JavaScript **Stimulus** (sur Symfony, qui, en arrière-plan, inclut le script `js` correspondant dans le fichier `html`) et le navigateur web faisait le reste du travail sans même avoir besoin d'un serveur web. Beaucoup de frameworks JS coexistent avec tout un paquet d'utilitaires (compilateur, *linter*, serveur de développement...). Ces utilitaires sont très simples à installer grâce à Node.JS et [npm](https://fr.wikipedia.org/wiki/Npm) (officieusement l'acronyme de "Node Package Manager", officiellement le rétroacronyme de "npm is not an acronym").
 
 Npm est déjà disponible sur l'image docker que nous avons configuré (l'installer est normalement assez simple sous Linux). Pour initier un projet *Vue*, vous pouvez alors ouvrir votre terminal dans le dossier où vous souhaitez créer votre projet, puis entrez la commande :
 
@@ -38,9 +38,18 @@ Nous allons distinguer la version du code "en production" servie par notre serve
 
 <div class="exercice" markdown="1">
 
+Commencez par mettre à jour le gestionnaire de packages `npm` avec la commande suivante :
+```sh
+npm install -g npm@12.2.2
+```
+
 Déplacez-vous **dans le terminal de votre docker** dans le dossier `/root/workspace` et entrez la commande qui permet d'initier le projet.
 
-L'utilitaire vous demande de confirmer l'installation du package `create-vue`, faites-le. Ensuite, il vous demande de choisir plusieurs fonctionnalités supplémentaires dès la création du projet, nous allons sélectionner TypeScript et ESLint (dans un premier temps, nous allons ignorer les erreurs Typescript). Ensuite, il faudra refuser les `experimental features` et sélectionner non à la question `Skip all example code and start with a blank Vue project? `.
+L'utilitaire vous demande de confirmer l'installation du package `create-vue`, faites-le. Ensuite, il vous demande de choisir plusieurs fonctionnalités supplémentaires dès la création du projet :
+* Répondez **oui** pour l'utilisation de `TypeScript`.
+* On vous affiche ensuite une liste d'options. Sélectionnez seulement l'option **Linter** (déplacez vous avec les flèches du clavier, puis appuyez sur espace). Confirmez en appuyant sur entrée.
+* On vous affiche ensuite une seconde liste `experimental features`. Ne sélectionnez aucune option et validez en appuyant sur entrée.
+* Enfin, répondez **non** à la question `Skip all example code and start with a blank Vue project?`.
 
 ![](../assets/output_vite.png)
 </div>
@@ -232,6 +241,8 @@ Nous allons maintenant voir comment associer une variable au contenu d'un champ 
    }
    ```
 
+  **Attention :** Votre IDE devrait normalement vous dire qu'il y a une erreur (`Parameter 'e' implicitly has an 'any' type.`). On peut ignorer cette erreur pour l'instant, nous verrons plus tard ce qu'elle veut dire.
+
 3. Vérifiez qu'en changeant au clavier la valeur du champ la valeur affichée précédemment est bien modifiée.
 </div>
 
@@ -252,13 +263,11 @@ Les directives très utilisées ont des syntaxes raccourcies que nous allons pri
 
 ## Réalisation d'une liste de tâches
 Les deux exercices classiques pour découvrir un framework JS sont le morpion ou
-la liste de tâche (*TODO list*). Nous avons fait un morpion en "*R4.A.10 --
-Complément web*" l'an dernier donc pour découvrir la réactivité, nous allons réaliser une
-liste de tâches. Il sera possible d'ajouter des tâches, de retirer des tâches et
-de cocher certaines tâches pour indiquer qu'elles ont été effectuées. Elle
-ressemblera à ça: 
+la liste de tâche (*TODO list*). Nous avons fait un morpion en "*R4.01 --
+Architecture Logicielle*" (cours de JavaScript) l'an dernier donc pour découvrir la réactivité, 
+nous allons réaliser une liste de tâches. Il sera possible d'ajouter des tâches, de retirer des tâches 
+et de cocher certaines tâches pour indiquer qu'elles ont été effectuées. Elle ressemblera à ça: 
 ![](../assets/fin_TD1.png)
-
 
 ### Afficher la liste de tâches 
 
@@ -305,8 +314,6 @@ Nous allons maintenant permettre d'ajouter un élément à la liste de tâches.
 
 <div class="exercice" markdown="1" >
 
-
-
 1. Commencez par ajouter, avant l'affichage de la liste, un `<input type="text">` associé à une variable réactive qu'on pourra appeler `nouvelleTache` (il faut donc utiliser `ref` et `v-model`). On ajoutera un `placeholder` pertinent à l'input.
 
 2. Écrivez une nouvelle fonction `ajouterTache` qui ajoute un nouvel élément à `taches` (on pourra utiliser la méthode [`push`](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Array/push) des tableaux). Ce nouvel élément doit posséder une nouvelle `id` (on peut utiliser `id++`), une description qui correspond au contenu de la variable `nouvelleTache` et le booléen `faite:false`. La fonction `ajouterTache` devra aussi vérifier que `nouvelleTache` est différent de `""` avant de l'ajouter à `taches` puis réinitialiser la valeur de `nouvelleTache` à `""`. N'oubliez pas que pour utiliser nos variables `ref` dans le JS, il faut utiliser `.value`. 
@@ -316,7 +323,7 @@ Nous allons maintenant permettre d'ajouter un élément à la liste de tâches.
 </div>
 
 
-On aimerait bien que l'ajout d'une tâche ignore les espaces inutiles en début ou fin de chaine (en particulier, on aimerait que la chaine `"   "` soit ignorée tout comme la chaine vide). On a une solution très simple pour ça : le [modificateur `.trim`](https://vuejs.org/guide/essentials/forms.html#trim). Pour l'utiliser, à la place d'écrire `v-model="nouvelleTache"` on doit écrire `v-model.trim="nouvelleTache"` et le contenu de `nouvelleTache` sera alors le même que celui de l'input, mais en ignorant les espaces de début et de fin.
+On aimerait bien que l'ajout d'une tâche ignore les espaces inutiles en début ou fin de chaîne (en particulier, on aimerait que la chaîne `"   "` soit ignorée tout comme la chaîne vide). On a une solution très simple pour ça : le [modificateur `.trim`](https://vuejs.org/guide/essentials/forms.html#trim). Pour l'utiliser, à la place d'écrire `v-model="nouvelleTache"` on doit écrire `v-model.trim="nouvelleTache"` et le contenu de `nouvelleTache` sera alors le même que celui de l'input, mais en ignorant les espaces de début et de fin.
 
 <div class="exercice" markdown="1" >
 
@@ -373,7 +380,7 @@ Nous voulons maintenant permettre à l'utilisateur de noter si une tâche est fa
 }
 ```
 
-Il faudrait ensuite associer la classe CSS `fait` à toutes les tâches qui sont faites. La directive `v-bind:class` fonctionne de manière un peu particulière. L'un des manières de l'utiliser est de lui donner un objet dont les noms des propriétés sont les noms des classes à ajouter et la valeur de chaque propriété est un booléen qui indique si la classe correspondante doit être ajoutée. Ces classes se cumulent avec celles définies dans l'attribut HTML `class="..."` (par convention les classes définies ainsi ne doivent pas être retirées par la suite, d'ailleurs la syntaxe de `:class` ne permet pas de les retirer). Par exemple, un `<div>` avec
+Il faudrait ensuite associer la classe CSS `fait` à toutes les tâches qui sont faites. La directive `v-bind:class` fonctionne de manière un peu particulière. L'une des manières de l'utiliser est de lui donner un objet dont les noms des propriétés sont les noms des classes à ajouter et la valeur de chaque propriété est un booléen qui indique si la classe correspondante doit être ajoutée. Ces classes se cumulent avec celles définies dans l'attribut HTML `class="..."` (par convention les classes définies ainsi ne doivent pas être retirées par la suite, d'ailleurs la syntaxe de `:class` ne permet pas de les retirer). Par exemple, un `<div>` avec
 
 ```js
 <div class="blip blop" :class="{class1: true, class2: false, toto: true}">
@@ -655,9 +662,9 @@ Notez que les scripts qui sont appelés par `npm run`, c-à-d `vite`, `eslint` (
 
 Vous avez découvert un certain nombre de fonctionnalités de *Vue* pour la réalisation de notre liste de tâches. Dans le prochain TD, nous découvrirons la notion de composant pour réaliser un tableau de bord de liste de tâches.
 
-## Liens avec *R.4.01-Architecture Logicielle*
+## Liens avec *R4.01-Architecture Logicielle*
 
-Nous avons l'an dernier écrit notre petite bibliothèque de programmation réactive dans la ressource [*R.4.01-Architecture Logicielle*, alias *JavaScript*](https://gitlabinfo.iutmontp.univ-montp2.fr/r4.01-developpementweb/td7).
+Nous avons l'an dernier écrit notre petite bibliothèque de programmation réactive dans la ressource [*R4.01-Architecture Logicielle*, alias *JavaScript*](https://gitlabinfo.iutmontp.univ-montp2.fr/r4.01-developpementweb/td7).
 
 Pour rappel, la programmation réactive permet d'enregistrer, pour chaque
 propriété d'un objet réactif, la liste des fonctions qui lisent cette propriété.
