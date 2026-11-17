@@ -1,5 +1,5 @@
 ---
-title: TD1 — Initiation à Vue.js 
+title: TD1 — Initiation à Vue.js
 subtitle: Réalisation d'une liste de tâches
 lang: fr
 ---
@@ -13,20 +13,20 @@ lang: fr
 
 
 ## Introduction
-<!-- Indique à liquide d'ignorer les {{ }} jusqu'au endraw en fin de document -->
+<!-- Indique à Liquid d'ignorer les {{ }} jusqu'au endraw en fin de document -->
 Jusqu'à maintenant, nous n'avons utilisé que du JavaScript "nature".
 Ce langage offre beaucoup de possibilités, mais de nombreux frameworks permettent d'aller beaucoup plus loin.
 Ces frameworks offrent souvent des outils permettant de faire un certain nombre de tâches récurrentes plus facilement. Ils imposent (ou suggèrent) la plupart du temps une manière d'organiser le code d'un projet ainsi qu'un certain nombre de bonnes pratiques associées. Notez que puisque JavaScript peut aussi s'utiliser côté serveur, il existe des frameworks *frontend* et des frameworks *backend*.
 
-Dans ce TD, nous allons étudier les bases de *Vue* qui est l'un des frameworks *frontend* les plus populaires. Ce que nous allons voir est donc spécifique à ce framework. Cependant, la plupart des idées importantes (en particulier, la *réactivité* et la notion de *composants*) se retrouvent chez la plupart des frameworks même si les détails d'implémentation peuvent varier considérablement. Nous allons aussi profiter de ce TD pour découvrir TypeScript. C'est une surcouche du langage JavaScript qui permet d'utiliser les types et donc d'augmenter la qualité, la ré-utilisabilité et la testabilité du code produit.
+Dans ce TD, nous allons étudier les bases de *Vue* qui est l'un des frameworks *frontend* les plus populaires. Ce que nous allons voir est donc spécifique à ce framework. Cependant, la plupart des idées importantes (en particulier, la *réactivité* et la notion de *composants*) se retrouvent chez la plupart des frameworks même si les détails d'implémentation peuvent varier considérablement. Nous allons aussi profiter de ce TD pour découvrir TypeScript. C'est une surcouche du langage JavaScript qui permet d'utiliser les types et donc d'augmenter la qualité, la réutilisabilité et la testabilité du code produit.
 
 
-Ce TD est partiellement inspiré du [tutoriel *Vue*](https://vuejs.org/tutorial/#step-1). La [documentation de *Vue*](https://vuejs.org/guide/introduction.html) fournit beaucoup d'information de manière assez lisible sur l'ensemble des fonctionnalités de *Vue*.
+Ce TD est partiellement inspiré du [tutoriel *Vue*](https://vuejs.org/tutorial/#step-1). La [documentation de *Vue*](https://vuejs.org/guide/introduction.html) fournit beaucoup d'informations de manière assez lisible sur l'ensemble des fonctionnalités de *Vue*.
 
 ## Première page avec `Vue.js` et `npm`
-Jusqu'à maintenant, nous n'avons utilisé que du JavaScript "nature". Nous pouvions donc simplement écrire notre fichier `js`, l'inclure dans le fichier `html` (comme nous faisions en seconde année) ou bien passer par un contrôleur JavaScript **Stimulus** (sur Symfony, qui, en arrière-plan, inclut le script `js` correspondant dans le fichier `html`) et le navigateur web faisait le reste du travail sans même avoir besoin d'un serveur web. Beaucoup de frameworks JS coexistent avec tout un paquet d'utilitaires (compilateur, *linter*, serveur de développement...). Ces utilitaires sont très simples à installer grâce à Node.JS et [npm](https://fr.wikipedia.org/wiki/Npm) (officieusement l'acronyme de "Node Package Manager", officiellement le rétroacronyme de "npm is not an acronym").
+Avec du JavaScript "nature", nous pouvions simplement écrire notre fichier `js` et l'inclure dans le fichier `html` (comme nous faisions en seconde année), le navigateur web faisant alors le reste du travail sans même avoir besoin d'un serveur web. Nous pouvions aussi passer par un contrôleur JavaScript **Stimulus** sur Symfony, qui, en arrière-plan, inclut le script `js` correspondant dans le fichier `html`. Beaucoup de frameworks JS coexistent avec tout un paquet d'utilitaires (compilateur, *linter*, serveur de développement...). Ces utilitaires sont très simples à installer grâce à Node.js et [npm](https://fr.wikipedia.org/wiki/Npm) (officieusement l'acronyme de "Node Package Manager", officiellement le rétroacronyme de "npm is not an acronym").
 
-Npm est déjà disponible sur l'image docker que nous avons configuré (l'installer est normalement assez simple sous Linux). Pour initier un projet *Vue*, vous pouvez alors ouvrir votre terminal dans le dossier où vous souhaitez créer votre projet, puis entrez la commande :
+Npm est déjà disponible sur l'image docker que nous avons configurée (l'installer est normalement assez simple sous Linux). Pour initier un projet *Vue*, vous pouvez alors ouvrir votre terminal dans le dossier où vous souhaitez créer votre projet, puis entrer la commande :
 
 
 ```sh
@@ -47,7 +47,7 @@ Déplacez-vous **dans le terminal de votre docker** dans le dossier `/root/works
 
 L'utilitaire vous demande de confirmer l'installation du package `create-vue`, faites-le. Ensuite, il vous demande de choisir plusieurs fonctionnalités supplémentaires dès la création du projet :
 * Répondez **oui** pour l'utilisation de `TypeScript`.
-* On vous affiche ensuite une liste d'options. Sélectionnez seulement l'option **Linter** (déplacez vous avec les flèches du clavier, puis appuyez sur espace). Confirmez en appuyant sur entrée.
+* On vous affiche ensuite une liste d'options. Sélectionnez seulement l'option **Linter** (déplacez-vous avec les flèches du clavier, puis appuyez sur espace). Confirmez en appuyant sur entrée.
 * On vous affiche ensuite une seconde liste `experimental features`. Ne sélectionnez aucune option et validez en appuyant sur entrée.
 * Enfin, répondez **non** à la question `Skip all example code and start with a blank Vue project?`.
 
@@ -62,7 +62,7 @@ cd todo_list
 npm install
 npm run dev
 ```
-La seconde commande permet d'installer les différentes dépendances du projet (comme `composer install` pour PHP, sauf qu'ici il faut le faire dès la première fois). La troisième commande lance normalement le serveur de développement de *Vite* qui permet de travailler dans de bonnes conditions. Cependant, comme nous l'utilisons depuis docker, il va falloir rajouter quelques lignes au fichier de configuration `vite.config.ts` pour que cela fonctionne.
+La seconde commande permet d'installer les différentes dépendances du projet, comme `composer install` pour PHP ; notez que `npm create` n'installe pas lui-même les dépendances, contrairement à `composer create-project`. La troisième commande lance normalement le serveur de développement de *Vite* qui permet de travailler dans de bonnes conditions. Cependant, comme nous l'utilisons depuis docker, il va falloir rajouter quelques lignes au fichier de configuration `vite.config.ts` pour que cela fonctionne.
 
 ```ts
 import { fileURLToPath, URL } from 'node:url'
@@ -83,8 +83,8 @@ export default defineConfig({
     },
   },
   server: {
-      host: true,
-      port: 5173
+    host: true,
+    port: 5173
   }
 })
 ```
@@ -94,19 +94,21 @@ export default defineConfig({
 
 1. Entrez les deux premières commandes **dans le terminal de votre docker**. 
 
-2. Faite la modification du fichier `vite.config.ts` en modifiant les quelques lignes nécessaires, puis faites le `npm run dev`.
+2. Faites la modification du fichier `vite.config.ts` en modifiant les quelques lignes nécessaires, puis lancez `npm run dev`.
 </div>
 
 Si tout va bien, la dernière commande donne la sortie suivante :
 
 ```
-> todo_list@0.0.0 dev
-> vite
+npm notice run todo_list@0.0.0 dev
+npm notice run vite
 
-  VITE v5.4.10  ready in 305 ms
+  VITE v8.3.8  ready in 756 ms
 
   ➜  Local:   http://localhost:5173/
-  ➜  Network: http://172.18.0.3:5173/
+  ➜  Network: http://172.18.0.3:5173/  eth0
+  ➜  Vue DevTools: Open http://localhost:5173/__devtools__/ as a separate window
+  ➜  Vue DevTools: Press Alt(⌥)+Shift(⇧)+D in App to toggle the Vue DevTools
   ➜  press h + enter to show help
 ```
 On peut alors ouvrir le lien `http://localhost:5173/` dans le navigateur web de notre choix (Firefox ou Chrome/Chromium). Notre page est disponible sur ce lien et celle-ci se met à jour dès que l'on modifie les fichiers, ce qui est plutôt pratique pour développer. Actuellement, vous devez avoir la page d'accueil d'un projet *Vue* de base. Ne fermez pas votre terminal sinon le serveur de développement cessera de fonctionner.
@@ -116,19 +118,19 @@ Nous avons utilisé 2 utilitaires : `npm` pour créer ce projet (`npm create`), 
 
 ### Petit point IDE et navigateur
 
-La documentation *Vue* semble encourager l'usage de VS code. De même, TypeScript que nous allons utiliser est développé par le même éditeur que VScode (Microsoft). Tous ces outils sont libres et open source. Pour ces différentes raisons, c'est un bon choix d'utiliser VS code (ou l'alternative VScodium qui est une version de VScode sans la télémétrie de Microsoft) et d'installer le plugin `Vue - Official` (on pourrait aussi installer un paquet d'autres plugins utiles tels que `ESLint` par exemple). Cependant, Webstorm propose a priori aussi un très bon support pour TypeScript et *Vue* sans installation préalable de plugin.
+La documentation *Vue* semble encourager l'usage de VS Code. De même, TypeScript que nous allons utiliser est développé par le même éditeur que VS Code (Microsoft). Tous ces logiciels sont libres et open source. Pour ces différentes raisons, c'est un bon choix d'utiliser VS Code (ou l'alternative VSCodium qui est une version de VS Code sans la télémétrie de Microsoft) et d'installer le plugin `Vue - Official` (on pourrait aussi installer un paquet d'autres plugins utiles tels que `ESLint` par exemple). Cependant, WebStorm propose a priori aussi un très bon support pour TypeScript et *Vue* sans installation préalable de plugin.
 
 Vous pouvez aussi installer un plugin au navigateur pour nous aider à déboguer un site codé avec *Vue*:
 sous [Firefox](https://addons.mozilla.org/fr/firefox/addon/vue-js-devtools/) et sous [Chrome](https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd). Ces plugins offrent un nouvel onglet dans les outils de développement qui ressemble à ceci :
 
 ![](../assets/screen_fire_vue.png)
 
-Depuis 2025, les projets Vue crées avec `npm create vue@latest` contiennent automatiquement `vite-plugin-vue-devtools` (voir la ligne correspondante du fichier `vite.config.ts`). Cela permet d'accéder aux mêmes outils de développements que le plugin du navigateur sans installer le plugin. En fait, il est maintenant [recommandé](https://devtools.vuejs.org/guide/vite-plugin) de préférer cet outil pour les projets utilisant `vite`.
+Depuis 2025, les projets Vue créés avec `npm create vue@latest` contiennent automatiquement `vite-plugin-vue-devtools` (voir la ligne correspondante du fichier `vite.config.ts`). Cela permet d'accéder aux mêmes outils de développement que le plugin du navigateur sans installer le plugin. En fait, il est maintenant [recommandé](https://devtools.vuejs.org/guide/vite-plugin) de préférer cet outil pour les projets utilisant `vite`.
 
 ### La première page
 
 
-Ouvrez le projet dans votre IDE et commencez à observer le contenu du dossier `todo_list/src`. Commençons par regarder les deux fichiers `main.ts` et `App.vue`. Le fichier `main.ts` est le point d'entrée principal du site et pour l'instant, il se contente d'importer un composant définit dans le fichier `App` et de le déclarer comme composant principal avec la dernière ligne. Ouvrez le fichier `index.html` pour voir à quoi le `#app` fait référence : on pourrait le remplacer par n'importe quel sélecteur valide.
+Ouvrez le projet dans votre IDE et commencez à observer le contenu du dossier `todo_list/src`. Commençons par regarder les deux fichiers `main.ts` et `App.vue`. Le fichier `main.ts` est le point d'entrée principal du site et pour l'instant, il se contente d'importer un composant défini dans le fichier `App` et de le déclarer comme composant principal avec la dernière ligne. Ouvrez le fichier `index.html` pour voir à quoi le `#app` fait référence : on pourrait le remplacer par n'importe quel sélecteur valide.
 
 Nous allons pour l'instant surtout nous concentrer sur le fichier `App.vue`. La première chose à constater c'est qu'il contient :
 - du JS entre les balises `<script>`, 
@@ -142,32 +144,32 @@ Ce découpage contredit l'organisation du code à laquelle vous êtes habitués.
 
 1. Remplacez le contenu de `App.vue` par
  
-```vue
-<script setup lang="ts">
-  let texte =  "un texte qui s'affiche";
-</script>
+   ```vue
+   <script setup lang="ts">
+     let texte = "un texte qui s'affiche";
+   </script>
+   
+   
+   <template>
+     <div id="wrapper">
+       <h1>TODO liste</h1>
+       <p>{{texte}}</p>
+     </div>
+   </template>
+   
+   <style scoped>
+   </style>
+   ```
 
+2. Vérifiez dans le navigateur que l'affichage a bien été mis à jour. 
 
-<template>
-  <div id="wrapper">
-    <h1>TODO liste</h1>
-    <p>{{texte}}</p>
-  </div>
-</template>
-
-<style scoped>
-</style>
-```
-
-2. Vérifiez dans le navigateur que l'affichage a bien été mis-à-jour. 
-
-3. Supprimez le dossier `src/component` que nous n'utiliserons pas dans le premier TD.
+3. Supprimez le dossier `src/components` que nous n'utiliserons pas dans le premier TD.
 
 </div>
 
-## Base du réactive : moustache, v-bind, v-on et v-model
+## Bases de la réactivité : moustache, v-bind, v-on et v-model
 
-Prenez le temps d'observer la page minimale que nous avons créée et de comprendre comment elle est décrite par notre fichier `App.vue`. Vous avez certainement remarqué dans l'exemple précédent que dans la page HTML le texte `{{texte}}` a été remplacé par le contenu de la variable. C'est la syntaxe "moustache" (doubles accolades) qui permet l'interpolation de texte (ça devrait vous rappeler Twig). On peut utiliser des expressions plus compliquées. Par exemple, on pourrait écrire `{{texte1+" "+texte2}}` pour afficher la concaténation des deux variables séparés par une espace.
+Prenez le temps d'observer la page minimale que nous avons créée et de comprendre comment elle est décrite par notre fichier `App.vue`. Vous avez certainement remarqué dans l'exemple précédent que dans la page HTML le texte `{{texte}}` a été remplacé par le contenu de la variable. C'est la syntaxe "moustache" (doubles accolades) qui permet l'interpolation de texte (ça devrait vous rappeler Twig). On peut utiliser des expressions plus compliquées. Par exemple, on pourrait écrire `{{texte1+" "+texte2}}` pour afficher la concaténation des deux variables séparées par une espace.
 
 La moustache ne fonctionne que pour inclure du texte dans le HTML. Si l'on veut utiliser une variable dans un attribut d'une balise, il va falloir utiliser `v-bind:monAttribut="maVariable"`. Par exemple, on pourrait ajouter au JS la définition `let url = "https://vuejs.org/";` et au HTML la ligne `<a v-bind:href="url"> Site de Vue</a>`.
 
@@ -184,7 +186,7 @@ On aimerait ensuite rajouter un compteur simple en dessous du texte de notre pag
 
 Vous l'avez compris, il faut donc écrire la fonction `incremente`. Voilà ce qu'on peut ajouter dans la partie script :
 
-``` js
+```ts
 let compteur = 7;
 function incremente(){
   compteur++;
@@ -200,7 +202,7 @@ function incremente(){
 
 </div>
 
-On peut constater dans la console que la valeur de la variable change, et pourtant l'affichage n'est pas mis à jour. C'est normal, l'interface n'est mis-à-jour que lorsqu'une variable "réactive" change, or pour l'instant, nous n'avons pas défini de variable réactive. Pour rendre la variable compteur réactive, vous allez devoir faire les trois choses suivantes :
+On peut constater dans la console que la valeur de la variable change, et pourtant l'affichage n'est pas mis à jour. C'est normal, l'interface n'est mise à jour que lorsqu'une variable "réactive" change, or pour l'instant, nous n'avons pas défini de variable réactive. Pour rendre la variable compteur réactive, vous allez devoir faire les trois choses suivantes :
 
 1. Importer la fonction `ref` en ajoutant la ligne suivante en haut du script 
    ```js
@@ -208,7 +210,7 @@ On peut constater dans la console que la valeur de la variable change, et pourta
    ```
    Cette ligne indique simplement que nous importons la fonction `ref` depuis le module `vue`. 
    
-   La notion de module permet de séparer le code JS en "blocs logiques" et donc d'avoir des projets mieux organisés. En particulier, plutôt que de devoir inclure tous nos fichiers JS dans l'entête du HTML, on peut ainsi inclure le module JS principal qui importe les modules JS dont il a besoin qui vont eux même importer les modules JS dont ils ont besoin. On a donc des dépendances beaucoup plus claires pour l'humain, pour l'IDE et pour le navigateur.
+   La notion de module permet de séparer le code JS en "blocs logiques" et donc d'avoir des projets mieux organisés. En particulier, plutôt que de devoir inclure tous nos fichiers JS dans l'entête du HTML, on peut ainsi inclure le module JS principal qui importe les modules JS dont il a besoin qui vont eux-mêmes importer les modules JS dont ils ont besoin. On a donc des dépendances beaucoup plus claires pour l'humain, pour l'IDE et pour le navigateur.
 
 2. Modifier la définition de compteur pour utiliser `ref` ainsi `let compteur = ref(7);`.
 
@@ -220,12 +222,12 @@ Faites-le et vérifiez que tout fonctionne.
 
 </div>
 
-La fonction `ref` renvoie un objet réactif qui encapsule l'objet donné en argument. Il faut donc maintenant utiliser `monobjet.value` pour accéder à sa valeur dans le JS. En contrepartie, dès qu'il change, l'interface se met-à-jour correctement. Il faudra définir et utiliser tous les objets réactifs de cette manière.
+La fonction `ref` renvoie un objet réactif qui encapsule la valeur donnée en argument. Il faut donc maintenant utiliser `monobjet.value` pour accéder à sa valeur dans le JS. En contrepartie, dès qu'elle change, l'interface se met à jour correctement. Il faudra définir et utiliser tous les objets réactifs de cette manière.
 
-> La fonction `ref` utilise l'objet proxy de JavaScript que nous avons utilisé dans un contexte similaire l'an dernier. En fait, *Vue* définie une fonction `reactive` dont le fonctionnement est très proche de la fonction `reactive` que nous avons écrit l'an dernier. La fonction `ref` utilise d'ailleurs `reactive`, mais `ref` est plus simple d'utilisation et nous utiliserons donc principalement `ref`.
+> La fonction `ref` utilise l'objet proxy de JavaScript que nous avons utilisé dans un contexte similaire l'an dernier. En fait, *Vue* définit une fonction `reactive` dont le fonctionnement est très proche de la fonction `reactive` que nous avons écrite l'an dernier. La fonction `ref` utilise d'ailleurs `reactive`, mais `ref` est plus simple d'utilisation et nous utiliserons donc principalement `ref`.
 
 
-> **Attention :** Pour utiliser une variable `ref` dans la partie `script JS` il faut écrire `maVariable.value` pour accéder à sa valeur alors qu'il faut faire `maVariable` dans la partie `template HTML`. Cela risque de vous causer pas mal d'erreur au début si vous l'oubliez !!
+> **Attention :** Pour utiliser une variable `ref` dans la partie `script JS` il faut écrire `maVariable.value` pour accéder à sa valeur alors qu'il faut faire `maVariable` dans la partie `template HTML`. Cela risque de vous causer pas mal d'erreurs au début si vous l'oubliez !!
 
 Nous allons maintenant voir comment associer une variable au contenu d'un champ de formulaire.
 
@@ -241,7 +243,7 @@ Nous allons maintenant voir comment associer une variable au contenu d'un champ 
    }
    ```
 
-  **Attention :** Votre IDE devrait normalement vous dire qu'il y a une erreur (`Parameter 'e' implicitly has an 'any' type.`). On peut ignorer cette erreur pour l'instant, nous verrons plus tard ce qu'elle veut dire.
+   **Attention :** Votre IDE devrait normalement vous dire qu'il y a une erreur (`Parameter 'e' implicitly has an 'any' type.`). On peut ignorer cette erreur pour l'instant, nous verrons plus tard ce qu'elle veut dire.
 
 3. Vérifiez qu'en changeant au clavier la valeur du champ la valeur affichée précédemment est bien modifiée.
 </div>
@@ -331,7 +333,7 @@ Faites-le et vérifiez que tout fonctionne.
 
 </div>
 
-De manière générale, la syntaxe complète des directives est la suivante `name:argument.modifiers="value"`. Par exemple, `v-on:click.prevent="gestionDuClic"` appelle la fonction `gestionDuClic` dès que l'élément est cliqué tout en empêchant la propagation de l'événement (en l'occurrence, on préfère utiliser la version courte `@click.prevent="gestionDuClic"`).
+De manière générale, la syntaxe complète des directives est la suivante `name:argument.modifiers="value"`. Par exemple, `v-on:click.prevent="gestionDuClic"` appelle la fonction `gestionDuClic` dès que l'élément est cliqué tout en empêchant le comportement par défaut de l'événement, c'est-à-dire en appelant `event.preventDefault()` (le modificateur `.stop` permettrait quant à lui d'empêcher la propagation de l'événement ; en l'occurrence, on préfère utiliser la version courte `@click.prevent="gestionDuClic"`).
 
 On va maintenant ajouter la possibilité de retirer un élément de la liste de tâche. 
 
@@ -382,7 +384,7 @@ Nous voulons maintenant permettre à l'utilisateur de noter si une tâche est fa
 
 Il faudrait ensuite associer la classe CSS `fait` à toutes les tâches qui sont faites. La directive `v-bind:class` fonctionne de manière un peu particulière. L'une des manières de l'utiliser est de lui donner un objet dont les noms des propriétés sont les noms des classes à ajouter et la valeur de chaque propriété est un booléen qui indique si la classe correspondante doit être ajoutée. Ces classes se cumulent avec celles définies dans l'attribut HTML `class="..."` (par convention les classes définies ainsi ne doivent pas être retirées par la suite, d'ailleurs la syntaxe de `:class` ne permet pas de les retirer). Par exemple, un `<div>` avec
 
-```js
+```html
 <div class="blip blop" :class="{class1: true, class2: false, toto: true}">
 ```
 
@@ -402,11 +404,11 @@ Observez que les valeurs des directives et les moustaches [peuvent prendre n'imp
 
 3. Ajoutez les 3 lignes de CSS.
 
-3. Ajoutez au `label` associé à chaque `tache` la classe `fait` quand son booléen `tache.faite` est à `true`. 
+4. Ajoutez au `label` associé à chaque `tache` la classe `fait` quand son booléen `tache.faite` est à `true`. 
 
-4. Vérifiez que tout fonctionne.
+5. Vérifiez que tout fonctionne.
 
-<!-- 5. Pour que chaque `<label>` soit associé à son `<input>`, il faut ajouter un
+<!-- 6. Pour que chaque `<label>` soit associé à son `<input>`, il faut ajouter un
    attribut `id` à chaque `<input type="checkbox">` et indiquer cet `id` dans
    l'attribut `for` de la balise `<label>`. Ainsi, un clic sur le `<label>`
    entrainera un clic sur sa `checkbox` associée. -->
